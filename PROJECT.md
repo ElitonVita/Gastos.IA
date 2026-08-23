@@ -6,7 +6,7 @@ Feito para resolver um problema pessoal: entender para onde vai o dinheiro entre
 
 ## O que ele faz
 
-- **Roda 100% no navegador, offline.** É um único `index.html` — sem backend, sem servidor, sem build. Abre com duplo clique.
+- **Roda 100% no navegador, offline.** Sem backend, sem servidor. `dist/index.html` é um único arquivo standalone — abre com duplo clique. Para desenvolvimento, o código-fonte fica separado em `src/` (veja o [README](README.md)), sem exigir nenhum passo de build para usar.
 - **Importa extratos em PDF** por drag-and-drop e extrai as transações (data, descrição, valor, saldo) usando `pdf.js` no próprio navegador.
 - **Detecta automaticamente o banco/tipo de conta** pelo texto do PDF (conta corrente BIL, fatura de cartão BIL, conta Revolut) e ajusta o parser para o layout de cada um.
 - **Categoriza transações**, manualmente ou com ajuda de um modelo de IA rodando localmente via **Ollama** (100% offline, nenhuma transação sai da máquina).

@@ -1,0 +1,18 @@
+*{scrollbar-width: thin; scrollbar-color: #3f3f46 transparent}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:#3f3f46;border-radius:999px}
+.card{backdrop-filter: blur(12px)}
+.drop-active{border-color:#6366f1 !important;background:rgba(99,102,241,0.08) !important}
+#printReport{display:none}
+@media print{
+  @page{ size:A4; margin:14mm 12mm; }
+  html,body{ background:#fff !important; }
+  body > *:not(#printReport){ display:none !important; }
+  #printReport{
+    display:block !important; color:#0a0a0f; font-family:Inter,sans-serif;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  #printReport .pr-avoid-break{ break-inside:avoid; page-break-inside:avoid; }
+  #printReport table{ width:100%; border-collapse:collapse; }
+  #printReport thead{ display:table-header-group; }
+  #printReport tr{ break-inside:avoid; page-break-inside:avoid; }
+}
