@@ -18,16 +18,44 @@ Desde essa primeira ideia o projeto evoluiu de um tracker manual para um pipelin
 Veja [`PROJECT.md`](PROJECT.md) para a descrição completa do projeto — o que ele faz, o que não faz, e como contribuir com extratos de outros bancos.
 
 ## Arquivos
-- `index.html` — dashboard (abra no navegador ou via `open index.html`)
+- `index.html` — dashboard para desenvolvimento; carrega os módulos em `src/` via `<script src>` (abre direto no navegador, mas precisa da pasta `src/` ao lado)
+- `dist/index.html` — **versão standalone**, tudo injetado inline num único arquivo — é essa que você baixa/abre se só quer usar o app
+- `src/` — o código-fonte separado por responsabilidade (parsers, renderização, persistência etc. — veja abaixo)
+- `build.js` — script Node sem dependências que monta `dist/index.html` a partir de `index.html` + `src/`
 - `PROJECT.md` — descrição completa do projeto, escopo e limitações
 - `IDEA.md` — a ideia original que deu origem ao projeto
 - `README.md` — este arquivo
 
 ## Como usar
-1. Abra `index.html` no navegador (duplo clique)
+1. Baixe `dist/index.html` (ou o `index.html` da raiz, se clonar o repo inteiro) e abra no navegador (duplo clique)
 2. Arraste PDFs de extrato bancário (colunas: Data · Descrição · Saída · Entrada · Saldo)
 3. Veja gráficos, filtre por categoria, troque Saída↔Entrada com o botão ⇆ na tabela
 4. Exporte CSV se precisar
+
+## Estrutura do código
+
+O app é JS puro, sem framework e sem build obrigatório — `src/*.js` são scripts globais simples, só divididos em arquivos por responsabilidade em vez de um único bloco de 3500 linhas:
+
+| Arquivo | Responsabilidade |
+|---|---|
+| `src/categories.js` | categorias, tipos de conta/banco, icon pickers, e o estado global da aplicação (transações, filtros, etc.) |
+| `src/parsers.js` | parsing de números em euros e extração de transações dos PDFs (Revolut, BIL conta corrente, BIL cartão) |
+| `src/render.js` | tabela, gráficos, KPIs, detecção de anomalias, heatmap de calendário |
+| `src/file-handling.js` | drag-and-drop de PDF, barra de progresso, dados de exemplo, exportação CSV |
+| `src/transactions.js` | notas, detalhes de transação, ações em massa, transferências entre contas |
+| `src/ollama.js` | categorização assistida por IA local (Ollama) |
+| `src/persistence.js` | salvar/carregar estado (`localStorage` e `gastos-data.json` via File System Access API) |
+| `src/print-report.js` | relatório para impressão |
+| `src/styles.css` | CSS customizado |
+
+### Desenvolvimento
+Edite os arquivos em `src/` (e o `index.html` da raiz para marcação/HTML). Para gerar o `dist/index.html` standalone atualizado:
+
+```bash
+node build.js
+```
+
+Sem `npm install`, sem bundler — o script só injeta cada `src/*.js`/`src/*.css` de volta inline no lugar da tag `<script src>`/`<link>` correspondente.
 
 ## IA Local com Ollama (100% offline)
 - Modelo padrão: `gemma4:latest` (9.6 GB, já detectado na sua máquina)
