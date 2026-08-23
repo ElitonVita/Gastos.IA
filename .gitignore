@@ -1,0 +1,4 @@
+# Dados pessoais/backup — nunca commitar
+*.json
+!package.json
+.DS_Store
