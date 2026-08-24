@@ -69,6 +69,20 @@
       "category": "Categoria",
       "actions": "Ações"
     },
+    "howItWorks": "<span class=\"font-bold\">Como funciona:</span> Importe extratos em <b>Configurações → Importar PDFs</b> → os gráficos usam só <b>Saídas</b> → corrija categorias na tabela. Tudo salvo automaticamente.",
+    "title": "Transações",
+    "subtitle": "· extrato completo",
+    "selectAllTitle": "Selecionar tudo nesta página",
+    "sort": {
+      "date": "Ordenar por data",
+      "description": "Ordenar por descrição",
+      "expense": "Ordenar por valor de saída",
+      "income": "Ordenar por valor de entrada",
+      "category": "Ordenar por categoria"
+    },
+    "emptyTitle": "Nenhuma despesa ainda",
+    "emptyDetail": "Adicione PDFs de extrato bancário (com colunas Data, Descrição, Saída, Entrada, Saldo) em <b>Configurações</b>, ou use dados de exemplo para explorar.",
+    "goToSettings": "Ir para Configurações",
     "empty": "Nenhuma transação nesse filtro.",
     "noValue": "—",
     "cardSettlement": "Fatura do cartão",
@@ -111,7 +125,10 @@
     "linkTransferSuccess": "Transferência vinculada com sucesso",
     "unlinkTransfer": "Desvincular transferência",
     "rejectAutoTransfer": "Rejeitar detecção automática",
-    "selectInOut": "Selecione uma transação de Saída e uma de Entrada — são os dois lados da mesma transferência."
+    "selectInOut": "Selecione uma transação de Saída e uma de Entrada — são os dois lados da mesma transferência.",
+    "linkTransferHint": "Selecione a saída (ex: BIL) e a entrada (ex: Revolut) da mesma transferência",
+    "linkTransferBetweenAccounts": "Transferência entre contas",
+    "bulkCountSuffix": "selecionada(s)"
   },
   "modals": {
     "manualEntry": {

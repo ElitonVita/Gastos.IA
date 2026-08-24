@@ -72,6 +72,20 @@ window.GASTOS_LOCALES = {
         "category": "Categoria",
         "actions": "Ações"
       },
+      "howItWorks": "<span class=\"font-bold\">Como funciona:</span> Importe extratos em <b>Configurações → Importar PDFs</b> → os gráficos usam só <b>Saídas</b> → corrija categorias na tabela. Tudo salvo automaticamente.",
+      "title": "Transações",
+      "subtitle": "· extrato completo",
+      "selectAllTitle": "Selecionar tudo nesta página",
+      "sort": {
+        "date": "Ordenar por data",
+        "description": "Ordenar por descrição",
+        "expense": "Ordenar por valor de saída",
+        "income": "Ordenar por valor de entrada",
+        "category": "Ordenar por categoria"
+      },
+      "emptyTitle": "Nenhuma despesa ainda",
+      "emptyDetail": "Adicione PDFs de extrato bancário (com colunas Data, Descrição, Saída, Entrada, Saldo) em <b>Configurações</b>, ou use dados de exemplo para explorar.",
+      "goToSettings": "Ir para Configurações",
       "empty": "Nenhuma transação nesse filtro.",
       "noValue": "—",
       "cardSettlement": "Fatura do cartão",
@@ -114,7 +128,10 @@ window.GASTOS_LOCALES = {
       "linkTransferSuccess": "Transferência vinculada com sucesso",
       "unlinkTransfer": "Desvincular transferência",
       "rejectAutoTransfer": "Rejeitar detecção automática",
-      "selectInOut": "Selecione uma transação de Saída e uma de Entrada — são os dois lados da mesma transferência."
+      "selectInOut": "Selecione uma transação de Saída e uma de Entrada — são os dois lados da mesma transferência.",
+      "linkTransferHint": "Selecione a saída (ex: BIL) e a entrada (ex: Revolut) da mesma transferência",
+      "linkTransferBetweenAccounts": "Transferência entre contas",
+      "bulkCountSuffix": "selecionada(s)"
     },
     "modals": {
       "manualEntry": {
@@ -554,6 +571,20 @@ window.GASTOS_LOCALES = {
         "category": "Category",
         "actions": "Actions"
       },
+      "howItWorks": "<span class=\"font-bold\">How it works:</span> Import statements in <b>Settings → Import PDFs</b> → charts only use <b>Expenses</b> → fix categories in the table. Everything saves automatically.",
+      "title": "Transactions",
+      "subtitle": "· full statement",
+      "selectAllTitle": "Select all on this page",
+      "sort": {
+        "date": "Sort by date",
+        "description": "Sort by description",
+        "expense": "Sort by expense amount",
+        "income": "Sort by income amount",
+        "category": "Sort by category"
+      },
+      "emptyTitle": "No expenses yet",
+      "emptyDetail": "Add bank statement PDFs (with Date, Description, Expense, Income, Balance columns) in <b>Settings</b>, or use demo data to explore.",
+      "goToSettings": "Go to Settings",
       "empty": "No transactions in this filter.",
       "noValue": "—",
       "cardSettlement": "Card statement",
@@ -596,7 +627,10 @@ window.GASTOS_LOCALES = {
       "linkTransferSuccess": "Transfer linked successfully",
       "unlinkTransfer": "Unlink transfer",
       "rejectAutoTransfer": "Reject auto-detection",
-      "selectInOut": "Select an Outflow and an Inflow transaction — they are the two sides of the same transfer."
+      "selectInOut": "Select an Outflow and an Inflow transaction — they are the two sides of the same transfer.",
+      "linkTransferHint": "Select the outgoing (e.g. BIL) and incoming (e.g. Revolut) side of the same transfer",
+      "linkTransferBetweenAccounts": "Transfer between accounts",
+      "bulkCountSuffix": "selected"
     },
     "modals": {
       "manualEntry": {

@@ -69,6 +69,20 @@
       "category": "Category",
       "actions": "Actions"
     },
+    "howItWorks": "<span class=\"font-bold\">How it works:</span> Import statements in <b>Settings → Import PDFs</b> → charts only use <b>Expenses</b> → fix categories in the table. Everything saves automatically.",
+    "title": "Transactions",
+    "subtitle": "· full statement",
+    "selectAllTitle": "Select all on this page",
+    "sort": {
+      "date": "Sort by date",
+      "description": "Sort by description",
+      "expense": "Sort by expense amount",
+      "income": "Sort by income amount",
+      "category": "Sort by category"
+    },
+    "emptyTitle": "No expenses yet",
+    "emptyDetail": "Add bank statement PDFs (with Date, Description, Expense, Income, Balance columns) in <b>Settings</b>, or use demo data to explore.",
+    "goToSettings": "Go to Settings",
     "empty": "No transactions in this filter.",
     "noValue": "—",
     "cardSettlement": "Card statement",
@@ -111,7 +125,10 @@
     "linkTransferSuccess": "Transfer linked successfully",
     "unlinkTransfer": "Unlink transfer",
     "rejectAutoTransfer": "Reject auto-detection",
-    "selectInOut": "Select an Outflow and an Inflow transaction — they are the two sides of the same transfer."
+    "selectInOut": "Select an Outflow and an Inflow transaction — they are the two sides of the same transfer.",
+    "linkTransferHint": "Select the outgoing (e.g. BIL) and incoming (e.g. Revolut) side of the same transfer",
+    "linkTransferBetweenAccounts": "Transfer between accounts",
+    "bulkCountSuffix": "selected"
   },
   "modals": {
     "manualEntry": {
