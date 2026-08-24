@@ -145,7 +145,9 @@ window.GASTOS_LOCALES = {
         "category": "Categoria",
         "cancel": "Cancelar",
         "submit": "Adicionar",
-        "invalidValue": "Informe um valor válido"
+        "invalidValue": "Informe um valor válido",
+        "valuePlaceholder": "123,45",
+        "descriptionPlaceholder": "Ex: Supermercado Pão de Açúcar"
       },
       "note": {
         "title": "Nota para \"{desc}\"",
@@ -153,7 +155,10 @@ window.GASTOS_LOCALES = {
         "placeholder": "Escreva uma nota...",
         "cancel": "Cancelar",
         "delete": "Apagar nota",
-        "save": "Salvar"
+        "save": "Salvar",
+        "dialogTitle": "Nota da transação",
+        "label": "Nota",
+        "deleteShort": "Remover"
       },
       "details": {
         "title": "Detalhes da transação",
@@ -165,7 +170,20 @@ window.GASTOS_LOCALES = {
         "autoTransferInfo": "Provável destino: {bank}",
         "close": "Fechar",
         "unlinkTransfer": "Desvincular transferência",
-        "rejectAutoTransfer": "Rejeitar detecção automática"
+        "rejectAutoTransfer": "Rejeitar detecção automática",
+        "transferBetweenAccounts": "Transferência entre contas",
+        "possibleTransfer": "Possível transferência entre contas",
+        "autoTransferHint": "Detectado pelo banco do beneficiário no extrato — não está contando como Gasto. Se estiver certo, não precisa fazer nada; se for um gasto de verdade, desfaça abaixo.",
+        "extractedData": "Dados extraídos do extrato",
+        "unlinkShort": "Desvincular",
+        "rejectShort": "Não é transferência — restaurar categoria"
+      },
+      "anomaly": {
+        "title": "Resolver gasto estranho",
+        "txListLabel": "Transações envolvidas",
+        "hint": "Excluir remove a transação de vez do extrato. Aceitar marca só esse alerta como revisado.",
+        "alwaysAcceptHint": "\"Sempre aceitar\" ignora essa descrição pra sempre — não vira mais gasto estranho, nem em meses futuros.",
+        "alwaysAcceptTitle": "Nunca mais avisar sobre essa descrição"
       },
       "category": {
         "titleNew": "Nova categoria",
@@ -176,14 +194,25 @@ window.GASTOS_LOCALES = {
         "keywords": "Palavras-chave (separadas por vírgula)",
         "cancel": "Cancelar",
         "submitNew": "Criar categoria",
-        "submitEdit": "Salvar alterações"
+        "submitEdit": "Salvar alterações",
+        "namePlaceholder": "Ex: Pets, Assinaturas",
+        "keywordsPlaceholder": "ex: petshop, cobasi, veterinário",
+        "keywordsHelp": "Usadas para classificar automaticamente. Só valem para categorização futura — não recategoriza o que já existe."
       },
       "bulkNote": {
         "title": "Adicionar nota a {count} transações",
         "count": "{count} transações",
         "placeholder": "Nota para todas as selecionadas...",
         "cancel": "Cancelar",
-        "save": "Salvar nota"
+        "save": "Salvar nota",
+        "dialogTitle": "Nota em massa",
+        "description": "Aplica a mesma nota em <span class=\"font-bold\">{count}</span> transações selecionadas, substituindo a nota atual de cada uma.",
+        "saveShort": "Aplicar a todas"
+      },
+      "bankType": {
+        "titleNew": "Novo tipo de conta",
+        "namePlaceholder": "Ex: N26, Banco do Brasil",
+        "submitNew": "Criar tipo de conta"
       }
     },
     "charts": {
@@ -677,7 +706,9 @@ window.GASTOS_LOCALES = {
         "category": "Category",
         "cancel": "Cancel",
         "submit": "Add",
-        "invalidValue": "Enter a valid amount"
+        "invalidValue": "Enter a valid amount",
+        "valuePlaceholder": "123.45",
+        "descriptionPlaceholder": "e.g. Supermarket"
       },
       "note": {
         "title": "Note for \"{desc}\"",
@@ -685,7 +716,10 @@ window.GASTOS_LOCALES = {
         "placeholder": "Write a note...",
         "cancel": "Cancel",
         "delete": "Delete note",
-        "save": "Save"
+        "save": "Save",
+        "dialogTitle": "Transaction note",
+        "label": "Note",
+        "deleteShort": "Remove"
       },
       "details": {
         "title": "Transaction details",
@@ -697,7 +731,20 @@ window.GASTOS_LOCALES = {
         "autoTransferInfo": "Likely destination: {bank}",
         "close": "Close",
         "unlinkTransfer": "Unlink transfer",
-        "rejectAutoTransfer": "Reject auto-detection"
+        "rejectAutoTransfer": "Reject auto-detection",
+        "transferBetweenAccounts": "Transfer between accounts",
+        "possibleTransfer": "Possible transfer between accounts",
+        "autoTransferHint": "Auto-detected from the beneficiary bank on the statement — not counted as an Expense. If that's correct, no action needed; if it's a real expense, undo it below.",
+        "extractedData": "Data extracted from the statement",
+        "unlinkShort": "Unlink",
+        "rejectShort": "Not a transfer — restore category"
+      },
+      "anomaly": {
+        "title": "Resolve unusual expense",
+        "txListLabel": "Transactions involved",
+        "hint": "Deleting removes the transaction from the statement for good. Accepting just marks this alert as reviewed.",
+        "alwaysAcceptHint": "\"Always accept\" ignores this description forever — it won't show up as unusual again, even in future months.",
+        "alwaysAcceptTitle": "Never warn about this description again"
       },
       "category": {
         "titleNew": "New category",
@@ -708,14 +755,25 @@ window.GASTOS_LOCALES = {
         "keywords": "Keywords (comma-separated)",
         "cancel": "Cancel",
         "submitNew": "Create category",
-        "submitEdit": "Save changes"
+        "submitEdit": "Save changes",
+        "namePlaceholder": "e.g. Pets, Subscriptions",
+        "keywordsPlaceholder": "e.g. petshop, vet",
+        "keywordsHelp": "Used to auto-classify. Only applies to future categorization — doesn't recategorize what already exists."
       },
       "bulkNote": {
         "title": "Add note to {count} transactions",
         "count": "{count} transactions",
         "placeholder": "Note for all selected...",
         "cancel": "Cancel",
-        "save": "Save note"
+        "save": "Save note",
+        "dialogTitle": "Bulk note",
+        "description": "Applies the same note to <span class=\"font-bold\">{count}</span> selected transactions, replacing each one's current note.",
+        "saveShort": "Apply to all"
+      },
+      "bankType": {
+        "titleNew": "New account type",
+        "namePlaceholder": "e.g. N26, Chase",
+        "submitNew": "Create account type"
       }
     },
     "charts": {

@@ -142,7 +142,9 @@
       "category": "Category",
       "cancel": "Cancel",
       "submit": "Add",
-      "invalidValue": "Enter a valid amount"
+      "invalidValue": "Enter a valid amount",
+      "valuePlaceholder": "123.45",
+      "descriptionPlaceholder": "e.g. Supermarket"
     },
     "note": {
       "title": "Note for \"{desc}\"",
@@ -150,7 +152,10 @@
       "placeholder": "Write a note...",
       "cancel": "Cancel",
       "delete": "Delete note",
-      "save": "Save"
+      "save": "Save",
+      "dialogTitle": "Transaction note",
+      "label": "Note",
+      "deleteShort": "Remove"
     },
     "details": {
       "title": "Transaction details",
@@ -162,7 +167,20 @@
       "autoTransferInfo": "Likely destination: {bank}",
       "close": "Close",
       "unlinkTransfer": "Unlink transfer",
-      "rejectAutoTransfer": "Reject auto-detection"
+      "rejectAutoTransfer": "Reject auto-detection",
+      "transferBetweenAccounts": "Transfer between accounts",
+      "possibleTransfer": "Possible transfer between accounts",
+      "autoTransferHint": "Auto-detected from the beneficiary bank on the statement — not counted as an Expense. If that's correct, no action needed; if it's a real expense, undo it below.",
+      "extractedData": "Data extracted from the statement",
+      "unlinkShort": "Unlink",
+      "rejectShort": "Not a transfer — restore category"
+    },
+    "anomaly": {
+      "title": "Resolve unusual expense",
+      "txListLabel": "Transactions involved",
+      "hint": "Deleting removes the transaction from the statement for good. Accepting just marks this alert as reviewed.",
+      "alwaysAcceptHint": "\"Always accept\" ignores this description forever — it won't show up as unusual again, even in future months.",
+      "alwaysAcceptTitle": "Never warn about this description again"
     },
     "category": {
       "titleNew": "New category",
@@ -173,14 +191,25 @@
       "keywords": "Keywords (comma-separated)",
       "cancel": "Cancel",
       "submitNew": "Create category",
-      "submitEdit": "Save changes"
+      "submitEdit": "Save changes",
+      "namePlaceholder": "e.g. Pets, Subscriptions",
+      "keywordsPlaceholder": "e.g. petshop, vet",
+      "keywordsHelp": "Used to auto-classify. Only applies to future categorization — doesn't recategorize what already exists."
     },
     "bulkNote": {
       "title": "Add note to {count} transactions",
       "count": "{count} transactions",
       "placeholder": "Note for all selected...",
       "cancel": "Cancel",
-      "save": "Save note"
+      "save": "Save note",
+      "dialogTitle": "Bulk note",
+      "description": "Applies the same note to <span class=\"font-bold\">{count}</span> selected transactions, replacing each one's current note.",
+      "saveShort": "Apply to all"
+    },
+    "bankType": {
+      "titleNew": "New account type",
+      "namePlaceholder": "e.g. N26, Chase",
+      "submitNew": "Create account type"
     }
   },
   "charts": {

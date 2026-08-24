@@ -142,7 +142,9 @@
       "category": "Categoria",
       "cancel": "Cancelar",
       "submit": "Adicionar",
-      "invalidValue": "Informe um valor válido"
+      "invalidValue": "Informe um valor válido",
+      "valuePlaceholder": "123,45",
+      "descriptionPlaceholder": "Ex: Supermercado Pão de Açúcar"
     },
     "note": {
       "title": "Nota para \"{desc}\"",
@@ -150,7 +152,10 @@
       "placeholder": "Escreva uma nota...",
       "cancel": "Cancelar",
       "delete": "Apagar nota",
-      "save": "Salvar"
+      "save": "Salvar",
+      "dialogTitle": "Nota da transação",
+      "label": "Nota",
+      "deleteShort": "Remover"
     },
     "details": {
       "title": "Detalhes da transação",
@@ -162,7 +167,20 @@
       "autoTransferInfo": "Provável destino: {bank}",
       "close": "Fechar",
       "unlinkTransfer": "Desvincular transferência",
-      "rejectAutoTransfer": "Rejeitar detecção automática"
+      "rejectAutoTransfer": "Rejeitar detecção automática",
+      "transferBetweenAccounts": "Transferência entre contas",
+      "possibleTransfer": "Possível transferência entre contas",
+      "autoTransferHint": "Detectado pelo banco do beneficiário no extrato — não está contando como Gasto. Se estiver certo, não precisa fazer nada; se for um gasto de verdade, desfaça abaixo.",
+      "extractedData": "Dados extraídos do extrato",
+      "unlinkShort": "Desvincular",
+      "rejectShort": "Não é transferência — restaurar categoria"
+    },
+    "anomaly": {
+      "title": "Resolver gasto estranho",
+      "txListLabel": "Transações envolvidas",
+      "hint": "Excluir remove a transação de vez do extrato. Aceitar marca só esse alerta como revisado.",
+      "alwaysAcceptHint": "\"Sempre aceitar\" ignora essa descrição pra sempre — não vira mais gasto estranho, nem em meses futuros.",
+      "alwaysAcceptTitle": "Nunca mais avisar sobre essa descrição"
     },
     "category": {
       "titleNew": "Nova categoria",
@@ -173,14 +191,25 @@
       "keywords": "Palavras-chave (separadas por vírgula)",
       "cancel": "Cancelar",
       "submitNew": "Criar categoria",
-      "submitEdit": "Salvar alterações"
+      "submitEdit": "Salvar alterações",
+      "namePlaceholder": "Ex: Pets, Assinaturas",
+      "keywordsPlaceholder": "ex: petshop, cobasi, veterinário",
+      "keywordsHelp": "Usadas para classificar automaticamente. Só valem para categorização futura — não recategoriza o que já existe."
     },
     "bulkNote": {
       "title": "Adicionar nota a {count} transações",
       "count": "{count} transações",
       "placeholder": "Nota para todas as selecionadas...",
       "cancel": "Cancelar",
-      "save": "Salvar nota"
+      "save": "Salvar nota",
+      "dialogTitle": "Nota em massa",
+      "description": "Aplica a mesma nota em <span class=\"font-bold\">{count}</span> transações selecionadas, substituindo a nota atual de cada uma.",
+      "saveShort": "Aplicar a todas"
+    },
+    "bankType": {
+      "titleNew": "Novo tipo de conta",
+      "namePlaceholder": "Ex: N26, Banco do Brasil",
+      "submitNew": "Criar tipo de conta"
     }
   },
   "charts": {
