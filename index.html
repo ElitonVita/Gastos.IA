@@ -41,16 +41,17 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white text-[18px] shadow-lg shadow-violet-600/20"><i class="ri-pie-chart-2-fill"></i></div>
       <div>
-        <h1 class="font-extrabold leading-none text-[16px] tracking-tight">Gastos<span class="text-violet-600">.AI</span></h1>
-        <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium tracking-wide uppercase">PDF → Dashboard inteligente</p>
+        <h1 data-i18n="app.title" data-i18n-html="true" class="font-extrabold leading-none text-[16px] tracking-tight">Gastos<span class="text-violet-600">.AI</span></h1>
+        <p data-i18n="app.subtitle" class="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium tracking-wide uppercase">PDF → Dashboard inteligente</p>
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <button id="btnPrint" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition"><i class="ri-printer-line"></i> <span class="hidden sm:inline">Imprimir relatório</span></button>
-      <button id="btnExport" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition"><i class="ri-download-2-line"></i> Exportar CSV</button>
-      <button id="btnClear" title="Limpar tudo" aria-label="Limpar todas as transações" class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition text-zinc-500"><i class="ri-delete-bin-line"></i></button>
-      <button id="btnTheme" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro" class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition text-zinc-500"><i class="ri-moon-line dark:hidden"></i><i class="ri-sun-line hidden dark:inline"></i></button>
-      <button onclick="showView('settings')" title="Importar / Configurações" class="inline-flex items-center gap-2 px-3.5 h-9 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-bold hover:opacity-90 transition"><i class="ri-settings-3-line"></i><span class="hidden sm:inline">Configurações</span></button>
+      <div id="languageSelector" class="flex items-center gap-1 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800"></div>
+      <button id="btnPrint" data-i18n-title="header.print" title="Imprimir relatório" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition"><i class="ri-printer-line"></i> <span data-i18n="header.print" class="hidden sm:inline">Imprimir relatório</span></button>
+      <button id="btnExport" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition"><i class="ri-download-2-line"></i> <span data-i18n="common.export">Exportar CSV</span></button>
+      <button id="btnClear" data-i18n-title="settings.general.clearAll" title="Limpar tudo" aria-label="Limpar todas as transações" class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition text-zinc-500"><i class="ri-delete-bin-line"></i></button>
+      <button id="btnTheme" data-i18n-title="header.theme" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro" class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition text-zinc-500"><i class="ri-moon-line dark:hidden"></i><i class="ri-sun-line hidden dark:inline"></i></button>
+      <button onclick="showView('settings')" data-i18n-title="settings.title" title="Importar / Configurações" class="inline-flex items-center gap-2 px-3.5 h-9 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-bold hover:opacity-90 transition"><i class="ri-settings-3-line"></i><span data-i18n="settings.title" class="hidden sm:inline">Configurações</span></button>
     </div>
   </div>
 </header>
@@ -271,18 +272,18 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
       <div class="flex items-center gap-2">
         <div class="relative">
           <i class="ri-search-line absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 text-sm"></i>
-          <input id="searchTx" placeholder="Buscar descrição..." class="pl-8 pr-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm w-[220px] text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400">
+          <input id="searchTx" data-i18n-placeholder="filters.searchPlaceholder" placeholder="Buscar descrição..." class="pl-8 pr-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm w-[220px] text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400">
         </div>
         <select id="filterCat" class="px-2.5 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
-          <option value="">Todas categorias</option>
+          <option value="" data-i18n-option="filters.allCategories">Todas categorias</option>
         </select>
         <select id="filterType" class="px-2.5 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
-          <option value="">Saída + Entrada</option>
-          <option value="saida" selected>Só Saídas</option>
-          <option value="entrada">Só Entradas</option>
+          <option value="" data-i18n-option="filters.typeAll">Saída + Entrada</option>
+          <option value="saida" selected data-i18n-option="filters.typeExpense">Só Saídas</option>
+          <option value="entrada" data-i18n-option="filters.typeIncome">Só Entradas</option>
         </select>
         <select id="filterBank" class="px-2.5 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
-          <option value="">Todas contas</option>
+          <option value="" data-i18n-option="filters.bankAll">Todas contas</option>
         </select>
 
       </div>
@@ -307,12 +308,12 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
         <thead class="sticky top-0 bg-zinc-50 dark:bg-zinc-800/80 backdrop-blur text-[11px] font-bold tracking-widest uppercase text-zinc-500">
           <tr>
             <th class="text-center px-3 py-3 w-[36px]"><input type="checkbox" id="selectAllTx" title="Selecionar tudo nesta página" class="rounded border-zinc-300 dark:border-zinc-600 text-violet-600 focus:ring-violet-500/40"></th>
-            <th class="text-left px-4 py-3 w-[92px] cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="date" title="Ordenar por data">Data <span class="sortArrow" data-key="date"></span></th>
-            <th class="text-left px-3 py-3 cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="desc" title="Ordenar por descrição">Descrição <span class="sortArrow" data-key="desc"></span></th>
-            <th class="text-right px-3 py-3 text-red-500 w-[110px] cursor-pointer select-none hover:opacity-80" data-sort="saida" title="Ordenar por valor de saída">Saída <span class="sortArrow" data-key="saida"></span></th>
-            <th class="text-right px-3 py-3 text-emerald-600 w-[110px] cursor-pointer select-none hover:opacity-80" data-sort="entrada" title="Ordenar por valor de entrada">Entrada <span class="sortArrow" data-key="entrada"></span></th>
-            <th class="text-left px-3 py-3 w-[170px] cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="cat" title="Ordenar por categoria">Categoria <span class="sortArrow" data-key="cat"></span></th>
-            <th class="text-right px-4 py-3 w-[136px]">Ações</th>
+            <th class="text-left px-4 py-3 w-[92px] cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="date" title="Ordenar por data"><span data-i18n="table.columns.date">Data</span> <span class="sortArrow" data-key="date"></span></th>
+            <th class="text-left px-3 py-3 cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="desc" title="Ordenar por descrição"><span data-i18n="table.columns.description">Descrição</span> <span class="sortArrow" data-key="desc"></span></th>
+            <th class="text-right px-3 py-3 text-red-500 w-[110px] cursor-pointer select-none hover:opacity-80" data-sort="saida" title="Ordenar por valor de saída"><span data-i18n="table.columns.expense">Saída</span> <span class="sortArrow" data-key="saida"></span></th>
+            <th class="text-right px-3 py-3 text-emerald-600 w-[110px] cursor-pointer select-none hover:opacity-80" data-sort="entrada" title="Ordenar por valor de entrada"><span data-i18n="table.columns.income">Entrada</span> <span class="sortArrow" data-key="entrada"></span></th>
+            <th class="text-left px-3 py-3 w-[170px] cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="cat" title="Ordenar por categoria"><span data-i18n="table.columns.category">Categoria</span> <span class="sortArrow" data-key="cat"></span></th>
+            <th class="text-right px-4 py-3 w-[136px]" data-i18n="table.columns.actions">Ações</th>
           </tr>
         </thead>
         <tbody id="txBody" class="divide-y divide-zinc-100 dark:divide-zinc-800"></tbody>
@@ -327,9 +328,9 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
     <div id="txFooter" class="px-4 py-3 border-t border-zinc-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-2 text-xs text-zinc-500 hidden">
       <span id="txSummary"></span>
       <div class="flex items-center gap-2">
-        <button id="prevPage" class="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-semibold disabled:opacity-40">← Anterior</button>
+        <button id="prevPage" class="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-semibold disabled:opacity-40">← <span data-i18n="table.prevPage">Anterior</span></button>
         <span id="pageInfo" class="font-mono"></span>
-        <button id="nextPage" class="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-semibold disabled:opacity-40">Próxima →</button>
+        <button id="nextPage" class="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-semibold disabled:opacity-40"><span data-i18n="table.nextPage">Próxima</span> →</button>
       </div>
     </div>
   </div>
@@ -339,7 +340,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 <!-- ===================== SETTINGS VIEW ===================== -->
 <div id="viewSettings" class="hidden max-w-[1360px] mx-auto px-4 md:px-6 py-6 space-y-6">
   <div class="flex items-center justify-between">
-    <h2 class="text-xl font-extrabold tracking-tight flex items-center gap-2"><i class="ri-settings-3-line text-violet-600"></i> Configurações</h2>
+    <h2 class="text-xl font-extrabold tracking-tight flex items-center gap-2"><i class="ri-settings-3-line text-violet-600"></i> <span data-i18n="settings.title">Configurações</span></h2>
     <button onclick="showView('main')" class="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-bold">← Voltar ao dashboard</button>
   </div>
   <!-- Row 1: IA Local (+ Tipos de conta logo abaixo, no espaço que sobra) | Importar PDFs -->
@@ -390,11 +391,11 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
         <input id="fileInput" type="file" accept=".pdf" multiple class="hidden">
         <input id="folderInput" type="file" accept=".pdf" webkitdirectory class="hidden">
         <div class="w-12 h-12 rounded-2xl bg-violet-600 text-white flex items-center justify-center mx-auto text-xl shadow-lg shadow-violet-600/20 mb-3"><i class="ri-upload-cloud-2-line"></i></div>
-        <p class="font-bold text-sm">Solte seus PDFs aqui</p>
-        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Extratos · Data · Descrição · Saída · Entrada · Saldo</p>
+        <p data-i18n="dropZone.title" class="font-bold text-sm">Solte seus PDFs aqui</p>
+        <p data-i18n="dropZone.subtitle" class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Extratos · Data · Descrição · Saída · Entrada · Saldo</p>
         <div class="flex items-center justify-center gap-2 mt-4">
-          <button id="btnPickFiles" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700 transition">Selecionar PDFs</button>
-          <button id="btnPickFolder" class="px-4 py-2 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition">Selecionar pasta</button>
+          <button id="btnPickFiles" data-i18n="dropZone.btnPickFiles" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700 transition">Selecionar PDFs</button>
+          <button id="btnPickFolder" data-i18n="dropZone.btnPickFolder" class="px-4 py-2 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition">Selecionar pasta</button>
         </div>
         <p class="text-[11px] text-zinc-400 mt-3">100% local — nada sai do seu PC · € (1.234,56 €)</p>
         <div id="progressWrap" class="hidden mt-4 text-left">
@@ -511,8 +512,8 @@ function showView(v){
     <label class="text-sm font-semibold block">Descrição <input id="mDesc" placeholder="Ex: Supermercado Pão de Açúcar" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
     <div class="grid grid-cols-2 gap-3"><label class="text-sm font-semibold block">Tipo <select id="mType" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"><option value="saida">Saída (despesa)</option><option value="entrada">Entrada (receita)</option></select></label><label class="text-sm font-semibold block">Categoria <select id="mCat" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></select></label></div>
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" id="btnCancelManual" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
-      <button type="submit" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Adicionar</button>
+      <button type="button" id="btnCancelManual" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="submit" data-i18n="modals.manualEntry.submit" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Adicionar</button>
     </div>
   </form>
 </dialog>
@@ -531,8 +532,8 @@ function showView(v){
     </label>
     <div class="flex justify-end gap-2 pt-2">
       <button type="button" id="btnNoteDelete" class="px-4 py-2 rounded-xl border border-red-200 dark:border-red-900 text-red-600 dark:text-red-400 font-semibold text-sm hidden"><i class="ri-delete-bin-line"></i> Remover</button>
-      <button type="button" id="btnNoteCancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
-      <button type="submit" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Salvar nota</button>
+      <button type="button" id="btnNoteCancel" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="submit" data-i18n="modals.note.save" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Salvar nota</button>
     </div>
   </form>
 </dialog>
@@ -599,7 +600,7 @@ function showView(v){
       <textarea id="bulkNoteText" rows="3" placeholder="Ex: revisão de assinatura, reembolsável..." class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 resize-y"></textarea>
     </label>
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" id="btnBulkNoteCancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="button" id="btnBulkNoteCancel" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
       <button type="submit" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Aplicar a todas</button>
     </div>
   </form>
@@ -621,8 +622,8 @@ function showView(v){
     </div>
     <label class="text-sm font-semibold block">Palavras-chave (separa por vírgula) <input id="cKeys" placeholder="ex: petshop, cobasi, veterinário" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"><span class="text-[11px] font-normal text-zinc-500">Usadas para classificar automaticamente. Só valem para categorização futura — não recategoriza o que já existe.</span></label>
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" id="btnCancelCat" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
-      <button type="submit" id="catSubmitBtn" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm">Criar categoria</button>
+      <button type="button" id="btnCancelCat" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="submit" id="catSubmitBtn" data-i18n="modals.category.submitNew" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm">Criar categoria</button>
     </div>
   </form>
 </dialog>
@@ -639,12 +640,14 @@ function showView(v){
       <input type="hidden" id="bIcon" value="ri-bank-line">
     </div>
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" id="btnCancelBankType" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="button" id="btnCancelBankType" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
       <button type="submit" id="bankSubmitBtn" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm">Criar tipo de conta</button>
     </div>
   </form>
 </dialog>
 
+<script src="src/locales.js"></script>
+<script src="src/i18n.js"></script>
 <script src="src/categories.js"></script>
 <script src="src/parsers.js"></script>
 <script src="src/render.js"></script>
@@ -653,5 +656,8 @@ function showView(v){
 <script src="src/ollama.js"></script>
 <script src="src/persistence.js"></script>
 <script src="src/print-report.js"></script>
+<script>
+window.i18n.initI18n();
+</script>
 </body>
 </html>

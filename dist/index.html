@@ -60,16 +60,17 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white text-[18px] shadow-lg shadow-violet-600/20"><i class="ri-pie-chart-2-fill"></i></div>
       <div>
-        <h1 class="font-extrabold leading-none text-[16px] tracking-tight">Gastos<span class="text-violet-600">.AI</span></h1>
-        <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium tracking-wide uppercase">PDF → Dashboard inteligente</p>
+        <h1 data-i18n="app.title" data-i18n-html="true" class="font-extrabold leading-none text-[16px] tracking-tight">Gastos<span class="text-violet-600">.AI</span></h1>
+        <p data-i18n="app.subtitle" class="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium tracking-wide uppercase">PDF → Dashboard inteligente</p>
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <button id="btnPrint" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition"><i class="ri-printer-line"></i> <span class="hidden sm:inline">Imprimir relatório</span></button>
-      <button id="btnExport" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition"><i class="ri-download-2-line"></i> Exportar CSV</button>
-      <button id="btnClear" title="Limpar tudo" aria-label="Limpar todas as transações" class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition text-zinc-500"><i class="ri-delete-bin-line"></i></button>
-      <button id="btnTheme" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro" class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition text-zinc-500"><i class="ri-moon-line dark:hidden"></i><i class="ri-sun-line hidden dark:inline"></i></button>
-      <button onclick="showView('settings')" title="Importar / Configurações" class="inline-flex items-center gap-2 px-3.5 h-9 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-bold hover:opacity-90 transition"><i class="ri-settings-3-line"></i><span class="hidden sm:inline">Configurações</span></button>
+      <div id="languageSelector" class="flex items-center gap-1 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800"></div>
+      <button id="btnPrint" data-i18n-title="header.print" title="Imprimir relatório" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition"><i class="ri-printer-line"></i> <span data-i18n="header.print" class="hidden sm:inline">Imprimir relatório</span></button>
+      <button id="btnExport" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition"><i class="ri-download-2-line"></i> <span data-i18n="common.export">Exportar CSV</span></button>
+      <button id="btnClear" data-i18n-title="settings.general.clearAll" title="Limpar tudo" aria-label="Limpar todas as transações" class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition text-zinc-500"><i class="ri-delete-bin-line"></i></button>
+      <button id="btnTheme" data-i18n-title="header.theme" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro" class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition text-zinc-500"><i class="ri-moon-line dark:hidden"></i><i class="ri-sun-line hidden dark:inline"></i></button>
+      <button onclick="showView('settings')" data-i18n-title="settings.title" title="Importar / Configurações" class="inline-flex items-center gap-2 px-3.5 h-9 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-bold hover:opacity-90 transition"><i class="ri-settings-3-line"></i><span data-i18n="settings.title" class="hidden sm:inline">Configurações</span></button>
     </div>
   </div>
 </header>
@@ -290,18 +291,18 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
       <div class="flex items-center gap-2">
         <div class="relative">
           <i class="ri-search-line absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 text-sm"></i>
-          <input id="searchTx" placeholder="Buscar descrição..." class="pl-8 pr-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm w-[220px] text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400">
+          <input id="searchTx" data-i18n-placeholder="filters.searchPlaceholder" placeholder="Buscar descrição..." class="pl-8 pr-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm w-[220px] text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400">
         </div>
         <select id="filterCat" class="px-2.5 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
-          <option value="">Todas categorias</option>
+          <option value="" data-i18n-option="filters.allCategories">Todas categorias</option>
         </select>
         <select id="filterType" class="px-2.5 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
-          <option value="">Saída + Entrada</option>
-          <option value="saida" selected>Só Saídas</option>
-          <option value="entrada">Só Entradas</option>
+          <option value="" data-i18n-option="filters.typeAll">Saída + Entrada</option>
+          <option value="saida" selected data-i18n-option="filters.typeExpense">Só Saídas</option>
+          <option value="entrada" data-i18n-option="filters.typeIncome">Só Entradas</option>
         </select>
         <select id="filterBank" class="px-2.5 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
-          <option value="">Todas contas</option>
+          <option value="" data-i18n-option="filters.bankAll">Todas contas</option>
         </select>
 
       </div>
@@ -326,12 +327,12 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
         <thead class="sticky top-0 bg-zinc-50 dark:bg-zinc-800/80 backdrop-blur text-[11px] font-bold tracking-widest uppercase text-zinc-500">
           <tr>
             <th class="text-center px-3 py-3 w-[36px]"><input type="checkbox" id="selectAllTx" title="Selecionar tudo nesta página" class="rounded border-zinc-300 dark:border-zinc-600 text-violet-600 focus:ring-violet-500/40"></th>
-            <th class="text-left px-4 py-3 w-[92px] cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="date" title="Ordenar por data">Data <span class="sortArrow" data-key="date"></span></th>
-            <th class="text-left px-3 py-3 cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="desc" title="Ordenar por descrição">Descrição <span class="sortArrow" data-key="desc"></span></th>
-            <th class="text-right px-3 py-3 text-red-500 w-[110px] cursor-pointer select-none hover:opacity-80" data-sort="saida" title="Ordenar por valor de saída">Saída <span class="sortArrow" data-key="saida"></span></th>
-            <th class="text-right px-3 py-3 text-emerald-600 w-[110px] cursor-pointer select-none hover:opacity-80" data-sort="entrada" title="Ordenar por valor de entrada">Entrada <span class="sortArrow" data-key="entrada"></span></th>
-            <th class="text-left px-3 py-3 w-[170px] cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="cat" title="Ordenar por categoria">Categoria <span class="sortArrow" data-key="cat"></span></th>
-            <th class="text-right px-4 py-3 w-[136px]">Ações</th>
+            <th class="text-left px-4 py-3 w-[92px] cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="date" title="Ordenar por data"><span data-i18n="table.columns.date">Data</span> <span class="sortArrow" data-key="date"></span></th>
+            <th class="text-left px-3 py-3 cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="desc" title="Ordenar por descrição"><span data-i18n="table.columns.description">Descrição</span> <span class="sortArrow" data-key="desc"></span></th>
+            <th class="text-right px-3 py-3 text-red-500 w-[110px] cursor-pointer select-none hover:opacity-80" data-sort="saida" title="Ordenar por valor de saída"><span data-i18n="table.columns.expense">Saída</span> <span class="sortArrow" data-key="saida"></span></th>
+            <th class="text-right px-3 py-3 text-emerald-600 w-[110px] cursor-pointer select-none hover:opacity-80" data-sort="entrada" title="Ordenar por valor de entrada"><span data-i18n="table.columns.income">Entrada</span> <span class="sortArrow" data-key="entrada"></span></th>
+            <th class="text-left px-3 py-3 w-[170px] cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="cat" title="Ordenar por categoria"><span data-i18n="table.columns.category">Categoria</span> <span class="sortArrow" data-key="cat"></span></th>
+            <th class="text-right px-4 py-3 w-[136px]" data-i18n="table.columns.actions">Ações</th>
           </tr>
         </thead>
         <tbody id="txBody" class="divide-y divide-zinc-100 dark:divide-zinc-800"></tbody>
@@ -346,9 +347,9 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
     <div id="txFooter" class="px-4 py-3 border-t border-zinc-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-2 text-xs text-zinc-500 hidden">
       <span id="txSummary"></span>
       <div class="flex items-center gap-2">
-        <button id="prevPage" class="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-semibold disabled:opacity-40">← Anterior</button>
+        <button id="prevPage" class="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-semibold disabled:opacity-40">← <span data-i18n="table.prevPage">Anterior</span></button>
         <span id="pageInfo" class="font-mono"></span>
-        <button id="nextPage" class="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-semibold disabled:opacity-40">Próxima →</button>
+        <button id="nextPage" class="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-semibold disabled:opacity-40"><span data-i18n="table.nextPage">Próxima</span> →</button>
       </div>
     </div>
   </div>
@@ -358,7 +359,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 <!-- ===================== SETTINGS VIEW ===================== -->
 <div id="viewSettings" class="hidden max-w-[1360px] mx-auto px-4 md:px-6 py-6 space-y-6">
   <div class="flex items-center justify-between">
-    <h2 class="text-xl font-extrabold tracking-tight flex items-center gap-2"><i class="ri-settings-3-line text-violet-600"></i> Configurações</h2>
+    <h2 class="text-xl font-extrabold tracking-tight flex items-center gap-2"><i class="ri-settings-3-line text-violet-600"></i> <span data-i18n="settings.title">Configurações</span></h2>
     <button onclick="showView('main')" class="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-bold">← Voltar ao dashboard</button>
   </div>
   <!-- Row 1: IA Local (+ Tipos de conta logo abaixo, no espaço que sobra) | Importar PDFs -->
@@ -409,11 +410,11 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
         <input id="fileInput" type="file" accept=".pdf" multiple class="hidden">
         <input id="folderInput" type="file" accept=".pdf" webkitdirectory class="hidden">
         <div class="w-12 h-12 rounded-2xl bg-violet-600 text-white flex items-center justify-center mx-auto text-xl shadow-lg shadow-violet-600/20 mb-3"><i class="ri-upload-cloud-2-line"></i></div>
-        <p class="font-bold text-sm">Solte seus PDFs aqui</p>
-        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Extratos · Data · Descrição · Saída · Entrada · Saldo</p>
+        <p data-i18n="dropZone.title" class="font-bold text-sm">Solte seus PDFs aqui</p>
+        <p data-i18n="dropZone.subtitle" class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Extratos · Data · Descrição · Saída · Entrada · Saldo</p>
         <div class="flex items-center justify-center gap-2 mt-4">
-          <button id="btnPickFiles" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700 transition">Selecionar PDFs</button>
-          <button id="btnPickFolder" class="px-4 py-2 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition">Selecionar pasta</button>
+          <button id="btnPickFiles" data-i18n="dropZone.btnPickFiles" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700 transition">Selecionar PDFs</button>
+          <button id="btnPickFolder" data-i18n="dropZone.btnPickFolder" class="px-4 py-2 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition">Selecionar pasta</button>
         </div>
         <p class="text-[11px] text-zinc-400 mt-3">100% local — nada sai do seu PC · € (1.234,56 €)</p>
         <div id="progressWrap" class="hidden mt-4 text-left">
@@ -530,8 +531,8 @@ function showView(v){
     <label class="text-sm font-semibold block">Descrição <input id="mDesc" placeholder="Ex: Supermercado Pão de Açúcar" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
     <div class="grid grid-cols-2 gap-3"><label class="text-sm font-semibold block">Tipo <select id="mType" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"><option value="saida">Saída (despesa)</option><option value="entrada">Entrada (receita)</option></select></label><label class="text-sm font-semibold block">Categoria <select id="mCat" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></select></label></div>
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" id="btnCancelManual" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
-      <button type="submit" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Adicionar</button>
+      <button type="button" id="btnCancelManual" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="submit" data-i18n="modals.manualEntry.submit" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Adicionar</button>
     </div>
   </form>
 </dialog>
@@ -550,8 +551,8 @@ function showView(v){
     </label>
     <div class="flex justify-end gap-2 pt-2">
       <button type="button" id="btnNoteDelete" class="px-4 py-2 rounded-xl border border-red-200 dark:border-red-900 text-red-600 dark:text-red-400 font-semibold text-sm hidden"><i class="ri-delete-bin-line"></i> Remover</button>
-      <button type="button" id="btnNoteCancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
-      <button type="submit" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Salvar nota</button>
+      <button type="button" id="btnNoteCancel" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="submit" data-i18n="modals.note.save" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Salvar nota</button>
     </div>
   </form>
 </dialog>
@@ -618,7 +619,7 @@ function showView(v){
       <textarea id="bulkNoteText" rows="3" placeholder="Ex: revisão de assinatura, reembolsável..." class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 resize-y"></textarea>
     </label>
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" id="btnBulkNoteCancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="button" id="btnBulkNoteCancel" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
       <button type="submit" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Aplicar a todas</button>
     </div>
   </form>
@@ -640,8 +641,8 @@ function showView(v){
     </div>
     <label class="text-sm font-semibold block">Palavras-chave (separa por vírgula) <input id="cKeys" placeholder="ex: petshop, cobasi, veterinário" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"><span class="text-[11px] font-normal text-zinc-500">Usadas para classificar automaticamente. Só valem para categorização futura — não recategoriza o que já existe.</span></label>
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" id="btnCancelCat" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
-      <button type="submit" id="catSubmitBtn" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm">Criar categoria</button>
+      <button type="button" id="btnCancelCat" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="submit" id="catSubmitBtn" data-i18n="modals.category.submitNew" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm">Criar categoria</button>
     </div>
   </form>
 </dialog>
@@ -658,12 +659,975 @@ function showView(v){
       <input type="hidden" id="bIcon" value="ri-bank-line">
     </div>
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" id="btnCancelBankType" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="button" id="btnCancelBankType" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
       <button type="submit" id="bankSubmitBtn" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm">Criar tipo de conta</button>
     </div>
   </form>
 </dialog>
 
+<script>
+// GERADO AUTOMATICAMENTE por gen-locales.js a partir de locales/pt.json e locales/en.json.
+// Não edite este arquivo à mão — edite os .json e rode `node gen-locales.js` (ou `node build.js`).
+window.GASTOS_LOCALES = {
+  "pt": {
+    "app": {
+      "title": "Gastos<span style=\"color:#7c3aed;\">.AI</span>",
+      "subtitle": "Dashboard de despesas 100% local e privado"
+    },
+    "header": {
+      "language": "Idioma",
+      "theme": "Tema",
+      "print": "Imprimir relatório"
+    },
+    "dropZone": {
+      "title": "Arraste PDFs aqui ou clique para selecionar",
+      "subtitle": "Extratos bancários (Revolut, BIL, etc.) — PDFs de texto, não imagens",
+      "btnPickFiles": "Escolher arquivos",
+      "btnPickFolder": "Escolher pasta"
+    },
+    "fileList": {
+      "title": "Arquivos importados",
+      "reading": "Lendo...",
+      "error": "Erro ao ler",
+      "noPdfs": "Nenhum PDF encontrado. Selecione arquivos .pdf",
+      "noValuesFound": "Não encontrei valores no formato esperado (ex: 12,34 € , € 1.234,56 ou 1 234,56 €). Abra o PDF e tente selecionar o valor com o mouse — se não conseguir selecionar, é PDF escaneado (imagem) e precisa de OCR. Use \"Adicionar transação manual\" como alternativa.",
+      "extractedText": "Texto extraído (primeiros 1200 chars) — copie e me envie se o erro persistir:",
+      "duplicatesSkipped": "duplicadas ignoradas (data+descrição+valor idênticos)",
+      "enriched": "completadas com novos detalhes",
+      "nothingNew": "Nada novo",
+      "inheritedCategories": "herdados de categorias já salvas"
+    },
+    "kpis": {
+      "balance": "Saldo atual",
+      "totalExpenses": "Total gasto",
+      "count": "Movimentos",
+      "average": "Média por gasto",
+      "topCategory": "Maior categoria",
+      "topCategoryValue": "Valor e % do total",
+      "insight": "Insight",
+      "insightDetail": "Detalhe do insight",
+      "savingsRate": "Taxa de poupança",
+      "saved": "sobrando no período",
+      "overspent": "além da renda",
+      "noIncome": "sem entradas no período",
+      "balanceSubDefault": "Entradas − saídas de todo o histórico · defina um saldo inicial em Configurações se faltar dado anterior"
+    },
+    "filters": {
+      "searchPlaceholder": "Buscar descrição, categoria, arquivo...",
+      "allCategories": "Todas categorias",
+      "allPeriods": "Todo o período",
+      "typeAll": "Todos",
+      "typeExpense": "Só saídas",
+      "typeIncome": "Só entradas",
+      "bankAll": "Todos os tipos",
+      "bankNone": "Sem tipo identificado",
+      "periodChips": {
+        "all": "Tudo"
+      }
+    },
+    "table": {
+      "columns": {
+        "select": "Selecionar",
+        "date": "Data",
+        "description": "Descrição",
+        "expense": "Saída",
+        "income": "Entrada",
+        "category": "Categoria",
+        "actions": "Ações"
+      },
+      "empty": "Nenhuma transação nesse filtro.",
+      "noValue": "—",
+      "cardSettlement": "Fatura do cartão",
+      "cardSettlementTitle": "Débito único da fatura do cartão — não contabilizado (as compras já foram contadas individualmente)",
+      "transferBetweenAccounts": "entre contas",
+      "transferBetweenAccountsTitle": "Transferência entre suas contas — não contabilizada em Gastos/Entradas. Veja o par em Detalhes.",
+      "possibleTransfer": "possível transferência",
+      "possibleTransferTitlePrefix": "Detectado automaticamente pelo banco do beneficiário — provável transferência para ",
+      "internalTransfer": "interna",
+      "internalTransferTitle": "Movimentação interna — não contabilizada",
+      "summary": "movimentos",
+      "realExpenses": "Gastos reais",
+      "income": "Entradas",
+      "internalTransfers": "Transf. internas",
+      "monthlyAverage": "Média mensal",
+      "pageInfo": "Página {current} / {total}",
+      "prevPage": "Anterior",
+      "nextPage": "Próxima"
+    },
+    "actions": {
+      "swap": "Trocar Saída ↔ Entrada",
+      "note": "Nota",
+      "details": "Detalhes",
+      "delete": "Excluir transação",
+      "confirmDelete": "Excluir esta transação?\n\n{desc}\n{date} · {value}",
+      "bulkActions": "Ações em massa",
+      "bulkCount": "{count} selecionadas",
+      "bulkClear": "Limpar seleção",
+      "bulkDelete": "Excluir selecionadas",
+      "bulkDeleteConfirm": "Excluir {n} transação(ões) selecionada(s)? Essa ação não pode ser desfeita.",
+      "bulkSwap": "Inverter Saída/Entrada",
+      "bulkCategory": "Categoria...",
+      "bulkBank": "Tipo de conta...",
+      "bulkNote": "Adicionar nota",
+      "bulkLinkTransfer": "Vincular transferência",
+      "selectTwoTransfers": "Selecione exatamente 2 transações: a saída (ex: na conta BIL) e a entrada correspondente (ex: na conta Revolut).",
+      "selectOneExpenseOneIncome": "Selecione uma transação de Saída e uma de Entrada — são os dois lados da mesma transferência.",
+      "alreadyLinked": "Uma das transações selecionadas já está vinculada a outra transferência. Desvincule antes (em Detalhes) se quiser refazer.",
+      "differentValues": "Os valores são diferentes ({expense} saindo vs {income} entrando) — normal se houve conversão de moeda ou taxa. Vincular mesmo assim?",
+      "linkTransferSuccess": "Transferência vinculada com sucesso",
+      "unlinkTransfer": "Desvincular transferência",
+      "rejectAutoTransfer": "Rejeitar detecção automática",
+      "selectInOut": "Selecione uma transação de Saída e uma de Entrada — são os dois lados da mesma transferência."
+    },
+    "modals": {
+      "manualEntry": {
+        "title": "Adicionar transação manual",
+        "date": "Data",
+        "value": "Valor",
+        "description": "Descrição",
+        "type": "Tipo",
+        "typeExpense": "Saída (gasto)",
+        "typeIncome": "Entrada (receita)",
+        "category": "Categoria",
+        "cancel": "Cancelar",
+        "submit": "Adicionar",
+        "invalidValue": "Informe um valor válido"
+      },
+      "note": {
+        "title": "Nota para \"{desc}\"",
+        "meta": "{date} · {value}{source}",
+        "placeholder": "Escreva uma nota...",
+        "cancel": "Cancelar",
+        "delete": "Apagar nota",
+        "save": "Salvar"
+      },
+      "details": {
+        "title": "Detalhes da transação",
+        "meta": "{date} · {value}",
+        "sourceFile": "Arquivo de origem",
+        "bankType": "Tipo de conta",
+        "notIdentified": "Não identificado",
+        "transferPair": "Vinculada a: {desc} · {date} · {value}{bank}",
+        "autoTransferInfo": "Provável destino: {bank}",
+        "close": "Fechar",
+        "unlinkTransfer": "Desvincular transferência",
+        "rejectAutoTransfer": "Rejeitar detecção automática"
+      },
+      "category": {
+        "titleNew": "Nova categoria",
+        "titleEdit": "Editar categoria",
+        "name": "Nome",
+        "color": "Cor",
+        "icon": "Ícone",
+        "keywords": "Palavras-chave (separadas por vírgula)",
+        "cancel": "Cancelar",
+        "submitNew": "Criar categoria",
+        "submitEdit": "Salvar alterações"
+      },
+      "bulkNote": {
+        "title": "Adicionar nota a {count} transações",
+        "count": "{count} transações",
+        "placeholder": "Nota para todas as selecionadas...",
+        "cancel": "Cancelar",
+        "save": "Salvar nota"
+      }
+    },
+    "charts": {
+      "mode": {
+        "donut": "Rosca",
+        "bar": "Barras"
+      },
+      "compareMode": {
+        "bars": "Barras agrupadas",
+        "lines": "Linhas sobrepostas"
+      },
+      "budgetScope": {
+        "month": "Mês atual",
+        "quarter": "Trimestre",
+        "year": "Ano"
+      },
+      "cashflowMode": {
+        "monthly": "Mensal",
+        "cumulative": "Acumulado"
+      },
+      "legends": {
+        "compare": "Legenda (clique para isolar categoria)",
+        "monthlyExpenses": "Gastos mensais",
+        "byCategory": "Por categoria",
+        "byMerchant": "Top estabelecimentos",
+        "distribution": "Distribuição",
+        "dayOfWeek": "Por dia da semana",
+        "compareCategoryMonth": "Categoria × Mês",
+        "trend": "Tendência",
+        "cashflow": "Fluxo de caixa"
+      }
+    },
+    "budget": {
+      "title": "Orçamento por categoria",
+      "incomeTarget": "Meta de renda mensal (€)",
+      "placeholder": "Sem meta",
+      "summary": {
+        "totalBudgeted": "Total orçado",
+        "incomeTarget": "Meta de renda",
+        "ofIncome": "% da renda",
+        "remaining": "Sobra",
+        "shortfall": "Falta",
+        "beyondIncome": "além da renda",
+        "free": "livre",
+        "noIncomeTarget": "Defina a meta de renda mensal acima pra ver quanto sobra e a porcentagem comprometida."
+      }
+    },
+    "settings": {
+      "title": "Configurações",
+      "tabs": {
+        "general": "Geral",
+        "data": "Dados",
+        "ai": "IA Local (Ollama)",
+        "categories": "Categorias",
+        "banks": "Tipos de conta"
+      },
+      "general": {
+        "demoData": "Ver com dados de exemplo",
+        "exportCsv": "Exportar CSV",
+        "clearAll": "Limpar tudo",
+        "clearConfirm": "Limpar {count} transações?"
+      },
+      "data": {
+        "title": "Persistência de dados",
+        "localStorage": "Salvando no navegador (localStorage)",
+        "folder": "Salvando na pasta \"{name}\"",
+        "folderSub": "gastos-data.json é gravado direto no seu computador a cada mudança.",
+        "localStorageSub": "Escolha uma pasta para gravar gastos-data.json direto no seu computador.",
+        "chooseFolder": "Escolher pasta",
+        "changeFolder": "Trocar pasta",
+        "saveNow": "Salvar agora",
+        "saveNowSuccess": "gastos-data.json salvo na pasta \"{name}\"",
+        "saveNowSuccessLocal": "Salvo no navegador (localStorage). Clique em \"Escolher pasta\" para gravar direto no computador.",
+        "exportJson": "Baixar backup JSON",
+        "importJson": "Restaurar backup JSON",
+        "importSuccess": "Backup restaurado: {count} transações",
+        "importError": "Arquivo inválido: {error}",
+        "storageFull": "Armazenamento do navegador cheio — escolha uma pasta ou baixe backup"
+      },
+      "ai": {
+        "title": "Categorização automática com IA local",
+        "url": "URL do Ollama",
+        "model": "Modelo",
+        "testConnection": "Testar conexão",
+        "autoCategorize": "Categorizar automaticamente ao importar",
+        "categorizeNow": "Categorizar com IA local",
+        "categorizing": "Categorizando...",
+        "status": {
+          "online": "online",
+          "offline": "offline",
+          "busy": "a categorizar...",
+          "hasModel": "online · {model}"
+        },
+        "log": {
+          "nothingToCategorize": "Nada para categorizar (sem Saídas).",
+          "allCategorized": "Todas as {count} saídas já estão categorizadas — nada a fazer. ✅",
+          "starting": "Iniciando: {count} descrições → {model} @ {url}",
+          "batchProgress": "Lote {current}/{total}: {applied} categorizadas",
+          "batchError": "Erro no lote {batch}: {error}",
+          "corsError": "Erro de CORS — rode: OLLAMA_ORIGINS=\"*\" ollama serve",
+          "completed": "Concluído: {done} transações re-categorizadas com {model}."
+        }
+      },
+      "categories": {
+        "add": "Adicionar categoria",
+        "edit": "Editar",
+        "keywordsHelp": "Palavras que fazem a categoria ser sugerida automaticamente"
+      },
+      "banks": {
+        "title": "Tipos de conta / banco",
+        "add": "Adicionar tipo",
+        "name": "Nome",
+        "icon": "Ícone",
+        "keywords": "Palavras-chave para detecção automática"
+      }
+    },
+    "openingBalance": {
+      "title": "Saldo inicial",
+      "date": "Data",
+      "value": "Valor (€)",
+      "save": "Salvar saldo inicial",
+      "clear": "Limpar saldo inicial",
+      "statusSet": "Definido: {value} em {date}",
+      "statusNone": "Nenhum saldo inicial definido — o Fluxo de caixa acumulado começa do zero."
+    },
+    "anomalies": {
+      "title": "Gastos estranhos detectados",
+      "description": "Estas transações têm valores muito acima do padrão da categoria. Revise cada uma:",
+      "accept": "Aceitar (é gasto real)",
+      "alwaysAccept": "Sempre aceitar esta descrição",
+      "reject": "Ignorar (não é gasto)",
+      "close": "Fechar"
+    },
+    "printReport": {
+      "title": "Gastos.AI — Relatório de Despesas",
+      "generated": "gerado em {date}",
+      "kpis": {
+        "totalExpenses": "TOTAL GASTO",
+        "income": "ENTRADAS",
+        "balance": "SALDO DO PERÍODO",
+        "savingsRate": "TAXA DE POUPANÇA"
+      },
+      "sections": {
+        "byCategory": "Gasto por categoria",
+        "monthlyEvolution": "Evolução mensal",
+        "topMerchants": "Top estabelecimentos",
+        "statement": "Extrato — {count} transações{category}"
+      },
+      "tableHeaders": {
+        "date": "Data",
+        "description": "Descrição",
+        "category": "Categoria",
+        "expense": "Saída",
+        "income": "Entrada"
+      },
+      "footer": "Gerado por Gastos.AI — 100% local e privado · {date}"
+    },
+    "categories": {
+      "alimentacao": "Alimentação",
+      "transporte": "Transporte",
+      "moradia": "Moradia",
+      "contas": "Contas & Serviços",
+      "saude": "Saúde",
+      "lazer": "Lazer",
+      "compras": "Compras",
+      "educacao": "Educação",
+      "outros": "Outros",
+      "transferencia": "Transferência interna",
+      "cartao": "Pagamento de Cartão"
+    },
+    "bankTypes": {
+      "REVOLUT": "Revolut",
+      "BIL": "BIL",
+      "BIL_CARD": "BIL Cartão",
+      "OTHER": "Outro"
+    },
+    "months": {
+      "short": [
+        "Jan",
+        "Fev",
+        "Mar",
+        "Abr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov",
+        "Dez"
+      ],
+      "long": [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Dezembro"
+      ]
+    },
+    "days": {
+      "short": [
+        "Dom",
+        "Seg",
+        "Ter",
+        "Qua",
+        "Qui",
+        "Sex",
+        "Sáb"
+      ],
+      "long": [
+        "Domingo",
+        "Segunda",
+        "Terça",
+        "Quarta",
+        "Quinta",
+        "Sexta",
+        "Sábado"
+      ]
+    },
+    "common": {
+      "loading": "Carregando...",
+      "error": "Erro",
+      "success": "Sucesso",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar",
+      "save": "Salvar",
+      "delete": "Excluir",
+      "edit": "Editar",
+      "close": "Fechar",
+      "yes": "Sim",
+      "no": "Não",
+      "ok": "OK",
+      "apply": "Aplicar",
+      "reset": "Redefinir",
+      "export": "Exportar CSV"
+    }
+  },
+  "en": {
+    "app": {
+      "title": "Expenses<span style=\"color:#7c3aed;\">.AI</span>",
+      "subtitle": "100% local & private expense dashboard"
+    },
+    "header": {
+      "language": "Language",
+      "theme": "Theme",
+      "print": "Print report"
+    },
+    "dropZone": {
+      "title": "Drag PDFs here or click to select",
+      "subtitle": "Bank statements (Revolut, BIL, etc.) — text PDFs, not scanned images",
+      "btnPickFiles": "Choose files",
+      "btnPickFolder": "Choose folder"
+    },
+    "fileList": {
+      "title": "Imported files",
+      "reading": "Reading...",
+      "error": "Read error",
+      "noPdfs": "No PDFs found. Select .pdf files",
+      "noValuesFound": "No values found in expected format (e.g., 12,34 € , € 1,234.56 or 1 234,56 €). Open the PDF and try selecting the amount with your mouse — if you can't select it, it's a scanned PDF (image) and needs OCR. Use \"Add manual transaction\" as an alternative.",
+      "extractedText": "Extracted text (first 1200 chars) — copy and send if error persists:",
+      "duplicatesSkipped": "duplicates skipped (identical date+description+value)",
+      "enriched": "enriched with new details",
+      "nothingNew": "Nothing new",
+      "inheritedCategories": "inherited from saved categories"
+    },
+    "kpis": {
+      "balance": "Current balance",
+      "totalExpenses": "Total spent",
+      "count": "Transactions",
+      "average": "Avg per expense",
+      "topCategory": "Top category",
+      "topCategoryValue": "Value & % of total",
+      "insight": "Insight",
+      "insightDetail": "Insight detail",
+      "savingsRate": "Savings rate",
+      "saved": "left over this period",
+      "overspent": "over income",
+      "noIncome": "no income this period",
+      "balanceSubDefault": "Income − expenses from all history · set an opening balance in Settings if prior data is missing"
+    },
+    "filters": {
+      "searchPlaceholder": "Search description, category, file...",
+      "allCategories": "All categories",
+      "allPeriods": "All periods",
+      "typeAll": "All",
+      "typeExpense": "Expenses only",
+      "typeIncome": "Income only",
+      "bankAll": "All account types",
+      "bankNone": "No type identified",
+      "periodChips": {
+        "all": "All"
+      }
+    },
+    "table": {
+      "columns": {
+        "select": "Select",
+        "date": "Date",
+        "description": "Description",
+        "expense": "Expense",
+        "income": "Income",
+        "category": "Category",
+        "actions": "Actions"
+      },
+      "empty": "No transactions in this filter.",
+      "noValue": "—",
+      "cardSettlement": "Card statement",
+      "cardSettlementTitle": "Single card statement debit — not counted (individual purchases already counted)",
+      "transferBetweenAccounts": "between accounts",
+      "transferBetweenAccountsTitle": "Transfer between your accounts — not counted in Expenses/Income. See pair in Details.",
+      "possibleTransfer": "possible transfer",
+      "possibleTransferTitlePrefix": "Auto-detected by beneficiary bank — likely transfer to ",
+      "internalTransfer": "internal",
+      "internalTransferTitle": "Internal movement — not counted",
+      "summary": "transactions",
+      "realExpenses": "Real expenses",
+      "income": "Income",
+      "internalTransfers": "Internal transfers",
+      "monthlyAverage": "Monthly average",
+      "pageInfo": "Page {current} / {total}",
+      "prevPage": "Previous",
+      "nextPage": "Next"
+    },
+    "actions": {
+      "swap": "Swap Expense ↔ Income",
+      "note": "Note",
+      "details": "Details",
+      "delete": "Delete transaction",
+      "confirmDelete": "Delete this transaction?\n\n{desc}\n{date} · {value}",
+      "bulkActions": "Bulk actions",
+      "bulkCount": "{count} selected",
+      "bulkClear": "Clear selection",
+      "bulkDelete": "Delete selected",
+      "bulkDeleteConfirm": "Delete {n} selected transaction(s)? This cannot be undone.",
+      "bulkSwap": "Swap Expense/Income",
+      "bulkCategory": "Category...",
+      "bulkBank": "Account type...",
+      "bulkNote": "Add note",
+      "bulkLinkTransfer": "Link transfer",
+      "selectTwoTransfers": "Select exactly 2 transactions: the outgoing one (e.g. in your BIL account) and the matching incoming one (e.g. in Revolut).",
+      "selectOneExpenseOneIncome": "Select one Expense and one Income transaction — the two sides of the same transfer.",
+      "alreadyLinked": "One of the selected transactions is already linked to another transfer. Unlink first (in Details) if you want to redo.",
+      "differentValues": "Values differ ({expense} out vs {income} in) — normal if currency conversion or fees applied. Link anyway?",
+      "linkTransferSuccess": "Transfer linked successfully",
+      "unlinkTransfer": "Unlink transfer",
+      "rejectAutoTransfer": "Reject auto-detection",
+      "selectInOut": "Select an Outflow and an Inflow transaction — they are the two sides of the same transfer."
+    },
+    "modals": {
+      "manualEntry": {
+        "title": "Add manual transaction",
+        "date": "Date",
+        "value": "Amount",
+        "description": "Description",
+        "type": "Type",
+        "typeExpense": "Expense (out)",
+        "typeIncome": "Income (in)",
+        "category": "Category",
+        "cancel": "Cancel",
+        "submit": "Add",
+        "invalidValue": "Enter a valid amount"
+      },
+      "note": {
+        "title": "Note for \"{desc}\"",
+        "meta": "{date} · {value}{source}",
+        "placeholder": "Write a note...",
+        "cancel": "Cancel",
+        "delete": "Delete note",
+        "save": "Save"
+      },
+      "details": {
+        "title": "Transaction details",
+        "meta": "{date} · {value}",
+        "sourceFile": "Source file",
+        "bankType": "Account type",
+        "notIdentified": "Not identified",
+        "transferPair": "Linked to: {desc} · {date} · {value}{bank}",
+        "autoTransferInfo": "Likely destination: {bank}",
+        "close": "Close",
+        "unlinkTransfer": "Unlink transfer",
+        "rejectAutoTransfer": "Reject auto-detection"
+      },
+      "category": {
+        "titleNew": "New category",
+        "titleEdit": "Edit category",
+        "name": "Name",
+        "color": "Color",
+        "icon": "Icon",
+        "keywords": "Keywords (comma-separated)",
+        "cancel": "Cancel",
+        "submitNew": "Create category",
+        "submitEdit": "Save changes"
+      },
+      "bulkNote": {
+        "title": "Add note to {count} transactions",
+        "count": "{count} transactions",
+        "placeholder": "Note for all selected...",
+        "cancel": "Cancel",
+        "save": "Save note"
+      }
+    },
+    "charts": {
+      "mode": {
+        "donut": "Donut",
+        "bar": "Bars"
+      },
+      "compareMode": {
+        "bars": "Grouped bars",
+        "lines": "Overlaid lines"
+      },
+      "budgetScope": {
+        "month": "Current month",
+        "quarter": "Quarter",
+        "year": "Year"
+      },
+      "cashflowMode": {
+        "monthly": "Monthly",
+        "cumulative": "Cumulative"
+      },
+      "legends": {
+        "compare": "Legend (click to isolate category)",
+        "monthlyExpenses": "Monthly expenses",
+        "byCategory": "By category",
+        "byMerchant": "Top merchants",
+        "distribution": "Distribution",
+        "dayOfWeek": "By day of week",
+        "compareCategoryMonth": "Category × Month",
+        "trend": "Trend",
+        "cashflow": "Cash flow"
+      }
+    },
+    "budget": {
+      "title": "Budget by category",
+      "incomeTarget": "Monthly income target (€)",
+      "placeholder": "No target",
+      "summary": {
+        "totalBudgeted": "Total budgeted",
+        "incomeTarget": "Income target",
+        "ofIncome": "% of income",
+        "remaining": "Remaining",
+        "shortfall": "Shortfall",
+        "beyondIncome": "over income",
+        "free": "free",
+        "noIncomeTarget": "Set monthly income target above to see remaining and % committed."
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "tabs": {
+        "general": "General",
+        "data": "Data",
+        "ai": "Local AI (Ollama)",
+        "categories": "Categories",
+        "banks": "Account types"
+      },
+      "general": {
+        "demoData": "Load demo data",
+        "exportCsv": "Export CSV",
+        "clearAll": "Clear all",
+        "clearConfirm": "Clear {count} transactions?"
+      },
+      "data": {
+        "title": "Data persistence",
+        "localStorage": "Saving in browser (localStorage)",
+        "folder": "Saving to folder \"{name}\"",
+        "folderSub": "gastos-data.json is written directly to your computer on every change.",
+        "localStorageSub": "Choose a folder to save gastos-data.json directly on your computer.",
+        "chooseFolder": "Choose folder",
+        "changeFolder": "Change folder",
+        "saveNow": "Save now",
+        "saveNowSuccess": "gastos-data.json saved to folder \"{name}\"",
+        "saveNowSuccessLocal": "Saved in browser (localStorage). Click \"Choose folder\" to save directly on computer.",
+        "exportJson": "Download JSON backup",
+        "importJson": "Restore JSON backup",
+        "importSuccess": "Backup restored: {count} transactions",
+        "importError": "Invalid file: {error}",
+        "storageFull": "Browser storage full — choose a folder or download backup"
+      },
+      "ai": {
+        "title": "Auto-categorization with local AI",
+        "url": "Ollama URL",
+        "model": "Model",
+        "testConnection": "Test connection",
+        "autoCategorize": "Auto-categorize on import",
+        "categorizeNow": "Categorize with local AI",
+        "categorizing": "Categorizing...",
+        "status": {
+          "online": "online",
+          "offline": "offline",
+          "busy": "categorizing...",
+          "hasModel": "online · {model}"
+        },
+        "log": {
+          "nothingToCategorize": "Nothing to categorize (no Expenses).",
+          "allCategorized": "All {count} expenses already categorized — nothing to do. ✅",
+          "starting": "Starting: {count} descriptions → {model} @ {url}",
+          "batchProgress": "Batch {current}/{total}: {applied} categorized",
+          "batchError": "Error in batch {batch}: {error}",
+          "corsError": "CORS error — run: OLLAMA_ORIGINS=\"*\" ollama serve",
+          "completed": "Done: {done} transactions re-categorized with {model}."
+        }
+      },
+      "categories": {
+        "add": "Add category",
+        "edit": "Edit",
+        "keywordsHelp": "Words that trigger auto-suggestion for this category"
+      },
+      "banks": {
+        "title": "Account types / banks",
+        "add": "Add type",
+        "name": "Name",
+        "icon": "Icon",
+        "keywords": "Keywords for auto-detection"
+      }
+    },
+    "openingBalance": {
+      "title": "Opening balance",
+      "date": "Date",
+      "value": "Value (€)",
+      "save": "Save opening balance",
+      "clear": "Clear opening balance",
+      "statusSet": "Set: {value} on {date}",
+      "statusNone": "No opening balance set — Cumulative cash flow starts from zero."
+    },
+    "anomalies": {
+      "title": "Unusual expenses detected",
+      "description": "These transactions have values far above the category pattern. Review each:",
+      "accept": "Accept (real expense)",
+      "alwaysAccept": "Always accept this description",
+      "reject": "Ignore (not an expense)",
+      "close": "Close"
+    },
+    "printReport": {
+      "title": "Expenses.AI — Expense Report",
+      "generated": "generated on {date}",
+      "kpis": {
+        "totalExpenses": "TOTAL SPENT",
+        "income": "INCOME",
+        "balance": "PERIOD BALANCE",
+        "savingsRate": "SAVINGS RATE"
+      },
+      "sections": {
+        "byCategory": "Expenses by category",
+        "monthlyEvolution": "Monthly evolution",
+        "topMerchants": "Top merchants",
+        "statement": "Statement — {count} transactions{category}"
+      },
+      "tableHeaders": {
+        "date": "Date",
+        "description": "Description",
+        "category": "Category",
+        "expense": "Expense",
+        "income": "Income"
+      },
+      "footer": "Generated by Expenses.AI — 100% local & private · {date}"
+    },
+    "categories": {
+      "alimentacao": "Food & Groceries",
+      "transporte": "Transport",
+      "moradia": "Housing",
+      "contas": "Bills & Services",
+      "saude": "Health",
+      "lazer": "Leisure",
+      "compras": "Shopping",
+      "educacao": "Education",
+      "outros": "Other",
+      "transferencia": "Internal transfer",
+      "cartao": "Card Payment"
+    },
+    "bankTypes": {
+      "REVOLUT": "Revolut",
+      "BIL": "BIL",
+      "BIL_CARD": "BIL Card",
+      "OTHER": "Other"
+    },
+    "months": {
+      "short": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ],
+      "long": [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ]
+    },
+    "days": {
+      "short": [
+        "Sun",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat"
+      ],
+      "long": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ]
+    },
+    "common": {
+      "loading": "Loading...",
+      "error": "Error",
+      "success": "Success",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "save": "Save",
+      "delete": "Delete",
+      "edit": "Edit",
+      "close": "Close",
+      "yes": "Yes",
+      "no": "No",
+      "ok": "OK",
+      "apply": "Apply",
+      "reset": "Reset",
+      "export": "Export CSV"
+    }
+  }
+};
+</script>
+<script>
+// ---------- i18n (Internationalization) ----------
+let currentLang = 'en';
+let translations = {};
+
+async function loadTranslations(lang) {
+  // Lê de window.GASTOS_LOCALES (src/locales.js), não via fetch: o app é
+  // pensado pra abrir direto no navegador (file://), e fetch() para um
+  // arquivo local é bloqueado nesse caso — só <script src> funciona.
+  try {
+    const data = window.GASTOS_LOCALES && window.GASTOS_LOCALES[lang];
+    if (!data) throw new Error(`Locale "${lang}" not found in window.GASTOS_LOCALES`);
+    translations = data;
+    currentLang = lang;
+    localStorage.setItem('gastosai_lang', lang);
+    return true;
+  } catch (e) {
+    console.error('Failed to load translations:', e);
+    return false;
+  }
+}
+
+function t(key, params = {}) {
+  const keys = key.split('.');
+  let value = translations;
+  for (const k of keys) {
+    if (value && typeof value === 'object' && k in value) {
+      value = value[k];
+    } else {
+      console.warn(`Translation missing: ${key}`);
+      return key; // fallback to key
+    }
+  }
+  if (typeof value !== 'string') {
+    console.warn(`Translation not a string: ${key}`);
+    return key;
+  }
+  // Replace params like {count}, {desc}, etc.
+  return value.replace(/\{(\w+)\}/g, (match, param) => params[param] ?? match);
+}
+
+function tHtml(key, params = {}) {
+  // For translations that contain HTML (like app.title with span)
+  // Safe: translations loaded from our own trusted JSON locale files
+  return t(key, params);
+}
+
+function getCurrentLang() {
+  return currentLang;
+}
+
+function getAvailableLangs() {
+  return [
+    { code: 'pt', label: 'Português', flag: '🇧🇷' },
+    { code: 'en', label: 'English', flag: '🇬🇧' }
+  ];
+}
+
+async function switchLanguage(lang) {
+  if (lang === currentLang) return;
+  const success = await loadTranslations(lang);
+  if (success) {
+    applyTranslations();
+    updateLanguageSelector();
+    // Re-render all dynamic content
+    if (typeof renderCategoryChips === 'function') renderCategoryChips();
+    if (typeof renderTable === 'function') renderTable();
+    if (typeof updateCharts === 'function') updateCharts();
+    if (typeof updateKPIs === 'function') updateKPIs();
+    if (typeof renderBankTypeChips === 'function') renderBankTypeChips();
+    if (typeof refreshPeriodOptions === 'function') refreshPeriodOptions();
+    if (typeof updateOpeningBalanceStatus === 'function') updateOpeningBalanceStatus();
+    if (typeof updateFsStatus === 'function') updateFsStatus();
+  }
+}
+
+function applyTranslations() {
+  // Update static elements with data-i18n attribute
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    const translation = t(key);
+    if (el.dataset.i18nHtml === 'true') {
+      el.innerHTML = translation;
+    } else {
+      el.textContent = translation;
+    }
+  });
+
+  // Update placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    el.placeholder = t(key);
+  });
+
+  // Update titles (tooltips)
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const key = el.dataset.i18nTitle;
+    el.title = t(key);
+  });
+
+  // Update select options with data-i18n-option
+  document.querySelectorAll('[data-i18n-option]').forEach(el => {
+    const key = el.dataset.i18nOption;
+    el.textContent = t(key);
+  });
+}
+
+function updateLanguageSelector() {
+  const selector = document.getElementById('languageSelector');
+  if (!selector) return;
+  const langs = getAvailableLangs();
+  selector.innerHTML = langs.map(l => `
+    <button
+      type="button"
+      class="lang-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition ${l.code === currentLang ? 'bg-white dark:bg-zinc-700 shadow-sm text-violet-600 dark:text-violet-300' : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'}"
+      data-lang="${l.code}"
+      aria-label="${l.label}"
+      title="${l.label}"
+    >
+      <span class="text-base">${l.flag}</span>
+      <span class="font-semibold text-xs hidden sm:inline">${l.label}</span>
+    </button>
+  `).join('');
+
+  selector.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchLanguage(btn.dataset.lang));
+  });
+}
+
+// Initialize i18n on page load
+async function initI18n() {
+  const savedLang = localStorage.getItem('gastosai_lang') || 'en';
+  await loadTranslations(savedLang);
+  updateLanguageSelector();
+  applyTranslations();
+}
+
+// Export for use in other modules
+window.i18n = {
+  t,
+  tHtml,
+  getCurrentLang,
+  getAvailableLangs,
+  switchLanguage,
+  applyTranslations,
+  initI18n
+};</script>
 <script>
 // ---------- Categories ----------
 const DEFAULT_CATEGORIES = [
@@ -4176,6 +5140,9 @@ document.getElementById('btnPrint')?.addEventListener('click', ()=>{
   setTimeout(()=>window.print(), 50);
 });
 
+</script>
+<script>
+window.i18n.initI18n();
 </script>
 </body>
 </html>

@@ -17,6 +17,9 @@ function readLocal(relSrc) {
 }
 
 function build() {
+  // Regenera src/locales.js a partir de locales/*.json antes de embutir tudo no HTML.
+  require('./gen-locales.js');
+
   let html = fs.readFileSync(SRC_HTML, 'utf8');
 
   // <script src="src/foo.js"></script>  ->  <script>...conteúdo de src/foo.js...</script>
