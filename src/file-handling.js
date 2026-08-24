@@ -12,16 +12,19 @@ function showProgress(pct,label){
 }
 function hideProgress(){ document.getElementById('progressWrap').classList.add('hidden'); }
 
+// i18n: strings here are resolved once, at each event; switching language mid-import is
+// expected to leave in-flight messages in whatever language was active when they were
+// generated — the next fresh import call picks up the new language.
 async function handleFiles(files){
   const pdfs = Array.from(files).filter(f=> f.name.toLowerCase().endsWith('.pdf'));
-  if(pdfs.length===0){ alert('Nenhum PDF encontrado. Selecione arquivos .pdf'); return; }
+  if(pdfs.length===0){ alert(t('fileList.noPdfs')); return; }
   fileList.classList.remove('hidden');
-  fileList.innerHTML = pdfs.map(f=>`<div class="flex items-center gap-3 px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 text-sm"><i class="fileIcon ri-file-pdf-line text-red-500 text-lg"></i><span class="flex-1 truncate font-medium">${escapeHtml(f.name)}</span><span class="bankBadge"></span><span class="text-xs font-mono text-zinc-500">${(f.size/1024).toFixed(0)} KB</span><span class="status text-[11px] font-bold px-2 py-1 rounded-full bg-amber-100 text-amber-700">lendo...</span></div>`).join('');
+  fileList.innerHTML = pdfs.map(f=>`<div class="flex items-center gap-3 px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 text-sm"><i class="fileIcon ri-file-pdf-line text-red-500 text-lg"></i><span class="flex-1 truncate font-medium">${escapeHtml(f.name)}</span><span class="bankBadge"></span><span class="text-xs font-mono text-zinc-500">${(f.size/1024).toFixed(0)} KB</span><span class="status text-[11px] font-bold px-2 py-1 rounded-full bg-amber-100 text-amber-700">${t('fileList.readingStatus')}</span></div>`).join('');
   let allNew=[];
   window._lastPdfTexts=[];
   window._lastStructured=[];
   for(let i=0;i<pdfs.length;i++){
-    const f=pdfs[i]; showProgress((i/pdfs.length)*100, `Lendo ${f.name} (${i+1}/${pdfs.length})`);
+    const f=pdfs[i]; showProgress((i/pdfs.length)*100, t('fileList.readingProgress', {name: f.name, current: i+1, total: pdfs.length}));
     try{
       const buf=await f.arrayBuffer();
       const pdf=await pdfjsLib.getDocument({data:buf}).promise;
@@ -81,38 +84,38 @@ async function handleFiles(files){
       const row=fileList.children[i]; const st=row.querySelector('.status');
       const saidas = txs.filter(t=>t.saida).length;
       const entradas = txs.filter(t=>t.entrada).length;
-      st.textContent = txs.length? `${saidas} saídas · ${entradas} entradas` : 'nenhum valor encontrado';
+      st.textContent = txs.length? t('fileList.parsedCounts', {expenses: saidas, income: entradas}) : t('fileList.parsedNone');
       st.className='status text-[11px] font-bold px-2 py-1 rounded-full '+(txs.length? 'bg-emerald-100 text-emerald-700':'bg-zinc-200 text-zinc-600');
       // Ícone de cartão + selo "BIL" quando detectamos uma fatura de cartão BIL
       const detectedBank = detectBankType(text);
       const icon = row.querySelector('.fileIcon');
       const badge = row.querySelector('.bankBadge');
       if(detectedBank==='BIL_CARD'){
-        if(icon){ icon.className='fileIcon ri-bank-card-2-fill text-amber-500 text-lg'; icon.title='Fatura de cartão BIL'; }
-        if(badge) badge.innerHTML='<span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300">BIL</span>';
+        if(icon){ icon.className='fileIcon ri-bank-card-2-fill text-amber-500 text-lg'; icon.title=t('fileList.bilCardTitle'); }
+        if(badge) badge.innerHTML=`<span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300">${t('fileList.bilBadge')}</span>`;
       } else if(detectedBank==='BIL'){
-        if(icon){ icon.className='fileIcon ri-bank-fill text-red-500 text-lg'; icon.title='Extrato de conta BIL'; }
-        if(badge) badge.innerHTML='<span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200">BIL</span>';
+        if(icon){ icon.className='fileIcon ri-bank-fill text-red-500 text-lg'; icon.title=t('fileList.bilAccountTitle'); }
+        if(badge) badge.innerHTML=`<span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200">${t('fileList.bilBadge')}</span>`;
       } else if(detectedBank==='REVOLUT'){
-        if(icon){ icon.title='Extrato Revolut'; }
-        if(badge) badge.innerHTML='<span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300">Revolut</span>';
+        if(icon){ icon.title=t('fileList.revolutTitle'); }
+        if(badge) badge.innerHTML=`<span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300">${t('fileList.revolutBadge')}</span>`;
       }
     }catch(e){
       const row=fileList.children[i]; const st=row.querySelector('.status');
-      st.textContent='erro ao ler'; st.className='status text-[11px] font-bold px-2 py-1 rounded-full bg-red-100 text-red-700';
+      st.textContent=t('fileList.error'); st.className='status text-[11px] font-bold px-2 py-1 rounded-full bg-red-100 text-red-700';
       console.error(e);
     }
   }
-  showProgress(100,'Concluído'); setTimeout(hideProgress,900);
+  showProgress(100,t('fileList.completed')); setTimeout(hideProgress,900);
   if(allNew.length===0){
-    alert('Não encontrei valores no formato esperado (ex: 12,34 € , € 1.234,56 ou 1 234,56 €). Abra o PDF e tente selecionar o valor com o mouse — se não conseguir selecionar, é PDF escaneado (imagem) e precisa de OCR. Use “Adicionar transação manual” como alternativa.');
+    alert(t('fileList.noValuesFound'));
     // mostra prévia do texto extraído para diagnóstico (primeiros 1200 chars)
     const lastTexts = window._lastPdfTexts || [];
     if(lastTexts.length){
       const preview = lastTexts[0].slice(0,1200);
       const dbg = document.createElement('div');
       dbg.className='mt-3 p-3 rounded-xl bg-zinc-900 text-zinc-100 text-xs font-mono whitespace-pre-wrap break-words max-h-[200px] overflow-auto border border-zinc-700';
-      dbg.innerHTML = '<div class="font-bold mb-1 text-amber-300">Texto extraído (primeiros 1200 chars) — copie e me envie se o erro persistir:</div>' + escapeHtml(preview || '(vazio — PDF sem texto selecionável)');
+      dbg.innerHTML = `<div class="font-bold mb-1 text-amber-300">${t('fileList.extractedText')}</div>` + escapeHtml(preview || t('fileList.debugEmptyText'));
       fileList.appendChild(dbg);
     }
     return;
@@ -136,14 +139,14 @@ async function handleFiles(files){
   if(dupCount > 0){
     const row=fileList.children[pdfs.length-1];
     if(row){
-      const extra = enrichedCount>0 ? ` · ${enrichedCount} completadas com novos detalhes` : '';
-      row.insertAdjacentHTML('afterend', `<div class="text-[11px] text-amber-600 font-semibold px-3 py-1">⏭️ ${dupCount} duplicadas ignoradas (data+descrição+valor idênticos)${extra}</div>`);
+      const extra = enrichedCount>0 ? t('fileList.enrichedClause', {n: enrichedCount}) : '';
+      row.insertAdjacentHTML('afterend', `<div class="text-[11px] text-amber-600 font-semibold px-3 py-1">${t('fileList.duplicatesBanner', {n: dupCount, extra})}</div>`);
     }
   }
   if(enrichedCount > 0){ renderTable(); renderBankTypeChips(); persistState(); }
   if(allNew.length===0){
-    showProgress(100,'Nada novo'); setTimeout(hideProgress,900);
-    ollamaLog?.(`${dupCount} movimentos duplicados${enrichedCount>0?` (${enrichedCount} completados com novos detalhes)`:''} — nada novo importado.`);
+    showProgress(100,t('fileList.nothingNewProgress')); setTimeout(hideProgress,900);
+    ollamaLog?.(t('fileList.nothingNewLog', {n: dupCount, enrichedClause: enrichedCount>0 ? t('fileList.enrichedLogClause', {n: enrichedCount}) : ''}));
     return;
   }
   // auto-herda categoria de descrições já conhecidas (do JSON salvo ou da sessão)
@@ -160,7 +163,7 @@ async function handleFiles(files){
   currentPage=1;
   renderCategoryChips(); renderTable(); updateCharts(); updateKPIs();
   persistState();
-  if(inherited>0){ fileList.querySelectorAll('.status')[pdfs.length-1]?.insertAdjacentHTML('afterend', `<div class="text-[11px] text-violet-600 font-semibold px-3 py-1">✨ ${inherited} herdados de categorias já salvas</div>`); }
+  if(inherited>0){ fileList.querySelectorAll('.status')[pdfs.length-1]?.insertAdjacentHTML('afterend', `<div class="text-[11px] text-violet-600 font-semibold px-3 py-1">${t('fileList.inheritedBanner', {n: inherited})}</div>`); }
   // auto IA if enabled
   if(document.getElementById('ollamaAuto')?.checked && allNew.some(t=>t.saida)){
     setTimeout(()=>categorizeWithOllama(), 350);
@@ -251,6 +254,9 @@ document.querySelectorAll('.cashflowModeBtn').forEach(b=>{
 });
 
 // Demo data
+// i18n: intentionally not translated — these are realistic Portuguese merchant
+// names/descriptions for a Portugal-based demo dataset (Continente, Pingo Doce,
+// BIL, etc). Translating them would make the sample data read as fictional.
 const DEMO = [
   {date:'2026-02-01',desc:'Saldo inicial',saida:null,entrada:null,balanco:3240.00,cat:'outros'},
   {date:'2026-02-05',desc:'Supermercado Continente',saida:87.42,entrada:null,balanco:3152.58,cat:'alimentacao'},
@@ -297,14 +303,14 @@ document.getElementById('btnDemo').addEventListener('click', ()=>{
     source: 'dados-de-exemplo.pdf'
   }));
   fileList.classList.remove('hidden');
-  fileList.innerHTML=`<div class="flex items-center gap-3 px-3 py-2 rounded-xl border border-emerald-200 bg-emerald-50 dark:bg-emerald-950/30 text-sm"><i class="ri-sparkling-line text-emerald-600"></i><span class="flex-1 font-semibold text-emerald-800 dark:text-emerald-200">Dados de exemplo carregados — ${DEMO.length} despesas</span><span class="text-xs font-mono text-emerald-700">${fmtEUR(DEMO.filter(x=>x.saida).reduce((s,x)=>s+x.saida,0))}</span></div>`;
+  fileList.innerHTML=`<div class="flex items-center gap-3 px-3 py-2 rounded-xl border border-emerald-200 bg-emerald-50 dark:bg-emerald-950/30 text-sm"><i class="ri-sparkling-line text-emerald-600"></i><span class="flex-1 font-semibold text-emerald-800 dark:text-emerald-200">${t('fileList.demoLoaded', {n: DEMO.length})}</span><span class="text-xs font-mono text-emerald-700">${fmtEUR(DEMO.filter(x=>x.saida).reduce((s,x)=>s+x.saida,0))}</span></div>`;
   renderCategoryChips(); renderTable(); updateCharts();
 });
 
 // Export CSV
 document.getElementById('btnExport').addEventListener('click', ()=>{
-  if(transactions.length===0){ alert('Nada para exportar ainda.'); return; }
-  const header=['data','descricao','saida','entrada','saldo','categoria','arquivo'];
+  if(transactions.length===0){ alert(t('actions.nothingToExport')); return; }
+  const header=tArray('table.csvHeaders');
   const rows=transactions.map(t=>[
     (t.realDate||t.date).toISOString().slice(0,10),
     `"${t.desc.replace(/"/g,'""')}"`,
@@ -322,7 +328,7 @@ document.getElementById('btnExport').addEventListener('click', ()=>{
 // Clear
 document.getElementById('btnClear').addEventListener('click', ()=>{
   if(!transactions.length) return;
-  if(!confirm(`Limpar ${transactions.length} transações?`)) return;
+  if(!confirm(t('settings.general.clearConfirm', {count: transactions.length}))) return;
   transactions=[]; fileList.classList.add('hidden'); fileList.innerHTML=''; activeCatFilter=null;
   try{ localStorage.removeItem(STORAGE_KEY); }catch{}
   if(fsDirHandle){ fsDirHandle.removeEntry('gastos-data.json').catch(()=>{}); }
@@ -341,11 +347,11 @@ document.getElementById('manualForm').addEventListener('submit', e=>{
   e.preventDefault();
   const date=new Date(document.getElementById('mDate').value||Date.now());
   const amount=parseFloat(document.getElementById('mVal').value);
-  const desc=document.getElementById('mDesc').value.trim()||'Movimento';
+  const desc=document.getElementById('mDesc').value.trim()||t('transactions.defaultDescription');
   const typeEl=document.getElementById('mType'); const isEntrada = typeEl && typeEl.value==='entrada';
   const cat=document.getElementById('mCat').value || (isEntrada ? 'outros' : categorize(desc));
   const internal = cat==='transferencia'; // marcado manualmente como Transferência interna — some dos totais
-  if(!amount||isNaN(amount)){ alert('Informe um valor válido'); return; }
+  if(!amount||isNaN(amount)){ alert(t('modals.manualEntry.invalidValue')); return; }
   if(isEntrada) transactions.push({ id:'manual-'+Date.now(), date, desc, saida:null, entrada:Math.abs(amount), balanco:null, amount:0, cat, internal, source:'manual' });
   else transactions.push({ id:'manual-'+Date.now(), date, desc, saida:Math.abs(amount), entrada:null, balanco:null, amount:Math.abs(amount), cat, internal, source:'manual' });
   manualDialog.close(); renderCategoryChips(); renderTable(); updateCharts(); persistState();

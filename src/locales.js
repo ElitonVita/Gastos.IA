@@ -27,7 +27,26 @@ window.GASTOS_LOCALES = {
       "duplicatesSkipped": "duplicadas ignoradas (data+descrição+valor idênticos)",
       "enriched": "completadas com novos detalhes",
       "nothingNew": "Nada novo",
-      "inheritedCategories": "herdados de categorias já salvas"
+      "inheritedCategories": "herdados de categorias já salvas",
+      "readingStatus": "lendo...",
+      "readingProgress": "Lendo {name} ({current}/{total})",
+      "parsedCounts": "{expenses} saídas · {income} entradas",
+      "parsedNone": "nenhum valor encontrado",
+      "bilCardTitle": "Fatura de cartão BIL",
+      "bilAccountTitle": "Extrato de conta BIL",
+      "bilBadge": "BIL",
+      "revolutTitle": "Extrato Revolut",
+      "revolutBadge": "Revolut",
+      "readError": "erro ao ler",
+      "completed": "Concluído",
+      "debugEmptyText": "(vazio — PDF sem texto selecionável)",
+      "duplicatesBanner": "⏭️ {n} duplicadas ignoradas (data+descrição+valor idênticos){extra}",
+      "enrichedClause": " · {n} completadas com novos detalhes",
+      "nothingNewProgress": "Nada novo",
+      "nothingNewLog": "{n} movimentos duplicados{enrichedClause} — nada novo importado.",
+      "enrichedLogClause": " ({n} completados com novos detalhes)",
+      "inheritedBanner": "✨ {n} herdados de categorias já salvas",
+      "demoLoaded": "Dados de exemplo carregados — {n} despesas"
     },
     "kpis": {
       "balance": "Saldo atual",
@@ -116,7 +135,16 @@ window.GASTOS_LOCALES = {
       "avgPerMonthTitle": "Total dividido pelos {n} {monthWord} com movimento nessa categoria",
       "monthWordSingular": "mês",
       "monthWordPlural": "meses",
-      "summaryInternalTransfersTitle": "Movimentações internas (pockets, Flexible Cash Funds) — não contam como gasto"
+      "summaryInternalTransfersTitle": "Movimentações internas (pockets, Flexible Cash Funds) — não contam como gasto",
+      "csvHeaders": [
+        "data",
+        "descricao",
+        "saida",
+        "entrada",
+        "saldo",
+        "categoria",
+        "arquivo"
+      ]
     },
     "actions": {
       "swap": "Trocar Saída ↔ Entrada",
@@ -144,7 +172,11 @@ window.GASTOS_LOCALES = {
       "selectInOut": "Selecione uma transação de Saída e uma de Entrada — são os dois lados da mesma transferência.",
       "linkTransferHint": "Selecione a saída (ex: BIL) e a entrada (ex: Revolut) da mesma transferência",
       "linkTransferBetweenAccounts": "Transferência entre contas",
-      "bulkCountSuffix": "selecionada(s)"
+      "bulkCountSuffix": "selecionada(s)",
+      "nothingToExport": "Nada para exportar ainda."
+    },
+    "transactions": {
+      "defaultDescription": "Movimento"
     },
     "modals": {
       "manualEntry": {
@@ -695,7 +727,26 @@ window.GASTOS_LOCALES = {
       "duplicatesSkipped": "duplicates skipped (identical date+description+value)",
       "enriched": "enriched with new details",
       "nothingNew": "Nothing new",
-      "inheritedCategories": "inherited from saved categories"
+      "inheritedCategories": "inherited from saved categories",
+      "readingStatus": "reading...",
+      "readingProgress": "Reading {name} ({current}/{total})",
+      "parsedCounts": "{expenses} expenses · {income} income",
+      "parsedNone": "no values found",
+      "bilCardTitle": "BIL card statement",
+      "bilAccountTitle": "BIL account statement",
+      "bilBadge": "BIL",
+      "revolutTitle": "Revolut statement",
+      "revolutBadge": "Revolut",
+      "readError": "read error",
+      "completed": "Done",
+      "debugEmptyText": "(empty — PDF has no selectable text)",
+      "duplicatesBanner": "⏭️ {n} duplicates skipped (identical date+description+value){extra}",
+      "enrichedClause": " · {n} enriched with new details",
+      "nothingNewProgress": "Nothing new",
+      "nothingNewLog": "{n} duplicate transactions{enrichedClause} — nothing new imported.",
+      "enrichedLogClause": " ({n} enriched with new details)",
+      "inheritedBanner": "✨ {n} inherited from saved categories",
+      "demoLoaded": "Demo data loaded — {n} expenses"
     },
     "kpis": {
       "balance": "Current balance",
@@ -784,7 +835,16 @@ window.GASTOS_LOCALES = {
       "avgPerMonthTitle": "Total split across the {n} {monthWord} with activity in this category",
       "monthWordSingular": "month",
       "monthWordPlural": "months",
-      "summaryInternalTransfersTitle": "Internal movements (pockets, Flexible Cash Funds) — not counted as expenses"
+      "summaryInternalTransfersTitle": "Internal movements (pockets, Flexible Cash Funds) — not counted as expenses",
+      "csvHeaders": [
+        "date",
+        "description",
+        "expense",
+        "income",
+        "balance",
+        "category",
+        "file"
+      ]
     },
     "actions": {
       "swap": "Swap Expense ↔ Income",
@@ -812,7 +872,11 @@ window.GASTOS_LOCALES = {
       "selectInOut": "Select an Outflow and an Inflow transaction — they are the two sides of the same transfer.",
       "linkTransferHint": "Select the outgoing (e.g. BIL) and incoming (e.g. Revolut) side of the same transfer",
       "linkTransferBetweenAccounts": "Transfer between accounts",
-      "bulkCountSuffix": "selected"
+      "bulkCountSuffix": "selected",
+      "nothingToExport": "Nothing to export yet."
+    },
+    "transactions": {
+      "defaultDescription": "Transaction"
     },
     "modals": {
       "manualEntry": {

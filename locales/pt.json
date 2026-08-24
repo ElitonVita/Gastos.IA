@@ -24,7 +24,26 @@
     "duplicatesSkipped": "duplicadas ignoradas (data+descrição+valor idênticos)",
     "enriched": "completadas com novos detalhes",
     "nothingNew": "Nada novo",
-    "inheritedCategories": "herdados de categorias já salvas"
+    "inheritedCategories": "herdados de categorias já salvas",
+    "readingStatus": "lendo...",
+    "readingProgress": "Lendo {name} ({current}/{total})",
+    "parsedCounts": "{expenses} saídas · {income} entradas",
+    "parsedNone": "nenhum valor encontrado",
+    "bilCardTitle": "Fatura de cartão BIL",
+    "bilAccountTitle": "Extrato de conta BIL",
+    "bilBadge": "BIL",
+    "revolutTitle": "Extrato Revolut",
+    "revolutBadge": "Revolut",
+    "readError": "erro ao ler",
+    "completed": "Concluído",
+    "debugEmptyText": "(vazio — PDF sem texto selecionável)",
+    "duplicatesBanner": "⏭️ {n} duplicadas ignoradas (data+descrição+valor idênticos){extra}",
+    "enrichedClause": " · {n} completadas com novos detalhes",
+    "nothingNewProgress": "Nada novo",
+    "nothingNewLog": "{n} movimentos duplicados{enrichedClause} — nada novo importado.",
+    "enrichedLogClause": " ({n} completados com novos detalhes)",
+    "inheritedBanner": "✨ {n} herdados de categorias já salvas",
+    "demoLoaded": "Dados de exemplo carregados — {n} despesas"
   },
   "kpis": {
     "balance": "Saldo atual",
@@ -113,7 +132,8 @@
     "avgPerMonthTitle": "Total dividido pelos {n} {monthWord} com movimento nessa categoria",
     "monthWordSingular": "mês",
     "monthWordPlural": "meses",
-    "summaryInternalTransfersTitle": "Movimentações internas (pockets, Flexible Cash Funds) — não contam como gasto"
+    "summaryInternalTransfersTitle": "Movimentações internas (pockets, Flexible Cash Funds) — não contam como gasto",
+    "csvHeaders": ["data","descricao","saida","entrada","saldo","categoria","arquivo"]
   },
   "actions": {
     "swap": "Trocar Saída ↔ Entrada",
@@ -141,7 +161,11 @@
     "selectInOut": "Selecione uma transação de Saída e uma de Entrada — são os dois lados da mesma transferência.",
     "linkTransferHint": "Selecione a saída (ex: BIL) e a entrada (ex: Revolut) da mesma transferência",
     "linkTransferBetweenAccounts": "Transferência entre contas",
-    "bulkCountSuffix": "selecionada(s)"
+    "bulkCountSuffix": "selecionada(s)",
+    "nothingToExport": "Nada para exportar ainda."
+  },
+  "transactions": {
+    "defaultDescription": "Movimento"
   },
   "modals": {
     "manualEntry": {
