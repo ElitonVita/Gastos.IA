@@ -495,7 +495,8 @@
         "online": "online",
         "offline": "offline",
         "busy": "a categorizar...",
-        "hasModel": "online · {model}"
+        "hasModel": "online · {model}",
+        "none": "(nenhum)"
       },
       "log": {
         "nothingToCategorize": "Nada para categorizar (sem Saídas).",
@@ -504,7 +505,12 @@
         "batchProgress": "Lote {current}/{total}: {applied} categorizadas",
         "batchError": "Erro no lote {batch}: {error}",
         "corsError": "Erro de CORS — rode: OLLAMA_ORIGINS=\"*\" ollama serve",
-        "completed": "Concluído: {done} transações re-categorizadas com {model}."
+        "completed": "Concluído: {done} transações re-categorizadas com {model}.",
+        "healthCheckOk": "Ollama online. Modelos: {models}",
+        "healthCheckFail": "Ollama offline: {error} — verifique: OLLAMA_ORIGINS=\"*\" ollama serve",
+        "healthCheckHint": "Dica: brew services stop ollama && OLLAMA_ORIGINS=\"*\" ollama serve",
+        "batchSummary": "{n} sem categoria serão enviadas à IA · {already} já categorizadas foram ignoradas",
+        "batchUnparsable": "Lote {batch}: resposta sem JSON — \"{preview}\""
       }
     },
     "categories": {

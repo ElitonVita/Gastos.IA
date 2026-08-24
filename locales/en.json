@@ -495,7 +495,8 @@
         "online": "online",
         "offline": "offline",
         "busy": "categorizing...",
-        "hasModel": "online · {model}"
+        "hasModel": "online · {model}",
+        "none": "(none)"
       },
       "log": {
         "nothingToCategorize": "Nothing to categorize (no Expenses).",
@@ -504,7 +505,12 @@
         "batchProgress": "Batch {current}/{total}: {applied} categorized",
         "batchError": "Error in batch {batch}: {error}",
         "corsError": "CORS error — run: OLLAMA_ORIGINS=\"*\" ollama serve",
-        "completed": "Done: {done} transactions re-categorized with {model}."
+        "completed": "Done: {done} transactions re-categorized with {model}.",
+        "healthCheckOk": "Ollama online. Models: {models}",
+        "healthCheckFail": "Ollama offline: {error} — check: OLLAMA_ORIGINS=\"*\" ollama serve",
+        "healthCheckHint": "Tip: brew services stop ollama && OLLAMA_ORIGINS=\"*\" ollama serve",
+        "batchSummary": "{n} uncategorized will be sent to the AI · {already} already categorized were skipped",
+        "batchUnparsable": "Batch {batch}: response had no JSON — \"{preview}\""
       }
     },
     "categories": {

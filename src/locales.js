@@ -506,7 +506,8 @@ window.GASTOS_LOCALES = {
           "online": "online",
           "offline": "offline",
           "busy": "a categorizar...",
-          "hasModel": "online · {model}"
+          "hasModel": "online · {model}",
+          "none": "(nenhum)"
         },
         "log": {
           "nothingToCategorize": "Nada para categorizar (sem Saídas).",
@@ -515,7 +516,12 @@ window.GASTOS_LOCALES = {
           "batchProgress": "Lote {current}/{total}: {applied} categorizadas",
           "batchError": "Erro no lote {batch}: {error}",
           "corsError": "Erro de CORS — rode: OLLAMA_ORIGINS=\"*\" ollama serve",
-          "completed": "Concluído: {done} transações re-categorizadas com {model}."
+          "completed": "Concluído: {done} transações re-categorizadas com {model}.",
+          "healthCheckOk": "Ollama online. Modelos: {models}",
+          "healthCheckFail": "Ollama offline: {error} — verifique: OLLAMA_ORIGINS=\"*\" ollama serve",
+          "healthCheckHint": "Dica: brew services stop ollama && OLLAMA_ORIGINS=\"*\" ollama serve",
+          "batchSummary": "{n} sem categoria serão enviadas à IA · {already} já categorizadas foram ignoradas",
+          "batchUnparsable": "Lote {batch}: resposta sem JSON — \"{preview}\""
         }
       },
       "categories": {
@@ -1206,7 +1212,8 @@ window.GASTOS_LOCALES = {
           "online": "online",
           "offline": "offline",
           "busy": "categorizing...",
-          "hasModel": "online · {model}"
+          "hasModel": "online · {model}",
+          "none": "(none)"
         },
         "log": {
           "nothingToCategorize": "Nothing to categorize (no Expenses).",
@@ -1215,7 +1222,12 @@ window.GASTOS_LOCALES = {
           "batchProgress": "Batch {current}/{total}: {applied} categorized",
           "batchError": "Error in batch {batch}: {error}",
           "corsError": "CORS error — run: OLLAMA_ORIGINS=\"*\" ollama serve",
-          "completed": "Done: {done} transactions re-categorized with {model}."
+          "completed": "Done: {done} transactions re-categorized with {model}.",
+          "healthCheckOk": "Ollama online. Models: {models}",
+          "healthCheckFail": "Ollama offline: {error} — check: OLLAMA_ORIGINS=\"*\" ollama serve",
+          "healthCheckHint": "Tip: brew services stop ollama && OLLAMA_ORIGINS=\"*\" ollama serve",
+          "batchSummary": "{n} uncategorized will be sent to the AI · {already} already categorized were skipped",
+          "batchUnparsable": "Batch {batch}: response had no JSON — \"{preview}\""
         }
       },
       "categories": {
