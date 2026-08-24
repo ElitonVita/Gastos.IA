@@ -45,6 +45,13 @@ function tArray(key) {
   return Array.isArray(value) ? value : [];
 }
 
+function tObject(key) {
+  const keys = key.split('.');
+  let value = translations;
+  for (const k of keys) { if (value && typeof value === 'object' && k in value) value = value[k]; else return {}; }
+  return (value && typeof value === 'object' && !Array.isArray(value)) ? value : {};
+}
+
 function tHtml(key, params = {}) {
   // For translations that contain HTML (like app.title with span)
   // Safe: translations loaded from our own trusted JSON locale files
@@ -145,6 +152,7 @@ async function initI18n() {
 window.i18n = {
   t,
   tArray,
+  tObject,
   tHtml,
   getCurrentLang,
   getAvailableLangs,

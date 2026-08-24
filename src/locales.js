@@ -189,7 +189,28 @@ window.GASTOS_LOCALES = {
         "autoTransferHint": "Detectado pelo banco do beneficiário no extrato — não está contando como Gasto. Se estiver certo, não precisa fazer nada; se for um gasto de verdade, desfaça abaixo.",
         "extractedData": "Dados extraídos do extrato",
         "unlinkShort": "Desvincular",
-        "rejectShort": "Não é transferência — restaurar categoria"
+        "rejectShort": "Não é transferência — restaurar categoria",
+        "consideredDateLabel": "Data considerada no mês/orçamento",
+        "metaLabels": {
+          "town": "Local",
+          "dateProcessed": "Data de processamento",
+          "type": "Tipo de movimento",
+          "remittance": "Informação de remessa",
+          "beneficiary": "Beneficiário",
+          "byOrderOf": "Por ordem de",
+          "beneficiaryAccount": "Conta do beneficiário",
+          "atBank": "Banco do beneficiário",
+          "mandateRef": "Referência do mandato",
+          "endToEnd": "ID ponta a ponta",
+          "ourRef": "Nossa referência",
+          "to": "Destino",
+          "card": "Cartão",
+          "fxRate": "Taxa de câmbio",
+          "originalAmount": "Valor na moeda original",
+          "paymentDate": "Data de pagamento da fatura",
+          "cardNumber": "Número do cartão",
+          "cardStatementDate": "Fatura referente a"
+        }
       },
       "anomaly": {
         "title": "Resolver gasto estranho",
@@ -836,7 +857,28 @@ window.GASTOS_LOCALES = {
         "autoTransferHint": "Auto-detected from the beneficiary bank on the statement — not counted as an Expense. If that's correct, no action needed; if it's a real expense, undo it below.",
         "extractedData": "Data extracted from the statement",
         "unlinkShort": "Unlink",
-        "rejectShort": "Not a transfer — restore category"
+        "rejectShort": "Not a transfer — restore category",
+        "consideredDateLabel": "Month/budget date considered",
+        "metaLabels": {
+          "town": "Location",
+          "dateProcessed": "Processing date",
+          "type": "Transaction type",
+          "remittance": "Remittance information",
+          "beneficiary": "Beneficiary",
+          "byOrderOf": "By order of",
+          "beneficiaryAccount": "Beneficiary account",
+          "atBank": "Beneficiary bank",
+          "mandateRef": "Mandate reference",
+          "endToEnd": "End-to-end ID",
+          "ourRef": "Our reference",
+          "to": "To",
+          "card": "Card",
+          "fxRate": "Exchange rate",
+          "originalAmount": "Original currency amount",
+          "paymentDate": "Statement payment date",
+          "cardNumber": "Card number",
+          "cardStatementDate": "Statement period"
+        }
       },
       "anomaly": {
         "title": "Resolve unusual expense",
