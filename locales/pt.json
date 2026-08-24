@@ -596,7 +596,12 @@
   },
   "printReport": {
     "title": "Gastos.AI — Relatório de Despesas",
+    "subtitle": "Relatório de Despesas",
     "generated": "gerado em {date}",
+    "categoryClause": " · categoria: {name}",
+    "noExpensesInPeriod": "Sem saídas no período.",
+    "noData": "Sem dados.",
+    "printWithoutDataAlert": "Adicione dados antes de imprimir — importe PDFs ou use \"Ver com dados de exemplo\" em Configurações.",
     "kpis": {
       "totalExpenses": "TOTAL GASTO",
       "income": "ENTRADAS",

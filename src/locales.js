@@ -607,7 +607,12 @@ window.GASTOS_LOCALES = {
     },
     "printReport": {
       "title": "Gastos.AI — Relatório de Despesas",
+      "subtitle": "Relatório de Despesas",
       "generated": "gerado em {date}",
+      "categoryClause": " · categoria: {name}",
+      "noExpensesInPeriod": "Sem saídas no período.",
+      "noData": "Sem dados.",
+      "printWithoutDataAlert": "Adicione dados antes de imprimir — importe PDFs ou use \"Ver com dados de exemplo\" em Configurações.",
       "kpis": {
         "totalExpenses": "TOTAL GASTO",
         "income": "ENTRADAS",
@@ -1323,7 +1328,12 @@ window.GASTOS_LOCALES = {
     },
     "printReport": {
       "title": "Expenses.AI — Expense Report",
+      "subtitle": "Expense Report",
       "generated": "generated on {date}",
+      "categoryClause": " · category: {name}",
+      "noExpensesInPeriod": "No expenses this period.",
+      "noData": "No data.",
+      "printWithoutDataAlert": "Add data before printing — import PDFs or use \"Load demo data\" in Settings.",
       "kpis": {
         "totalExpenses": "TOTAL SPENT",
         "income": "INCOME",

@@ -596,7 +596,12 @@
   },
   "printReport": {
     "title": "Expenses.AI — Expense Report",
+    "subtitle": "Expense Report",
     "generated": "generated on {date}",
+    "categoryClause": " · category: {name}",
+    "noExpensesInPeriod": "No expenses this period.",
+    "noData": "No data.",
+    "printWithoutDataAlert": "Add data before printing — import PDFs or use \"Load demo data\" in Settings.",
     "kpis": {
       "totalExpenses": "TOTAL SPENT",
       "income": "INCOME",
