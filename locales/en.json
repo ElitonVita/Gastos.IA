@@ -249,11 +249,42 @@
     "cashflow": {
       "title": "Cash flow",
       "hintCumulative": "· cumulative balance over time",
-      "subtitle": "Income − real expenses, excluding internal transfers. Green = surplus, red = drawing down reserves."
+      "subtitle": "Income − real expenses, excluding internal transfers. Green = surplus, red = drawing down reserves.",
+      "hintMonthly": "· income − expenses per month",
+      "hintForecast": "· forecast: {income} income − {expense} expense = {net}/month",
+      "hintWithOpening": "· cumulative balance starting from {value} on {date}",
+      "subtitleForecast": "Solid line = actual. Dashed line (purple) = forecast using the budget set in Settings, with the historical average for categories without a target.",
+      "healthyTitle": "Healthy cash flow",
+      "healthySubHasIncome": "Saving {pct}% of income last month — no month overspent income.",
+      "healthySubNoIncome": "Not enough income to assess yet — no month overspent income.",
+      "deficitMonthText": "Spent {value} more than earned that month.",
+      "tightMarginText": "Only {pct}% of income was left ({value}).",
+      "forecastPositiveTitle": "Surplus expected per month",
+      "forecastNegativeTitle": "Shortfall expected per month",
+      "forecastText": "Income {income} − expenses {expense} = {net}/month, at the budget's pace.",
+      "estimatedBalanceTitle": "Estimated balance in {month}",
+      "estimatedBalanceText": "Starting from {start} today, projects to {final} in {n} months.",
+      "zeroBalanceTitle": "Balance may hit zero",
+      "zeroBalanceTextSingular": "At this pace, the estimated balance turns negative in ~{n} month.",
+      "zeroBalanceTextPlural": "At this pace, the estimated balance turns negative in ~{n} months.",
+      "noIncomeTargetTitle": "No income target set",
+      "noIncomeTargetText": "Using the average of recent income ({avg}/month) — set a target in Settings → Monthly budgets for a more intentional forecast.",
+      "noBudgetCatsTitle": "Categories without a target",
+      "noBudgetCatsText": "{n} categor(y/ies) without a budget use the historical average: {names}."
+    },
+    "cashflowDatasetLabels": {
+      "monthly": "Monthly balance",
+      "forecast": "Balance (actual + forecast)",
+      "cumulative": "Cumulative balance"
     },
     "category": {
       "title": "Where your money goes",
-      "hintByCategory": "· by category"
+      "hintByCategory": "· by category",
+      "hintWaterfall": "· from income down to balance, category by category"
+    },
+    "datasetLabels": {
+      "expense": "Expense",
+      "trend3m": "Trend (3m)"
     },
     "monthChart": {
       "title": "Monthly evolution",
@@ -266,22 +297,45 @@
     "histogram": {
       "title": "Value distribution",
       "badge": "Histogram",
-      "hint": "Peaks show the most common spending range. Use it to spot recurring micro-expenses."
+      "hint": "Peaks show the most common spending range. Use it to spot recurring micro-expenses.",
+      "tooltipTitle": "Range {range}",
+      "tooltipLabel": "{n} transactions"
     },
     "trend": {
       "title": "Spending trend",
-      "subtitle": "3-month moving average vs monthly spend"
+      "subtitle": "3-month moving average vs monthly spend",
+      "upBadge": "▲ +{pct}% vs last month",
+      "downBadge": "▼ -{pct}% vs last month"
     },
     "recurring": {
       "title": "Recurring charges detected",
-      "subtitle": "Same description across several months — subscriptions and fixed costs"
+      "subtitle": "Same description across several months — subscriptions and fixed costs",
+      "messages": {
+        "emptyState": "No recurring pattern detected yet — appears after 2+ months of data.",
+        "monthsCountTitle": "{n} months with this expense",
+        "itemSubtext": "{count}x total · average {avg}"
+      }
     },
     "dow": {
       "subtitle": "Where your spending concentrates"
     },
     "calendar": {
       "title": "Spending calendar",
-      "subtitle": "Stronger color = day with more spending — payday, weekend, etc."
+      "subtitle": "Stronger color = day with more spending — payday, weekend, etc.",
+      "emptyState": "No data yet.",
+      "noSpendThisMonth": "No spending this month.",
+      "biggestDayTitle": "Priciest day",
+      "biggestDayText": "{date} — {value}",
+      "avgPerDayTitle": "Average per spending day",
+      "avgPerDayText": "{value} across {n} of {total} days",
+      "weekendHigherTitle": "Weekends weigh more",
+      "weekdayHigherTitle": "Weekdays weigh more",
+      "weekdayVsWeekendText": "{weekday}/weekday vs {weekend}/weekend day — {pct}% more {which}.",
+      "weekendOnlyText": "Spending only {which} so far.",
+      "onWeekend": "on weekends",
+      "onWeekdays": "on weekdays",
+      "noSpendDaysTitle": "Days without spending",
+      "noSpendDaysText": "{n} of {total} days with no recorded expense."
     },
     "compare": {
       "title": "Category comparison",
@@ -461,7 +515,22 @@
     "accept": "Accept (real expense)",
     "alwaysAccept": "Always accept this description",
     "reject": "Ignore (not an expense)",
-    "close": "Close"
+    "close": "Close",
+    "messages": {
+      "exactDuplicate": "{n}× identical charge of {value} for \"{desc}\" on the same day — might be a duplicate.",
+      "nearDuplicate": "Two charges of {value} for \"{desc}\" {days} day(s) apart — check it isn't a duplicate.",
+      "merchantOutlier": "{value} for \"{desc}\" was well above usual (average {avg}, {pct}% more).",
+      "globalOutlier": "Atypical expense for the period: {value} for \"{desc}\" (overall average {avg}).",
+      "spikeDay": "{date} had {total} across {count} transactions — well above the daily average ({avg}).",
+      "countFoundSingular": "{n} found",
+      "countFoundPlural": "{n} found",
+      "countNone": "nothing out of the ordinary",
+      "emptyTitle": "Nothing out of the ordinary",
+      "emptyDetail": "No duplicates, spikes, or atypical values this period.",
+      "resolveButton": "Resolve",
+      "moreNotShown": "+ {n} more not shown.",
+      "noTxFound": "No transaction involved still exists (already deleted)."
+    }
   },
   "printReport": {
     "title": "Expenses.AI — Expense Report",

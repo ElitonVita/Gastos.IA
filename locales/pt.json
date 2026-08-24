@@ -249,11 +249,42 @@
     "cashflow": {
       "title": "Fluxo de caixa",
       "hintCumulative": "· saldo acumulado ao longo do tempo",
-      "subtitle": "Entradas − saídas reais, sem transferências internas. Verde = sobrando, vermelho = consumindo reserva."
+      "subtitle": "Entradas − saídas reais, sem transferências internas. Verde = sobrando, vermelho = consumindo reserva.",
+      "hintMonthly": "· entradas − saídas por mês",
+      "hintForecast": "· projeção: {income} renda − {expense} gasto = {net}/mês",
+      "hintWithOpening": "· saldo acumulado a partir de {value} em {date}",
+      "subtitleForecast": "Linha sólida = real. Linha tracejada (roxa) = projeção usando o orçamento definido em Configurações, com média histórica pra categorias sem meta.",
+      "healthyTitle": "Fluxo saudável",
+      "healthySubHasIncome": "Guardando {pct}% da renda no último mês — nenhum mês estourou a renda.",
+      "healthySubNoIncome": "Sem entradas suficientes para avaliar ainda — nenhum mês estourou a renda.",
+      "deficitMonthText": "Gastou {value} a mais do que ganhou nesse mês.",
+      "tightMarginText": "Só sobrou {pct}% da renda ({value}).",
+      "forecastPositiveTitle": "Sobra prevista por mês",
+      "forecastNegativeTitle": "Falta prevista por mês",
+      "forecastText": "Renda {income} − gastos {expense} = {net}/mês, no ritmo do orçamento.",
+      "estimatedBalanceTitle": "Saldo estimado em {month}",
+      "estimatedBalanceText": "Partindo de {start} hoje, projeta-se {final} em {n} meses.",
+      "zeroBalanceTitle": "Saldo pode zerar",
+      "zeroBalanceTextSingular": "Nesse ritmo, o saldo estimado fica negativo em ~{n} mês.",
+      "zeroBalanceTextPlural": "Nesse ritmo, o saldo estimado fica negativo em ~{n} meses.",
+      "noIncomeTargetTitle": "Meta de renda não definida",
+      "noIncomeTargetText": "Usando a média das últimas entradas ({avg}/mês) — defina uma meta em Configurações → Orçamentos mensais pra uma previsão mais intencional.",
+      "noBudgetCatsTitle": "Categorias sem meta",
+      "noBudgetCatsText": "{n} categoria(s) sem orçamento usam a média histórica: {names}."
+    },
+    "cashflowDatasetLabels": {
+      "monthly": "Saldo do mês",
+      "forecast": "Saldo (real + previsto)",
+      "cumulative": "Saldo acumulado"
     },
     "category": {
       "title": "Onde seu dinheiro vai",
-      "hintByCategory": "· por categoria"
+      "hintByCategory": "· por categoria",
+      "hintWaterfall": "· da renda até o saldo, categoria por categoria"
+    },
+    "datasetLabels": {
+      "expense": "Gasto",
+      "trend3m": "Tendência (3m)"
     },
     "monthChart": {
       "title": "Evolução mensal",
@@ -266,22 +297,45 @@
     "histogram": {
       "title": "Distribuição de valores",
       "badge": "Histograma",
-      "hint": "Picos indicam faixa de gasto mais comum. Use para identificar micro-gastos recorrentes."
+      "hint": "Picos indicam faixa de gasto mais comum. Use para identificar micro-gastos recorrentes.",
+      "tooltipTitle": "Faixa {range}",
+      "tooltipLabel": "{n} transações"
     },
     "trend": {
       "title": "Tendência de gastos",
-      "subtitle": "Média móvel (3 meses) vs gasto mensal"
+      "subtitle": "Média móvel (3 meses) vs gasto mensal",
+      "upBadge": "▲ +{pct}% vs mês anterior",
+      "downBadge": "▼ -{pct}% vs mês anterior"
     },
     "recurring": {
       "title": "Gastos recorrentes detectados",
-      "subtitle": "Mesma descrição em vários meses — assinaturas e fixos"
+      "subtitle": "Mesma descrição em vários meses — assinaturas e fixos",
+      "messages": {
+        "emptyState": "Nenhum padrão recorrente detectado ainda — aparece depois de 2+ meses de dados.",
+        "monthsCountTitle": "{n} meses com esse gasto",
+        "itemSubtext": "{count}x no total · média {avg}"
+      }
     },
     "dow": {
       "subtitle": "Onde seus gastos se concentram"
     },
     "calendar": {
       "title": "Calendário de gastos",
-      "subtitle": "Cor mais forte = dia com mais gasto — pico de salário, fim de semana, etc."
+      "subtitle": "Cor mais forte = dia com mais gasto — pico de salário, fim de semana, etc.",
+      "emptyState": "Sem dados ainda.",
+      "noSpendThisMonth": "Sem gastos nesse mês.",
+      "biggestDayTitle": "Dia mais caro",
+      "biggestDayText": "{date} — {value}",
+      "avgPerDayTitle": "Média por dia com gasto",
+      "avgPerDayText": "{value} em {n} de {total} dias",
+      "weekendHigherTitle": "Fim de semana pesa mais",
+      "weekdayHigherTitle": "Dias úteis pesam mais",
+      "weekdayVsWeekendText": "{weekday}/dia útil vs {weekend}/dia de fim de semana — {pct}% a mais {which}.",
+      "weekendOnlyText": "Só há gasto {which} até agora.",
+      "onWeekend": "no fim de semana",
+      "onWeekdays": "em dias úteis",
+      "noSpendDaysTitle": "Dias sem gasto",
+      "noSpendDaysText": "{n} de {total} dias sem nenhuma saída registrada."
     },
     "compare": {
       "title": "Comparativo por categoria",
@@ -461,7 +515,22 @@
     "accept": "Aceitar (é gasto real)",
     "alwaysAccept": "Sempre aceitar esta descrição",
     "reject": "Ignorar (não é gasto)",
-    "close": "Fechar"
+    "close": "Fechar",
+    "messages": {
+      "exactDuplicate": "{n}× cobrança idêntica de {value} em \"{desc}\" no mesmo dia — pode ser cobrança duplicada.",
+      "nearDuplicate": "Duas cobranças de {value} em \"{desc}\" com {days} dia(s) de intervalo — confira se não é duplicada.",
+      "merchantOutlier": "{value} em \"{desc}\" ficou bem acima do habitual (média {avg}, {pct}% a mais).",
+      "globalOutlier": "Gasto atípico para o período: {value} em \"{desc}\" (média geral {avg}).",
+      "spikeDay": "{date} teve {total} em {count} transações — bem acima da média diária ({avg}).",
+      "countFoundSingular": "{n} encontrado",
+      "countFoundPlural": "{n} encontrados",
+      "countNone": "nada fora do comum",
+      "emptyTitle": "Nada fora do padrão",
+      "emptyDetail": "Sem duplicidades, picos ou valores atípicos no período.",
+      "resolveButton": "Resolver",
+      "moreNotShown": "+ {n} outro(s) não exibido(s).",
+      "noTxFound": "Nenhuma transação envolvida ainda existe (já foi excluída)."
+    }
   },
   "printReport": {
     "title": "Gastos.AI — Relatório de Despesas",

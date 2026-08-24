@@ -448,7 +448,7 @@ function ensureCharts(){
   if(trendChart) trendChart.destroy();
   trendChart = new Chart(document.getElementById('trendChart'), { type:'line', data:{labels:[],datasets:[]}, options: monthOptions() });
   if(dowChart) dowChart.destroy();
-  dowChart = new Chart(document.getElementById('dowChart'), { type:'bar', data:{labels:['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],datasets:[]}, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{callbacks:{label:(c)=>` ${fmtEUR(c.parsed.y)}`}}}, scales:{ x:{grid:{display:false}}, y:{grid:{color:'rgba(128,128,128,0.18)'}, ticks:{callback:v=>'€ '+v}} } } });
+  dowChart = new Chart(document.getElementById('dowChart'), { type:'bar', data:{labels:window.i18n.tArray('days.short'),datasets:[]}, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{callbacks:{label:(c)=>` ${fmtEUR(c.parsed.y)}`}}}, scales:{ x:{grid:{display:false}}, y:{grid:{color:'rgba(128,128,128,0.18)'}, ticks:{callback:v=>'€ '+v}} } } });
   if(compareChart) compareChart.destroy();
   compareChart = new Chart(document.getElementById('compareChart'), { type: compareMode==='lines'?'line':'bar', data:{labels:[],datasets:[]}, options:compareOptions() });
   if(cashflowChart) cashflowChart.destroy();
@@ -542,7 +542,7 @@ function merchantOptions(){
 function histOptions(){
   return {
     responsive:true, maintainAspectRatio:false,
-    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ title:(a)=>`Faixa ${a[0].label}`, label:(c)=>` ${c.parsed.y} transações` } } },
+    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ title:(a)=>window.i18n.t('charts.histogram.tooltipTitle', {range: a[0].label}), label:(c)=>window.i18n.t('charts.histogram.tooltipLabel', {n: c.parsed.y}) } } },
     scales:{
       x:{ grid:{display:false}, ticks:{ font:{size:10}, maxRotation:0 } },
       y:{ grid:{color:'rgba(128,128,128,0.18)'}, ticks:{ stepSize:1 } }
@@ -585,7 +585,7 @@ function detectAnomalies(txP){
     if(g.length>1){
       g.forEach(t=>flaggedIds.add(t.id));
       anomalies.push({ type:'duplicate', severity:'high', txs:g, date:g[0].date, aid:anomalyId('duplicate',g,g[0].date), descKey:normalizeDescKey(g[0].desc),
-        text:`${g.length}× cobrança idêntica de ${fmtEUR(g[0].saida)} em "${g[0].desc}" no mesmo dia — pode ser cobrança duplicada.` });
+        text: window.i18n.t('anomalies.messages.exactDuplicate', {n: g.length, value: fmtEUR(g[0].saida), desc: g[0].desc}) });
     }
   });
 
@@ -601,7 +601,7 @@ function detectAnomalies(txP){
       const days=(b.date-a.date)/86400000;
       if(days>0 && days<=3){
         anomalies.push({ type:'near-duplicate', severity:'medium', txs:[a,b], date:b.date, aid:anomalyId('near-duplicate',[a,b],b.date), descKey:normalizeDescKey(b.desc),
-          text:`Duas cobranças de ${fmtEUR(b.saida)} em "${b.desc}" com ${Math.round(days)} dia(s) de intervalo — confira se não é duplicada.` });
+          text: window.i18n.t('anomalies.messages.nearDuplicate', {value: fmtEUR(b.saida), desc: b.desc, days: Math.round(days)}) });
       }
     }
   });
@@ -617,7 +617,7 @@ function detectAnomalies(txP){
       const z=(t.saida-m)/sd;
       if(z>=2.5 && t.saida>m*1.5){
         anomalies.push({ type:'outlier-merchant', severity: z>=4?'high':'medium', txs:[t], date:t.date, aid:anomalyId('outlier-merchant',[t],t.date), descKey:normalizeDescKey(t.desc),
-          text:`${fmtEUR(t.saida)} em "${t.desc}" ficou bem acima do habitual (média ${fmtEUR(m)}, ${Math.round(t.saida/m*100-100)}% a mais).` });
+          text: window.i18n.t('anomalies.messages.merchantOutlier', {value: fmtEUR(t.saida), desc: t.desc, avg: fmtEUR(m), pct: Math.round(t.saida/m*100-100)}) });
       }
     });
   });
@@ -630,7 +630,7 @@ function detectAnomalies(txP){
         const z=(t.saida-m)/sd;
         if(z>=3.5 && !anomalies.some(a=>a.txs.some(x=>x.id===t.id))){
           anomalies.push({ type:'outlier-global', severity:'high', txs:[t], date:t.date, aid:anomalyId('outlier-global',[t],t.date), descKey:normalizeDescKey(t.desc),
-            text:`Gasto atípico para o período: ${fmtEUR(t.saida)} em "${t.desc}" (média geral ${fmtEUR(m)}).` });
+            text: window.i18n.t('anomalies.messages.globalOutlier', {value: fmtEUR(t.saida), desc: t.desc, avg: fmtEUR(m)}) });
         }
       });
     }
@@ -648,7 +648,7 @@ function detectAnomalies(txP){
         if(z>=3 && d.total>m*2){
           const dayTxs = spend.filter(t=>dayKey(t.date)===dayKey(d.date));
           anomalies.push({ type:'spike-day', severity:'medium', txs:dayTxs, date:d.date, aid:anomalyId('spike-day',[],d.date),
-            text:`${d.date.toLocaleDateString('pt-BR')} teve ${fmtEUR(d.total)} em ${d.count} transações — bem acima da média diária (${fmtEUR(m)}).` });
+            text: window.i18n.t('anomalies.messages.spikeDay', {date: d.date.toLocaleDateString('pt-BR'), total: fmtEUR(d.total), count: d.count, avg: fmtEUR(m)}) });
         }
       });
     }
@@ -665,9 +665,9 @@ function renderAnomalies(txP){
   if(!el) return;
   const anomalies = detectAnomalies(txP).filter(a=>!dismissedAnomalyIds.has(a.aid));
   currentAnomalies = anomalies; // guarda para o botão "Resolver" reabrir pelo aid
-  if(countEl) countEl.textContent = anomalies.length ? `${anomalies.length} encontrado${anomalies.length>1?'s':''}` : 'nada fora do comum';
+  if(countEl) countEl.textContent = anomalies.length ? (anomalies.length===1 ? window.i18n.t('anomalies.messages.countFoundSingular', {n: anomalies.length}) : window.i18n.t('anomalies.messages.countFoundPlural', {n: anomalies.length})) : window.i18n.t('anomalies.messages.countNone');
   if(anomalies.length===0){
-    el.innerHTML = '<div class="p-3 rounded-xl border border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/30"><p class="text-[12px] font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5"><i class="ri-checkbox-circle-fill"></i> Nada fora do padrão</p><p class="text-[11px] text-emerald-700/80 dark:text-emerald-400/70 mt-1 leading-relaxed">Sem duplicidades, picos ou valores atípicos no período.</p></div>';
+    el.innerHTML = `<div class="p-3 rounded-xl border border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/30"><p class="text-[12px] font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5"><i class="ri-checkbox-circle-fill"></i> ${window.i18n.t('anomalies.messages.emptyTitle')}</p><p class="text-[11px] text-emerald-700/80 dark:text-emerald-400/70 mt-1 leading-relaxed">${window.i18n.t('anomalies.messages.emptyDetail')}</p></div>`;
     return;
   }
   const icons={ duplicate:'ri-file-copy-2-fill', 'near-duplicate':'ri-file-copy-2-line', 'outlier-merchant':'ri-arrow-up-circle-fill', 'outlier-global':'ri-flashlight-fill', 'spike-day':'ri-calendar-event-fill' };
@@ -679,10 +679,10 @@ function renderAnomalies(txP){
           <p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="${icons[a.type]||'ri-error-warning-fill'}"></i> ${a.date.toLocaleDateString('pt-BR')}</p>
           <p class="text-[11px] ${high?'text-red-700/80 dark:text-red-400/70':'text-amber-700/80 dark:text-amber-400/70'} mt-1 leading-relaxed">${escapeHtml(a.text)}</p>
         </div>
-        <button type="button" class="anomalyResolveBtn shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-bold ${high?'bg-red-600 hover:bg-red-700':'bg-amber-600 hover:bg-amber-700'} text-white whitespace-nowrap" data-aid="${escapeHtml(a.aid)}">Resolver</button>
+        <button type="button" class="anomalyResolveBtn shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-bold ${high?'bg-red-600 hover:bg-red-700':'bg-amber-600 hover:bg-amber-700'} text-white whitespace-nowrap" data-aid="${escapeHtml(a.aid)}">${window.i18n.t('anomalies.messages.resolveButton')}</button>
       </div>
     </div>`;
-  }).join('') + (anomalies.length>30 ? `<p class="text-[11px] text-zinc-500 pt-1">+ ${anomalies.length-30} outro(s) não exibido(s).</p>` : '');
+  }).join('') + (anomalies.length>30 ? `<p class="text-[11px] text-zinc-500 pt-1">${window.i18n.t('anomalies.messages.moreNotShown', {n: anomalies.length-30})}</p>` : '');
   el.querySelectorAll('.anomalyResolveBtn').forEach(b=>{
     b.addEventListener('click', e=>{ openAnomalyDialog(e.currentTarget.dataset.aid); });
   });
@@ -712,7 +712,7 @@ function renderAnomalyDialogBody(a){
   const liveIds = new Set(a.txs.map(t=>t.id));
   const rows = transactions.filter(t=>liveIds.has(t.id)).sort((x,y)=>x.date-y.date);
   if(rows.length===0){
-    listEl.innerHTML = '<p class="text-xs text-zinc-500 py-4 text-center">Nenhuma transação envolvida ainda existe (já foi excluída).</p>';
+    listEl.innerHTML = `<p class="text-xs text-zinc-500 py-4 text-center">${window.i18n.t('anomalies.messages.noTxFound')}</p>`;
   } else {
     listEl.innerHTML = rows.map(t=>{
       const c=catById(t.cat);
@@ -723,7 +723,7 @@ function renderAnomalyDialogBody(a){
           <span class="text-[11px] text-zinc-500">${(t.realDate||t.date).toLocaleDateString('pt-BR')} · ${escapeHtml(c.name)}${t.bank?` · ${escapeHtml(bankLabel(t.bank))}`:''}${t.note?` · ${escapeHtml(t.note)}`:''}</span>
         </span>
         <span class="font-bold font-mono text-[13px] shrink-0 text-red-600 dark:text-red-400">${fmtEUR(t.saida||t.entrada||0)}</span>
-        <button type="button" class="anomalyTxDelBtn shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30" data-id="${t.id}" title="Excluir esta transação"><i class="ri-delete-bin-line"></i></button>
+        <button type="button" class="anomalyTxDelBtn shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30" data-id="${t.id}" title="${window.i18n.t('actions.delete')}"><i class="ri-delete-bin-line"></i></button>
       </div>`;
     }).join('');
     listEl.querySelectorAll('.anomalyTxDelBtn').forEach(b=>{
@@ -772,7 +772,7 @@ function renderCalHeatmap(txP){
     monthK = months[months.length-1];
   }
   if(!monthK){
-    el.innerHTML='<p class="text-xs text-zinc-500 py-8 text-center">Sem dados ainda.</p>';
+    el.innerHTML=`<p class="text-xs text-zinc-500 py-8 text-center">${window.i18n.t('charts.calendar.emptyState')}</p>`;
     if(labelEl) labelEl.textContent='';
     if(hlEl) hlEl.innerHTML='';
     return;
@@ -800,7 +800,7 @@ function renderCalHeatmap(txP){
   if(hlEl){
     const activeDays = Object.keys(byDay).map(Number);
     if(activeDays.length===0){
-      hlEl.innerHTML = '<p class="text-[11px] text-zinc-500 text-center">Sem gastos nesse mês.</p>';
+      hlEl.innerHTML = `<p class="text-[11px] text-zinc-500 text-center">${window.i18n.t('charts.calendar.noSpendThisMonth')}</p>`;
     } else {
       const total = activeDays.reduce((s,d)=>s+byDay[d],0);
       const biggestDay = activeDays.reduce((a,b)=> byDay[b]>byDay[a] ? b : a);
@@ -816,19 +816,20 @@ function renderCalHeatmap(txP){
       const avgWeekend = weekendCount ? weekendSum/weekendCount : 0;
 
       const boxes = [];
-      boxes.push({ icon:'ri-flashlight-fill', color:'violet', title:'Dia mais caro',
-        text:`${String(biggestDay).padStart(2,'0')}/${String(m).padStart(2,'0')} — ${fmtEUR(byDay[biggestDay])}` });
-      boxes.push({ icon:'ri-bar-chart-2-line', color:'zinc', title:'Média por dia com gasto',
-        text:`${fmtEUR(total/activeDays.length)} em ${activeDays.length} de ${daysInMonth} dias` });
+      boxes.push({ icon:'ri-flashlight-fill', color:'violet', title: window.i18n.t('charts.calendar.biggestDayTitle'),
+        text: window.i18n.t('charts.calendar.biggestDayText', {date: `${String(biggestDay).padStart(2,'0')}/${String(m).padStart(2,'0')}`, value: fmtEUR(byDay[biggestDay])}) });
+      boxes.push({ icon:'ri-bar-chart-2-line', color:'zinc', title: window.i18n.t('charts.calendar.avgPerDayTitle'),
+        text: window.i18n.t('charts.calendar.avgPerDayText', {value: fmtEUR(total/activeDays.length), n: activeDays.length, total: daysInMonth}) });
       if(weekdayCount && weekendCount && (avgWeekday>0 || avgWeekend>0)){
         const weekendHigher = avgWeekend > avgWeekday;
         const bigger = weekendHigher ? avgWeekend : avgWeekday, smaller = weekendHigher ? avgWeekday : avgWeekend;
         const pct = smaller>0 ? Math.round((bigger/smaller-1)*100) : null;
-        boxes.push({ icon:'ri-calendar-event-line', color: weekendHigher?'amber':'zinc', title: weekendHigher?'Fim de semana pesa mais':'Dias úteis pesam mais',
-          text: pct!=null ? `${fmtEUR(avgWeekday)}/dia útil vs ${fmtEUR(avgWeekend)}/dia de fim de semana — ${pct}% a mais ${weekendHigher?'no fim de semana':'em dias úteis'}.` : `Só há gasto ${weekendHigher?'no fim de semana':'em dias úteis'} até agora.` });
+        const which = weekendHigher ? window.i18n.t('charts.calendar.onWeekend') : window.i18n.t('charts.calendar.onWeekdays');
+        boxes.push({ icon:'ri-calendar-event-line', color: weekendHigher?'amber':'zinc', title: weekendHigher ? window.i18n.t('charts.calendar.weekendHigherTitle') : window.i18n.t('charts.calendar.weekdayHigherTitle'),
+          text: pct!=null ? window.i18n.t('charts.calendar.weekdayVsWeekendText', {weekday: fmtEUR(avgWeekday), weekend: fmtEUR(avgWeekend), pct, which}) : window.i18n.t('charts.calendar.weekendOnlyText', {which}) });
       }
       if(daysWithoutSpend>0){
-        boxes.push({ icon:'ri-checkbox-blank-circle-line', color:'emerald', title:'Dias sem gasto', text:`${daysWithoutSpend} de ${daysInMonth} dias sem nenhuma saída registrada.` });
+        boxes.push({ icon:'ri-checkbox-blank-circle-line', color:'emerald', title: window.i18n.t('charts.calendar.noSpendDaysTitle'), text: window.i18n.t('charts.calendar.noSpendDaysText', {n: daysWithoutSpend, total: daysInMonth}) });
       }
       const colorCls = { violet:['border-violet-200 dark:border-violet-900 bg-violet-50 dark:bg-violet-950/30','text-violet-700 dark:text-violet-400'],
         amber:['border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/30','text-amber-700 dark:text-amber-400'],
@@ -853,7 +854,7 @@ function updateCharts(){
     monthChart.data.labels=[]; monthChart.data.datasets=[]; monthChart.update();
     merchantChart.data.labels=[]; merchantChart.data.datasets=[]; merchantChart.update();
     histChart.data.labels=[]; histChart.data.datasets=[]; histChart.update();
-    document.getElementById('catLegend').innerHTML='<span class="text-xs text-zinc-500">Sem dados ainda — adicione PDFs ou use o exemplo.</span>';
+    document.getElementById('catLegend').innerHTML=`<span class="text-xs text-zinc-500">${window.i18n.t('charts.waterfall.emptyState')}</span>`;
     document.getElementById('monthRange').textContent='';
     if(cashflowChart){ cashflowChart.data.labels=[]; cashflowChart.data.datasets=[]; cashflowChart.update(); }
     const cfTipsEl=document.getElementById('cashflowTips'); if(cfTipsEl) cfTipsEl.innerHTML='';
@@ -879,12 +880,12 @@ function updateCharts(){
 
   const catModeHintEl = document.getElementById('catModeHint');
   if(chartMode==='waterfall'){
-    if(catModeHintEl) catModeHintEl.textContent = '· da renda até o saldo, categoria por categoria';
+    if(catModeHintEl) catModeHintEl.textContent = window.i18n.t('charts.category.hintWaterfall');
     const totalIncome = txP.filter(t=>t.entrada && !t.internal).reduce((s,t)=>s+t.entrada,0);
     const TOP_N = 6;
     const top = catEntries.slice(0, TOP_N);
     const restVal = catEntries.slice(TOP_N).reduce((s,[,v])=>s+v,0);
-    const wLabels=['Renda']; const wRanges=[[0,totalIncome]]; const wColors=['#10b981']; const wIds=[null];
+    const wLabels=[window.i18n.t('charts.waterfall.income')]; const wRanges=[[0,totalIncome]]; const wColors=['#10b981']; const wIds=[null];
     let running = totalIncome;
     top.forEach(([id,v])=>{
       const c=catById(id); const start = running-v;
@@ -893,22 +894,22 @@ function updateCharts(){
     });
     if(restVal>0.005){
       const start = running-restVal;
-      wRanges.push([start, running]); wColors.push('#a1a1aa'); wLabels.push('Outras categorias'); wIds.push(null);
+      wRanges.push([start, running]); wColors.push('#a1a1aa'); wLabels.push(window.i18n.t('charts.waterfall.otherCategories')); wIds.push(null);
       running = start;
     }
-    wLabels.push('Saldo'); wRanges.push([0, running]); wColors.push(running>=0?'#10b981':'#ef4444'); wIds.push(null);
+    wLabels.push(window.i18n.t('charts.waterfall.balance')); wRanges.push([0, running]); wColors.push(running>=0?'#10b981':'#ef4444'); wIds.push(null);
 
     catChart.data.labels=wLabels; catChart.data.ids=wIds;
     catChart.data.datasets=[{ data:wRanges, backgroundColor:wColors, borderRadius:6, barThickness: wLabels.length>8?18:28 }];
     catChart.update();
     document.getElementById('catLegend').innerHTML = `<div class="text-[12px] leading-relaxed p-2.5 space-y-2">
-      <p class="text-zinc-600 dark:text-zinc-300"><span class="font-bold">Como ler:</span> começa na sua renda do período e desce categoria por categoria até o que sobrou.</p>
-      <p class="flex items-center gap-1.5 text-zinc-500"><span class="w-2 h-2 rounded-full inline-block" style="background:#10b981"></span> Renda / saldo positivo</p>
-      <p class="flex items-center gap-1.5 text-zinc-500"><span class="w-2 h-2 rounded-full inline-block" style="background:#ef4444"></span> Saldo negativo</p>
-      <p class="flex items-center gap-1.5 text-zinc-500"><span class="w-2 h-2 rounded-full inline-block" style="background:#a1a1aa"></span> Outras categorias agrupadas</p>
+      <p class="text-zinc-600 dark:text-zinc-300"><span class="font-bold">${window.i18n.t('charts.waterfall.howToRead')}</span> ${window.i18n.t('charts.waterfall.explanation')}</p>
+      <p class="flex items-center gap-1.5 text-zinc-500"><span class="w-2 h-2 rounded-full inline-block" style="background:#10b981"></span> ${window.i18n.t('charts.waterfall.legendIncomePositive')}</p>
+      <p class="flex items-center gap-1.5 text-zinc-500"><span class="w-2 h-2 rounded-full inline-block" style="background:#ef4444"></span> ${window.i18n.t('charts.waterfall.legendNegative')}</p>
+      <p class="flex items-center gap-1.5 text-zinc-500"><span class="w-2 h-2 rounded-full inline-block" style="background:#a1a1aa"></span> ${window.i18n.t('charts.waterfall.legendOtherGrouped')}</p>
     </div>`;
   } else {
-    if(catModeHintEl) catModeHintEl.textContent = '· por categoria';
+    if(catModeHintEl) catModeHintEl.textContent = window.i18n.t('charts.category.hintByCategory');
     catChart.data.labels=labels; catChart.data.ids=ids;
     if(wantType==='doughnut'){
       catChart.data.datasets=[{ data:vals, backgroundColor:colors, borderWidth:0, hoverOffset:8 }];
@@ -942,7 +943,7 @@ function updateCharts(){
   const byMonth={}; txP.forEach(t=>{ if(t.saida && !t.internal){ const k=monthKey(t.date); byMonth[k]=(byMonth[k]||0)+t.saida; }});
   const months=Object.keys(byMonth).sort();
   monthChart.data.labels=months.map(monthLabel);
-  monthChart.data.datasets=[{ label:'Gasto', data:months.map(k=>Math.round(byMonth[k]*100)/100), borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.12)', fill:true, tension:0.35 }];
+  monthChart.data.datasets=[{ label: window.i18n.t('charts.datasetLabels.expense'), data:months.map(k=>Math.round(byMonth[k]*100)/100), borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.12)', fill:true, tension:0.35 }];
   monthChart.update();
   document.getElementById('monthRange').textContent = months.length? `${monthLabel(months[0])} → ${monthLabel(months[months.length-1])}` : '';
 
@@ -976,8 +977,8 @@ function updateCharts(){
     const ma=valsM.map((_,i)=>{ const s=Math.max(0,i-2); const win=valsM.slice(s,i+1); return Math.round(win.reduce((a,b)=>a+b,0)/win.length*100)/100; });
     trendChart.data.labels=ms.map(monthLabel);
     trendChart.data.datasets=[
-      { label:'Gasto', data:valsM, borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.10)', fill:true, tension:0.35 },
-      { label:'Tendência (3m)', data:ma, borderColor:'#f59e0b', borderDash:[6,4], pointRadius:0, tension:0.35 }
+      { label: window.i18n.t('charts.datasetLabels.expense'), data:valsM, borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.10)', fill:true, tension:0.35 },
+      { label: window.i18n.t('charts.datasetLabels.trend3m'), data:ma, borderColor:'#f59e0b', borderDash:[6,4], pointRadius:0, tension:0.35 }
     ];
     trendChart.update();
     const badge=document.getElementById('trendBadge');
@@ -985,8 +986,8 @@ function updateCharts(){
       // compara último mês vs anterior
       const diff = valsM[valsM.length-1]-valsM[valsM.length-2];
       const pctPrev = valsM[valsM.length-2]>0 ? Math.round(Math.abs(diff)/valsM[valsM.length-2]*100) : 0;
-      if(diff>0){ badge.textContent=`▲ +${pctPrev}% vs mês anterior`; badge.className='text-[11px] font-bold px-2 py-1 rounded-full bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400'; }
-      else { badge.textContent=`▼ -${pctPrev}% vs mês anterior`; badge.className='text-[11px] font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400'; }
+      if(diff>0){ badge.textContent=window.i18n.t('charts.trend.upBadge', {pct: pctPrev}); badge.className='text-[11px] font-bold px-2 py-1 rounded-full bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400'; }
+      else { badge.textContent=window.i18n.t('charts.trend.downBadge', {pct: pctPrev}); badge.className='text-[11px] font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400'; }
     } else if(badge){ badge.textContent=''; }
   }
 
@@ -1067,8 +1068,8 @@ function updateCharts(){
         ? (scopeMonths.length ? `${monthLabel(scopeMonths[0])} – ${monthLabel(scopeMonths[scopeMonths.length-1])}` : '')
         : (cmpMonth ? monthLabel(cmpMonth) : '');
       document.getElementById('compareModeHint').textContent = budgetScope==='cumulative'
-        ? `· real sobreposto à meta acumulada dos ${scopeMonths.length} meses do período — suaviza picos isolados (férias, etc.)`
-        : '· real sobreposto à meta definida em Configurações, mês mais recente';
+        ? window.i18n.t('charts.compare.hintCumulative', {n: scopeMonths.length})
+        : window.i18n.t('charts.compare.hintThisMonth');
     } else {
       if(chartWrapEl) chartWrapEl.classList.remove('hidden');
       if(budgetListEl) budgetListEl.classList.add('hidden');
@@ -1099,7 +1100,7 @@ function updateCharts(){
       });
       compareChart.update();
       document.getElementById('compareRange').textContent = lastN.length? lastN.map(monthLabel).join(' · ') : '';
-      document.getElementById('compareModeHint').textContent = compareMode==='lines' ? '· tendência de cada categoria mês a mês' : '· barras lado a lado por mês';
+      document.getElementById('compareModeHint').textContent = compareMode==='lines' ? window.i18n.t('charts.compare.hintLines') : window.i18n.t('charts.compare.hintBars');
       renderCompareLegend();
     }
   }
@@ -1123,9 +1124,9 @@ function updateCharts(){
     const subEl = document.getElementById('cashflowSub');
     if(cashflowMode==='monthly'){
       cashflowChart.data.labels = monthsAll.map(monthLabel);
-      cashflowChart.data.datasets=[{ label:'Saldo do mês', data:netByMonth, backgroundColor: netByMonth.map(v=>v>=0?'#10b981':'#ef4444'), borderRadius:6 }];
-      document.getElementById('cashflowHint').textContent = '· entradas − saídas por mês';
-      if(subEl) subEl.textContent = 'Entradas − saídas reais, sem transferências internas. Verde = sobrando, vermelho = consumindo reserva.';
+      cashflowChart.data.datasets=[{ label: window.i18n.t('charts.cashflowDatasetLabels.monthly'), data:netByMonth, backgroundColor: netByMonth.map(v=>v>=0?'#10b981':'#ef4444'), borderRadius:6 }];
+      document.getElementById('cashflowHint').textContent = window.i18n.t('charts.cashflow.hintMonthly');
+      if(subEl) subEl.textContent = window.i18n.t('charts.cashflow.subtitle');
     } else {
       // Se houver um saldo inicial definido (Configurações → Saldo inicial), a curva parte dele em vez de
       // zero — soma também o net de qualquer mês entre o saldo inicial e o começo do período mostrado, pra
@@ -1179,7 +1180,7 @@ function updateCharts(){
         const splitIdx = cumData.length; // a partir daqui é projeção, não histórico real
         cashflowChart.data.labels = monthsAll.concat(forecastKeys).map((k,i)=> i<splitIdx ? monthLabel(k) : monthLabel(k)+' (prev.)');
         cashflowChart.data.datasets=[{
-          label:'Saldo (real + previsto)', data: combined, fill:true, tension:0.3,
+          label: window.i18n.t('charts.cashflowDatasetLabels.forecast'), data: combined, fill:true, tension:0.3,
           borderColor: '#8b5cf6',
           segment:{
             borderDash: ctx => ctx.p1DataIndex >= splitIdx ? [6,4] : undefined,
@@ -1190,23 +1191,25 @@ function updateCharts(){
           pointStyle: combined.map((v,i)=> i>=splitIdx ? 'rectRot' : 'circle'),
           pointRadius: combined.map((v,i)=> i>=splitIdx ? 4 : 3)
         }];
+        const projectedNetStr = (projectedNet>=0?'+':'')+fmtEUR(projectedNet);
         document.getElementById('cashflowHint').textContent =
-          `· projeção: ${fmtEUR(projectedMonthlyIncome)} renda − ${fmtEUR(projectedMonthlyExpense)} gasto = ${projectedNet>=0?'+':''}${fmtEUR(projectedNet)}/mês`;
-        if(subEl) subEl.textContent = 'Linha sólida = real. Linha tracejada (roxa) = projeção usando o orçamento definido em Configurações, com média histórica pra categorias sem meta.';
+          window.i18n.t('charts.cashflow.hintForecast', {income: fmtEUR(projectedMonthlyIncome), expense: fmtEUR(projectedMonthlyExpense), net: projectedNetStr});
+        // i18n: color name here must match the forecast line's actual borderColor (#8b5cf6 = violet/purple)
+        if(subEl) subEl.textContent = window.i18n.t('charts.cashflow.subtitleForecast');
         forecastState = { projectedMonthlyIncome, projectedMonthlyExpense, projectedNet, usesIncomeTarget, avgIncome, noBudgetCats, forecastKeys, startSaldo, finalForecast: forecastData[forecastData.length-1] };
       } else {
         cashflowChart.data.labels = monthsAll.map(monthLabel);
         cashflowChart.data.datasets=[{
-          label:'Saldo acumulado', data:cumData, fill:true, tension:0.3,
+          label: window.i18n.t('charts.cashflowDatasetLabels.cumulative'), data:cumData, fill:true, tension:0.3,
           borderColor:ctx=>{ const v=ctx.p1?.parsed?.y ?? cumData[cumData.length-1] ?? 0; return v<0?'#ef4444':'#10b981'; },
           backgroundColor: cumData[cumData.length-1]>=0 ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)',
           segment:{ borderColor: ctx => (ctx.p0.parsed.y<0 || ctx.p1.parsed.y<0) ? '#ef4444' : '#10b981' },
           pointBackgroundColor: cumData.map(v=>v>=0?'#10b981':'#ef4444')
         }];
         document.getElementById('cashflowHint').textContent = (openingBalance && openingBalance.value!=null)
-          ? `· saldo acumulado a partir de ${fmtEUR(openingBalance.value)} em ${openingBalance.date.toLocaleDateString('pt-BR')}`
-          : '· saldo acumulado ao longo do tempo';
-        if(subEl) subEl.textContent = 'Entradas − saídas reais, sem transferências internas. Verde = sobrando, vermelho = consumindo reserva.';
+          ? window.i18n.t('charts.cashflow.hintWithOpening', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString('pt-BR')})
+          : window.i18n.t('charts.cashflow.hintCumulative');
+        if(subEl) subEl.textContent = window.i18n.t('charts.cashflow.subtitle');
       }
     }
     cashflowChart.update();
@@ -1217,19 +1220,20 @@ function updateCharts(){
       const f = forecastState;
       const boxes = [];
       const positive = f.projectedNet>=0;
+      const projectedNetStr = (positive?'+':'')+fmtEUR(f.projectedNet);
       boxes.push({ level: positive?'ok':'danger',
-        title: positive ? 'Sobra prevista por mês' : 'Falta prevista por mês',
-        text: `Renda ${fmtEUR(f.projectedMonthlyIncome)} − gastos ${fmtEUR(f.projectedMonthlyExpense)} = ${positive?'+':''}${fmtEUR(f.projectedNet)}/mês, no ritmo do orçamento.` });
+        title: positive ? window.i18n.t('charts.cashflow.forecastPositiveTitle') : window.i18n.t('charts.cashflow.forecastNegativeTitle'),
+        text: window.i18n.t('charts.cashflow.forecastText', {income: fmtEUR(f.projectedMonthlyIncome), expense: fmtEUR(f.projectedMonthlyExpense), net: projectedNetStr}) });
       const finalPositive = f.finalForecast>=0;
       boxes.push({ level: finalPositive?'ok':'danger',
-        title: `Saldo estimado em ${monthLabel(f.forecastKeys[f.forecastKeys.length-1])}`,
-        text: `Partindo de ${fmtEUR(f.startSaldo)} hoje, projeta-se ${fmtEUR(f.finalForecast)} em ${f.forecastKeys.length} meses.` });
+        title: window.i18n.t('charts.cashflow.estimatedBalanceTitle', {month: monthLabel(f.forecastKeys[f.forecastKeys.length-1])}),
+        text: window.i18n.t('charts.cashflow.estimatedBalanceText', {start: fmtEUR(f.startSaldo), final: fmtEUR(f.finalForecast), n: f.forecastKeys.length}) });
       if(f.projectedNet<0 && f.startSaldo>0){
         const monthsToZero = Math.ceil(f.startSaldo / -f.projectedNet);
-        if(monthsToZero<=24) boxes.push({ level:'danger', title:'Saldo pode zerar', text:`Nesse ritmo, o saldo estimado fica negativo em ~${monthsToZero} ${monthsToZero===1?'mês':'meses'}.` });
+        if(monthsToZero<=24) boxes.push({ level:'danger', title: window.i18n.t('charts.cashflow.zeroBalanceTitle'), text: monthsToZero===1 ? window.i18n.t('charts.cashflow.zeroBalanceTextSingular', {n: monthsToZero}) : window.i18n.t('charts.cashflow.zeroBalanceTextPlural', {n: monthsToZero}) });
       }
-      if(!f.usesIncomeTarget) boxes.push({ level:'warn', title:'Meta de renda não definida', text:`Usando a média das últimas entradas (${fmtEUR(f.avgIncome)}/mês) — defina uma meta em Configurações → Orçamentos mensais pra uma previsão mais intencional.` });
-      if(f.noBudgetCats.length) boxes.push({ level:'warn', title:'Categorias sem meta', text:`${f.noBudgetCats.length} categoria(s) sem orçamento usam a média histórica: ${f.noBudgetCats.map(c=>c.name).join(', ')}.` });
+      if(!f.usesIncomeTarget) boxes.push({ level:'warn', title: window.i18n.t('charts.cashflow.noIncomeTargetTitle'), text: window.i18n.t('charts.cashflow.noIncomeTargetText', {avg: fmtEUR(f.avgIncome)}) });
+      if(f.noBudgetCats.length) boxes.push({ level:'warn', title: window.i18n.t('charts.cashflow.noBudgetCatsTitle'), text: window.i18n.t('charts.cashflow.noBudgetCatsText', {n: f.noBudgetCats.length, names: f.noBudgetCats.map(c=>c.name).join(', ')}) });
       tipsEl.innerHTML = boxes.slice(0,4).map(b=>{
         const cls = b.level==='ok' ? 'border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/30'
           : b.level==='danger' ? 'border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30'
@@ -1249,15 +1253,15 @@ function updateCharts(){
         const inc=incByMonth[i], exp=expByMonth[i], net=netByMonth[i];
         if(inc<=0) continue; // sem entradas no mês, não dá pra avaliar margem
         const ratio=exp/inc;
-        if(net<0) tips.push({ level:'danger', month:monthsAll[i], text:`Gastou ${fmtEUR(Math.abs(net))} a mais do que ganhou nesse mês.` });
-        else if(ratio>=0.9) tips.push({ level:'warn', month:monthsAll[i], text:`Só sobrou ${Math.max(0,Math.round((1-ratio)*100))}% da renda (${fmtEUR(net)}).` });
+        if(net<0) tips.push({ level:'danger', month:monthsAll[i], text: window.i18n.t('charts.cashflow.deficitMonthText', {value: fmtEUR(Math.abs(net))}) });
+        else if(ratio>=0.9) tips.push({ level:'warn', month:monthsAll[i], text: window.i18n.t('charts.cashflow.tightMarginText', {pct: Math.max(0,Math.round((1-ratio)*100)), value: fmtEUR(net)}) });
       }
       if(tips.length===0){
         const lastIdx=incByMonth.length-1;
         const rate = (lastIdx>=0 && incByMonth[lastIdx]>0) ? Math.round(netByMonth[lastIdx]/incByMonth[lastIdx]*100) : null;
         tipsEl.innerHTML = `<div class="p-3 rounded-xl border border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/30">
-          <p class="text-[12px] font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5"><i class="ri-checkbox-circle-fill"></i> Fluxo saudável</p>
-          <p class="text-[11px] text-emerald-700/80 dark:text-emerald-400/70 mt-1 leading-relaxed">${rate!=null?`Guardando ${rate}% da renda no último mês`:'Sem entradas suficientes para avaliar ainda'} — nenhum mês estourou a renda.</p>
+          <p class="text-[12px] font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5"><i class="ri-checkbox-circle-fill"></i> ${window.i18n.t('charts.cashflow.healthyTitle')}</p>
+          <p class="text-[11px] text-emerald-700/80 dark:text-emerald-400/70 mt-1 leading-relaxed">${rate!=null ? window.i18n.t('charts.cashflow.healthySubHasIncome', {pct: rate}) : window.i18n.t('charts.cashflow.healthySubNoIncome')}</p>
         </div>`;
       } else {
         tipsEl.innerHTML = tips.map(t=>{
@@ -1280,14 +1284,14 @@ function updateCharts(){
     txP.forEach(t=>{ if(t.saida && !t.internal){ const k=normalizeDescKey(t.desc); (byKey[k]??=({months:new Set(), total:0, count:0, desc:t.desc})); byKey[k].months.add(monthKey(t.date)); byKey[k].total+=t.saida; byKey[k].count++; }});
     const rec=Object.values(byKey).filter(x=>x.months.size>=2).sort((a,b)=>b.months.size-a.months.size || b.count-a.count || b.total-a.total).slice(0,10);
     const rl=document.getElementById('recurringList');
-    if(rec.length===0){ rl.innerHTML='<span class="text-xs text-zinc-500">Nenhum padrão recorrente detectado ainda — aparece depois de 2+ meses de dados.</span>'; }
+    if(rec.length===0){ rl.innerHTML=`<span class="text-xs text-zinc-500">${window.i18n.t('charts.recurring.messages.emptyState')}</span>`; }
     else{
       rl.innerHTML=rec.map(r=>{
         const c=catById(categorize(r.desc));
         const avg=r.total/r.count;
         return `<div class="flex items-center gap-3 p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-          <span class="shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-extrabold font-mono" style="background:${c.color}1a;color:${c.color}" title="${r.months.size} meses com esse gasto">${r.months.size}×</span>
-          <span class="flex-1 min-w-0"><span class="block text-[13px] font-semibold truncate">${escapeHtml(r.desc)}</span><span class="text-[11px] text-zinc-500">${r.count}x no total · média ${fmtEUR(avg)}</span></span>
+          <span class="shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-extrabold font-mono" style="background:${c.color}1a;color:${c.color}" title="${window.i18n.t('charts.recurring.messages.monthsCountTitle', {n: r.months.size})}">${r.months.size}×</span>
+          <span class="flex-1 min-w-0"><span class="block text-[13px] font-semibold truncate">${escapeHtml(r.desc)}</span><span class="text-[11px] text-zinc-500">${window.i18n.t('charts.recurring.messages.itemSubtext', {count: r.count, avg: fmtEUR(avg)})}</span></span>
           <span class="font-bold font-mono text-[13px] shrink-0">${fmtEUR(r.total)}</span>
         </div>`;
       }).join('');
