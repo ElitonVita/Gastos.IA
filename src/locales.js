@@ -47,7 +47,15 @@ window.GASTOS_LOCALES = {
       "avgTicket": "Ticket médio",
       "perTransaction": "por transação",
       "insightTitle": "O que mais pesa?",
-      "insightDefault": "Adicione PDFs para ver insights."
+      "insightDefault": "Adicione PDFs para ver insights.",
+      "balanceSubWithOpening": "Saldo inicial {value} ({date}) + entradas − saídas",
+      "countBreakdown": "{expenses} saídas · {income} entradas{transfers} · {files} arquivos",
+      "countTransfersClause": " · {n} transferências internas",
+      "topCategoryValueText": "{value} · {pct}% do total",
+      "insightMainText": "{cat} é seu maior gasto",
+      "insightSubText": "{value} ({pct}%) — vale revisar assinaturas e compras nessa categoria.",
+      "savedText": "{value} sobrando no período",
+      "overspentText": "{value} além da renda"
     },
     "filters": {
       "searchPlaceholder": "Buscar descrição, categoria, arquivo...",
@@ -60,7 +68,8 @@ window.GASTOS_LOCALES = {
       "bankNone": "Sem tipo identificado",
       "periodChips": {
         "all": "Tudo"
-      }
+      },
+      "yearOf": "Ano de {year}"
     },
     "table": {
       "columns": {
@@ -103,7 +112,30 @@ window.GASTOS_LOCALES = {
       "monthlyAverage": "Média mensal",
       "pageInfo": "Página {current} / {total}",
       "prevPage": "Anterior",
-      "nextPage": "Próxima"
+      "nextPage": "Próxima",
+      "cardSettlementText": "Fatura do cartão",
+      "cardSettlementTitleText": "Débito único da fatura do cartão — não contabilizado (as compras já foram contadas individualmente)",
+      "transferBetweenAccountsText": "entre contas",
+      "transferBetweenAccountsTitleText": "Transferência entre suas contas — não contabilizada em Gastos/Entradas. Veja o par em Detalhes.",
+      "possibleTransferTitleText": "Detectado automaticamente pelo banco do beneficiário — provável transferência para {bank}. Confira em Detalhes.",
+      "possibleTransferText": "possível transferência",
+      "internalTransferText": "⇄ interna",
+      "internalTransferTitleText": "Movimentação interna — não contabilizada",
+      "swapTitle": "Trocar Saída ↔ Entrada",
+      "noteTitle": "Nota",
+      "detailsTitle": "Detalhes",
+      "deleteTitle": "Excluir transação",
+      "deleteConfirm": "Excluir esta transação?\n\n{desc}\n{date} · {value}",
+      "avgPerMonthTitle": "Total dividido pelos {n} {monthWord} com movimento nessa categoria",
+      "avgPerMonthLabel": "Média mensal: ",
+      "monthWordSingular": "mês",
+      "monthWordPlural": "meses",
+      "summaryMovements": "{n} movimentos",
+      "summaryRealExpenses": "Gastos reais",
+      "summaryIncome": "Entradas",
+      "summaryInternalTransfers": "Transf. internas",
+      "summaryInternalTransfersTitle": "Movimentações internas (pockets, Flexible Cash Funds) — não contam como gasto",
+      "pageInfoText": "Página {current} / {total}"
     },
     "actions": {
       "swap": "Trocar Saída ↔ Entrada",
@@ -328,7 +360,9 @@ window.GASTOS_LOCALES = {
         "shortfall": "Falta",
         "beyondIncome": "além da renda",
         "free": "livre",
-        "noIncomeTarget": "Defina a meta de renda mensal acima pra ver quanto sobra e a porcentagem comprometida."
+        "noIncomeTarget": "Defina a meta de renda mensal acima pra ver quanto sobra e a porcentagem comprometida.",
+        "pctOfIncomeText": "{pct}% da renda",
+        "pctFreeOrOverText": "{pct}% {label}"
       }
     },
     "settings": {
@@ -559,7 +593,8 @@ window.GASTOS_LOCALES = {
       "ok": "OK",
       "apply": "Aplicar",
       "reset": "Redefinir",
-      "export": "Exportar CSV"
+      "export": "Exportar CSV",
+      "editItemTitle": "Editar {name}"
     }
   },
   "en": {
@@ -608,7 +643,15 @@ window.GASTOS_LOCALES = {
       "avgTicket": "Avg ticket",
       "perTransaction": "per transaction",
       "insightTitle": "What weighs the most?",
-      "insightDefault": "Add PDFs to see insights."
+      "insightDefault": "Add PDFs to see insights.",
+      "balanceSubWithOpening": "Opening balance {value} ({date}) + income − expenses",
+      "countBreakdown": "{expenses} expenses · {income} income{transfers} · {files} files",
+      "countTransfersClause": " · {n} internal transfers",
+      "topCategoryValueText": "{value} · {pct}% of total",
+      "insightMainText": "{cat} is your biggest expense",
+      "insightSubText": "{value} ({pct}%) — worth reviewing subscriptions and purchases in this category.",
+      "savedText": "{value} left over this period",
+      "overspentText": "{value} over income"
     },
     "filters": {
       "searchPlaceholder": "Search description, category, file...",
@@ -621,7 +664,8 @@ window.GASTOS_LOCALES = {
       "bankNone": "No type identified",
       "periodChips": {
         "all": "All"
-      }
+      },
+      "yearOf": "Year {year}"
     },
     "table": {
       "columns": {
@@ -664,7 +708,30 @@ window.GASTOS_LOCALES = {
       "monthlyAverage": "Monthly average",
       "pageInfo": "Page {current} / {total}",
       "prevPage": "Previous",
-      "nextPage": "Next"
+      "nextPage": "Next",
+      "cardSettlementText": "Card statement",
+      "cardSettlementTitleText": "Single card statement debit — not counted (individual purchases already counted)",
+      "transferBetweenAccountsText": "between accounts",
+      "transferBetweenAccountsTitleText": "Transfer between your accounts — not counted in Expenses/Income. See pair in Details.",
+      "possibleTransferTitleText": "Auto-detected by beneficiary bank — likely transfer to {bank}. Check in Details.",
+      "possibleTransferText": "possible transfer",
+      "internalTransferText": "⇄ internal",
+      "internalTransferTitleText": "Internal movement — not counted",
+      "swapTitle": "Swap Expense ↔ Income",
+      "noteTitle": "Note",
+      "detailsTitle": "Details",
+      "deleteTitle": "Delete transaction",
+      "deleteConfirm": "Delete this transaction?\n\n{desc}\n{date} · {value}",
+      "avgPerMonthTitle": "Total split across the {n} {monthWord} with activity in this category",
+      "avgPerMonthLabel": "Monthly average: ",
+      "monthWordSingular": "month",
+      "monthWordPlural": "months",
+      "summaryMovements": "{n} transactions",
+      "summaryRealExpenses": "Real expenses",
+      "summaryIncome": "Income",
+      "summaryInternalTransfers": "Internal transfers",
+      "summaryInternalTransfersTitle": "Internal movements (pockets, Flexible Cash Funds) — not counted as expenses",
+      "pageInfoText": "Page {current} / {total}"
     },
     "actions": {
       "swap": "Swap Expense ↔ Income",
@@ -889,7 +956,9 @@ window.GASTOS_LOCALES = {
         "shortfall": "Shortfall",
         "beyondIncome": "over income",
         "free": "free",
-        "noIncomeTarget": "Set monthly income target above to see remaining and % committed."
+        "noIncomeTarget": "Set monthly income target above to see remaining and % committed.",
+        "pctOfIncomeText": "{pct}% of income",
+        "pctFreeOrOverText": "{pct}% {label}"
       }
     },
     "settings": {
@@ -1120,7 +1189,8 @@ window.GASTOS_LOCALES = {
       "ok": "OK",
       "apply": "Apply",
       "reset": "Reset",
-      "export": "Export CSV"
+      "export": "Export CSV",
+      "editItemTitle": "Edit {name}"
     }
   }
 };

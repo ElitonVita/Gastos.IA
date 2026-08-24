@@ -6,7 +6,7 @@ function renderCategoryChips(){
   const wrap=document.getElementById('categoryChips');
   const sel=document.getElementById('filterCat');
   const mSel=document.getElementById('mCat');
-  wrap.innerHTML=''; sel.innerHTML='<option value=\"\">Todas categorias</option>'; mSel.innerHTML='';
+  wrap.innerHTML=''; sel.innerHTML=`<option value="">${window.i18n.t('filters.allCategories')}</option>`; mSel.innerHTML='';
   categories.forEach(c=>{
     const active = activeCatFilter===c.id;
     const item=document.createElement('span');
@@ -21,7 +21,7 @@ function renderCategoryChips(){
     item.appendChild(chip);
     const editBtn=document.createElement('button');
     editBtn.type='button';
-    editBtn.title=`Editar ${escapeHtml(c.name)}`;
+    editBtn.title=window.i18n.t('common.editItemTitle', {name: escapeHtml(c.name)});
     editBtn.className='w-7 h-7 shrink-0 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-400 hover:text-violet-600 dark:hover:text-violet-400 hover:border-violet-300 dark:hover:border-violet-700 flex items-center justify-center text-[12px] transition';
     editBtn.innerHTML='<i class="ri-pencil-fill"></i>';
     editBtn.onclick=(e)=>{ e.stopPropagation(); openCategoryDialog(c.id); };
@@ -81,27 +81,27 @@ function updateBudgetSummary(){
     const remColor = over ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400';
     el.innerHTML = `<div class="grid grid-cols-3 gap-2 text-center">
       <div>
-        <p class="text-[10px] font-bold uppercase tracking-wide text-zinc-500">Total orçado</p>
+        <p class="text-[10px] font-bold uppercase tracking-wide text-zinc-500">${window.i18n.t('budget.summary.totalBudgeted')}</p>
         <p class="font-mono font-bold text-sm mt-0.5">${fmtEUR(totalBudget)}</p>
-        <p class="text-[10px] text-zinc-500 mt-0.5">${pctUsed}% da renda</p>
+        <p class="text-[10px] text-zinc-500 mt-0.5">${window.i18n.t('budget.summary.pctOfIncomeText', {pct: pctUsed})}</p>
       </div>
       <div>
-        <p class="text-[10px] font-bold uppercase tracking-wide text-zinc-500">Meta de renda</p>
+        <p class="text-[10px] font-bold uppercase tracking-wide text-zinc-500">${window.i18n.t('budget.summary.incomeTarget')}</p>
         <p class="font-mono font-bold text-sm mt-0.5">${fmtEUR(incomeTarget)}</p>
         <p class="text-[10px] text-zinc-500 mt-0.5">100%</p>
       </div>
       <div>
-        <p class="text-[10px] font-bold uppercase tracking-wide ${remColor}">${over?'Falta':'Sobra'}</p>
+        <p class="text-[10px] font-bold uppercase tracking-wide ${remColor}">${over?window.i18n.t('budget.summary.shortfall'):window.i18n.t('budget.summary.remaining')}</p>
         <p class="font-mono font-bold text-sm mt-0.5 ${remColor}">${fmtEUR(Math.abs(remaining))}</p>
-        <p class="text-[10px] ${remColor} mt-0.5">${Math.abs(100-pctUsed)}% ${over?'além da renda':'livre'}</p>
+        <p class="text-[10px] ${remColor} mt-0.5">${window.i18n.t('budget.summary.pctFreeOrOverText', {pct: Math.abs(100-pctUsed), label: over ? window.i18n.t('budget.summary.beyondIncome') : window.i18n.t('budget.summary.free')})}</p>
       </div>
     </div>`;
   } else {
     el.innerHTML = `<div class="flex items-center justify-between text-xs">
-        <span class="font-semibold flex items-center gap-1.5"><i class="ri-calculator-line text-zinc-400"></i> Total orçado</span>
+        <span class="font-semibold flex items-center gap-1.5"><i class="ri-calculator-line text-zinc-400"></i> ${window.i18n.t('budget.summary.totalBudgeted')}</span>
         <span class="font-mono font-bold">${fmtEUR(totalBudget)}</span>
       </div>
-      <p class="text-[10px] text-zinc-500 mt-1">Defina a meta de renda mensal acima pra ver quanto sobra e a porcentagem comprometida.</p>`;
+      <p class="text-[10px] text-zinc-500 mt-1">${window.i18n.t('budget.summary.noIncomeTarget')}</p>`;
   }
 }
 document.getElementById('incomeTargetInput')?.addEventListener('change', e=>{
@@ -117,7 +117,7 @@ function refreshPeriodOptions(){
   const sels=[document.getElementById('filterPeriod'), document.getElementById('filterPeriodTop')].filter(Boolean);
   for(const sel of sels){
     const cur=periodFilter;
-    sel.innerHTML='<option value="">Todo o período</option>';
+    sel.innerHTML=`<option value="">${window.i18n.t('filters.allPeriods')}</option>`;
     for(const m of months){
       const o=document.createElement('option');
       o.value=m; o.textContent=monthLabel(m);
@@ -136,9 +136,9 @@ function refreshPeriodOptions(){
       b.onclick=()=>setPeriod(val);
       chipWrap.appendChild(b);
     };
-    mk('Tudo','');
+    mk(window.i18n.t('filters.periodChips.all'),'');
     const years=[...new Set(transactions.map(t=>t.date.getFullYear()))].sort((a,b)=>b-a);
-    for(const y of years) mk(String(y), `year:${y}`, `Ano de ${y}`);
+    for(const y of years) mk(String(y), `year:${y}`, window.i18n.t('filters.yearOf', {year: y}));
     const recentMonths=months.slice(0,3);
     for(const m of recentMonths) mk(monthLabel(m), m);
     if(periodFilter && periodFilter!=='' && !periodFilter.startsWith('year:') && !recentMonths.includes(periodFilter)) mk(monthLabel(periodFilter), periodFilter);
@@ -174,9 +174,9 @@ function renderBulkBar(){
   bar.classList.toggle('hidden', n===0);
   const countEl=document.getElementById('bulkCount'); if(countEl) countEl.textContent=n;
   const catSel=document.getElementById('bulkCatSelect');
-  if(catSel) catSel.innerHTML = '<option value="">Categoria...</option>' + categories.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+  if(catSel) catSel.innerHTML = `<option value="">${window.i18n.t('actions.bulkCategory')}</option>` + categories.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
   const bankSel=document.getElementById('bulkBankSelect');
-  if(bankSel) bankSel.innerHTML = '<option value="">Tipo de conta...</option>' + bankTypes.map(b=>`<option value="${b.id}">${escapeHtml(b.name)}</option>`).join('');
+  if(bankSel) bankSel.innerHTML = `<option value="">${window.i18n.t('actions.bulkBank')}</option>` + bankTypes.map(b=>`<option value="${b.id}">${escapeHtml(b.name)}</option>`).join('');
 }
 function renderTable(){
   // remove da seleção ids que não existem mais (ex: após restaurar backup)
@@ -235,12 +235,12 @@ function renderTable(){
     // "Cartão BIL"/tipo de conta já aparece discreto embaixo da descrição (bankBadge) — aqui só sinaliza o que é
     // relevante além disso: a fatura consolidada não contabilizada, uma transferência entre contas, ou uma transferência interna comum.
     const intBadge = t.cardSettlement
-      ? ' <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 text-[10px] font-bold align-middle" title="Débito único da fatura do cartão — não contabilizado (as compras já foram contadas individualmente)"><i class="ri-bank-card-fill"></i> Fatura do cartão</span>'
+      ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 text-[10px] font-bold align-middle" title="${window.i18n.t('table.cardSettlementTitleText')}"><i class="ri-bank-card-fill"></i> ${window.i18n.t('table.cardSettlementText')}</span>`
       : (t.transferLinked
-        ? ' <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 text-[10px] font-bold align-middle" title="Transferência entre suas contas — não contabilizada em Gastos/Entradas. Veja o par em Detalhes."><i class="ri-arrow-left-right-line"></i> entre contas</span>'
+        ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 text-[10px] font-bold align-middle" title="${window.i18n.t('table.transferBetweenAccountsTitleText')}"><i class="ri-arrow-left-right-line"></i> ${window.i18n.t('table.transferBetweenAccountsText')}</span>`
         : (t.autoTransfer
-          ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 border border-dashed border-cyan-300 dark:border-cyan-800 text-[10px] font-bold align-middle" title="Detectado automaticamente pelo banco do beneficiário — provável transferência para ${escapeHtml(bankLabel(t.meta&&t.meta.transferToBank))}. Confira em Detalhes."><i class="ri-arrow-left-right-line"></i> possível transferência</span>`
-          : (t.internal ? ' <span class="inline-flex items-center px-1.5 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-300 text-[10px] font-bold align-middle" title="Movimentação interna — não contabilizada">⇄ interna</span>' : '')));
+          ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 border border-dashed border-cyan-300 dark:border-cyan-800 text-[10px] font-bold align-middle" title="${window.i18n.t('table.possibleTransferTitleText', {bank: escapeHtml(bankLabel(t.meta&&t.meta.transferToBank))})}"><i class="ri-arrow-left-right-line"></i> ${window.i18n.t('table.possibleTransferText')}</span>`
+          : (t.internal ? ` <span class="inline-flex items-center px-1.5 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-300 text-[10px] font-bold align-middle" title="${window.i18n.t('table.internalTransferTitleText')}">${window.i18n.t('table.internalTransferText')}</span>` : '')));
     const bankBadge = t.bank ? `<div class="text-[11px] text-zinc-400 dark:text-zinc-500 flex items-center gap-1 mt-0.5"><i class="${bankIcon(t.bank)}"></i> ${escapeHtml(bankLabel(t.bank))}</div>` : '';
     return `<tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition ${t.internal?'opacity-70':''} ${selectedTxIds.has(t.id)?'bg-violet-50 dark:bg-violet-950/30':''}">
       <td class="px-3 py-2.5 text-center"><input type="checkbox" class="rowSelect rounded border-zinc-300 dark:border-zinc-600 text-violet-600 focus:ring-violet-500/40" data-select="${t.id}" ${selectedTxIds.has(t.id)?'checked':''}></td>
@@ -255,10 +255,10 @@ function renderTable(){
       </td>
       <td class="px-4 py-2.5">
         <div class="flex items-center justify-end gap-1">
-          <button title="Trocar Saída ↔ Entrada" data-swap="${t.id}" class="swapBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700" style="display:${(t.saida||t.entrada)?'flex':'none'}"><i class="ri-swap-line"></i></button>
-          <button title="Nota" data-note="${t.id}" class="noteBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700 ${t.note?'text-amber-500 border-amber-300':''}"><i class="ri-sticky-note-line"></i></button>
-          <button title="Detalhes" data-details="${t.id}" class="detailsBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700"><i class="ri-information-line"></i></button>
-          <button title="Excluir transação" data-del="${t.id}" class="delBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] text-zinc-400 hover:bg-red-50 hover:text-red-600 hover:border-red-200 dark:hover:bg-red-950/40 dark:hover:text-red-400 dark:hover:border-red-900 transition"><i class="ri-delete-bin-line"></i></button>
+          <button title="${window.i18n.t('table.swapTitle')}" data-swap="${t.id}" class="swapBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700" style="display:${(t.saida||t.entrada)?'flex':'none'}"><i class="ri-swap-line"></i></button>
+          <button title="${window.i18n.t('table.noteTitle')}" data-note="${t.id}" class="noteBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700 ${t.note?'text-amber-500 border-amber-300':''}"><i class="ri-sticky-note-line"></i></button>
+          <button title="${window.i18n.t('table.detailsTitle')}" data-details="${t.id}" class="detailsBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700"><i class="ri-information-line"></i></button>
+          <button title="${window.i18n.t('table.deleteTitle')}" data-del="${t.id}" class="delBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] text-zinc-400 hover:bg-red-50 hover:text-red-600 hover:border-red-200 dark:hover:bg-red-950/40 dark:hover:text-red-400 dark:hover:border-red-900 transition"><i class="ri-delete-bin-line"></i></button>
         </div>
       </td>
     </tr>`;
@@ -292,7 +292,7 @@ function renderTable(){
   body.querySelectorAll('.delBtn').forEach(b=>{
     b.addEventListener('click', e=>{
       const id=e.currentTarget.dataset.del; const tx=transactions.find(x=>x.id===id); if(!tx) return;
-      if(!confirm(`Excluir esta transação?\n\n${tx.desc}\n${(tx.realDate||tx.date).toLocaleDateString('pt-BR')} · ${fmtEUR(tx.saida||tx.entrada||0)}`)) return;
+      if(!confirm(window.i18n.t('table.deleteConfirm', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString('pt-BR'), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
       transactions = transactions.filter(x=>x.id!==id);
       selectedTxIds.delete(id);
       renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
@@ -343,11 +343,12 @@ function renderTable(){
       const parts = [];
       if(saidaSum>0) parts.push(`<span class="text-red-600 font-bold">${fmtEUR(saidaSum/catMonths)}</span>`);
       if(entradaSum>0) parts.push(`<span class="text-emerald-600 font-bold">${fmtEUR(entradaSum/catMonths)}</span>`);
-      avgLabel = ` · <span title="Total dividido pelos ${catMonths} ${catMonths===1?'mês':'meses'} com movimento nessa categoria">Média mensal: ${parts.join(' / ')}</span>`;
+      const monthWord = catMonths===1 ? window.i18n.t('table.monthWordSingular') : window.i18n.t('table.monthWordPlural');
+      avgLabel = ` · <span title="${window.i18n.t('table.avgPerMonthTitle', {n: catMonths, monthWord})}">${window.i18n.t('table.avgPerMonthLabel')}${parts.join(' / ')}</span>`;
     }
   }
-  document.getElementById('txSummary').innerHTML = `<span class="font-semibold">${totalRows} movimentos</span> · Gastos reais: <span class="text-red-600 font-bold">${fmtEUR(saidaSum)}</span> · Entradas: <span class="text-emerald-600 font-bold">${fmtEUR(entradaSum)}</span>${transfSum?` · <span title="Movimentações internas (pockets, Flexible Cash Funds) — não contam como gasto">Transf. internas: ${fmtEUR(transfSum)}</span>`:''}${avgLabel}`;
-  document.getElementById('pageInfo').textContent = `Página ${currentPage} / ${totalPages}`;
+  document.getElementById('txSummary').innerHTML = `<span class="font-semibold">${window.i18n.t('table.summaryMovements', {n: totalRows})}</span> · ${window.i18n.t('table.summaryRealExpenses')}: <span class="text-red-600 font-bold">${fmtEUR(saidaSum)}</span> · ${window.i18n.t('table.summaryIncome')}: <span class="text-emerald-600 font-bold">${fmtEUR(entradaSum)}</span>${transfSum?` · <span title="${window.i18n.t('table.summaryInternalTransfersTitle')}">${window.i18n.t('table.summaryInternalTransfers')}: ${fmtEUR(transfSum)}</span>`:''}${avgLabel}`;
+  document.getElementById('pageInfo').textContent = window.i18n.t('table.pageInfoText', {current: currentPage, total: totalPages});
   document.getElementById('prevPage').disabled = currentPage<=1;
   document.getElementById('nextPage').disabled = currentPage>=totalPages;
 }
@@ -381,8 +382,8 @@ function updateKPIs(){
     if(el && subEl){
       el.textContent = fmtEUR(bal.total);
       subEl.textContent = (openingBalance && openingBalance.value!=null)
-        ? `Saldo inicial ${fmtEUR(bal.base)} (${openingBalance.date.toLocaleDateString('pt-BR')}) + entradas − saídas`
-        : 'Entradas − saídas de todo o histórico · defina um saldo inicial em Configurações se faltar dado anterior';
+        ? window.i18n.t('kpis.balanceSubWithOpening', {value: fmtEUR(bal.base), date: openingBalance.date.toLocaleDateString('pt-BR')})
+        : window.i18n.t('kpis.balanceSubDefault');
     }
   }
   const saidas = scoped.filter(t=>t.saida!=null && !t.internal);
@@ -392,7 +393,8 @@ function updateKPIs(){
   const saidasCount = scoped.filter(t=>t.saida && !t.internal).length;
   const entradasCount = scoped.filter(t=>t.entrada && !t.internal).length;
   const transfCount = scoped.filter(t=>t.internal).length;
-  document.getElementById('kpiCount').textContent = `${saidasCount} saídas · ${entradasCount} entradas${transfCount?` · ${transfCount} transferências internas`:''} · ${new Set(transactions.map(t=>t.source)).size} arquivos`;
+  const transfClause = transfCount ? window.i18n.t('kpis.countTransfersClause', {n: transfCount}) : '';
+  document.getElementById('kpiCount').textContent = window.i18n.t('kpis.countBreakdown', {expenses: saidasCount, income: entradasCount, transfers: transfClause, files: new Set(transactions.map(t=>t.source)).size});
   document.getElementById('kpiAvg').textContent = fmtEUR(avg);
   // top category
   const byCat={}; scoped.forEach(t=>{ if(t.saida && !t.internal) byCat[t.cat]=(byCat[t.cat]||0)+t.saida; });
@@ -400,13 +402,13 @@ function updateKPIs(){
   if(top){
     const c=catById(top[0]);
     document.getElementById('kpiTopCat').innerHTML = `<span class="inline-flex w-5 h-5 rounded-full items-center justify-center text-[10px] text-white align-middle mr-1" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>${escapeHtml(c.name)}`;
-    document.getElementById('kpiTopCatVal').textContent = `${fmtEUR(top[1])} · ${Math.round(top[1]/total*100)}% do total`;
-    document.getElementById('kpiInsight').textContent = `${c.name} é seu maior gasto`;
-    document.getElementById('kpiInsightSub').textContent = `${fmtEUR(top[1])} (${Math.round(top[1]/total*100)}%) — vale revisar assinaturas e compras nessa categoria.`;
+    document.getElementById('kpiTopCatVal').textContent = window.i18n.t('kpis.topCategoryValueText', {value: fmtEUR(top[1]), pct: Math.round(top[1]/total*100)});
+    document.getElementById('kpiInsight').textContent = window.i18n.t('kpis.insightMainText', {cat: c.name});
+    document.getElementById('kpiInsightSub').textContent = window.i18n.t('kpis.insightSubText', {value: fmtEUR(top[1]), pct: Math.round(top[1]/total*100)});
   } else {
     document.getElementById('kpiTopCat').textContent='—';
     document.getElementById('kpiTopCatVal').textContent='—';
-    document.getElementById('kpiInsight').textContent='Adicione PDFs para ver insights.';
+    document.getElementById('kpiInsight').textContent=window.i18n.t('kpis.insightDefault');
     document.getElementById('kpiInsightSub').textContent='';
   }
   // taxa de poupança: (entradas - saídas reais) / entradas, sem transferências internas
@@ -418,11 +420,11 @@ function updateKPIs(){
       const rate = Math.round(saved/income*100);
       kpiSavingsEl.textContent = `${rate}%`;
       kpiSavingsEl.className = 'font-extrabold text-2xl tracking-tight mt-1 ' + (rate>=0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400');
-      kpiSavingsSubEl.textContent = rate>=0 ? `${fmtEUR(saved)} sobrando no período` : `${fmtEUR(Math.abs(saved))} além da renda`;
+      kpiSavingsSubEl.textContent = rate>=0 ? window.i18n.t('kpis.savedText', {value: fmtEUR(saved)}) : window.i18n.t('kpis.overspentText', {value: fmtEUR(Math.abs(saved))});
     } else {
       kpiSavingsEl.textContent = '—';
       kpiSavingsEl.className = 'font-extrabold text-2xl tracking-tight mt-1';
-      kpiSavingsSubEl.textContent = 'sem entradas no período';
+      kpiSavingsSubEl.textContent = window.i18n.t('kpis.noIncome');
     }
   }
 }
@@ -728,7 +730,7 @@ function renderAnomalyDialogBody(a){
       b.addEventListener('click', e=>{
         const id=e.currentTarget.dataset.id;
         const tx=transactions.find(x=>x.id===id); if(!tx) return;
-        if(!confirm(`Excluir esta transação?\n\n${tx.desc}\n${(tx.realDate||tx.date).toLocaleDateString('pt-BR')} · ${fmtEUR(tx.saida||tx.entrada||0)}`)) return;
+        if(!confirm(window.i18n.t('table.deleteConfirm', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString('pt-BR'), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
         transactions = transactions.filter(x=>x.id!==id);
         selectedTxIds.delete(id);
         renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();

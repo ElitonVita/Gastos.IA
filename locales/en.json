@@ -44,7 +44,15 @@
     "avgTicket": "Avg ticket",
     "perTransaction": "per transaction",
     "insightTitle": "What weighs the most?",
-    "insightDefault": "Add PDFs to see insights."
+    "insightDefault": "Add PDFs to see insights.",
+    "balanceSubWithOpening": "Opening balance {value} ({date}) + income − expenses",
+    "countBreakdown": "{expenses} expenses · {income} income{transfers} · {files} files",
+    "countTransfersClause": " · {n} internal transfers",
+    "topCategoryValueText": "{value} · {pct}% of total",
+    "insightMainText": "{cat} is your biggest expense",
+    "insightSubText": "{value} ({pct}%) — worth reviewing subscriptions and purchases in this category.",
+    "savedText": "{value} left over this period",
+    "overspentText": "{value} over income"
   },
   "filters": {
     "searchPlaceholder": "Search description, category, file...",
@@ -57,7 +65,8 @@
     "bankNone": "No type identified",
     "periodChips": {
       "all": "All"
-    }
+    },
+    "yearOf": "Year {year}"
   },
   "table": {
     "columns": {
@@ -100,7 +109,30 @@
     "monthlyAverage": "Monthly average",
     "pageInfo": "Page {current} / {total}",
     "prevPage": "Previous",
-    "nextPage": "Next"
+    "nextPage": "Next",
+    "cardSettlementText": "Card statement",
+    "cardSettlementTitleText": "Single card statement debit — not counted (individual purchases already counted)",
+    "transferBetweenAccountsText": "between accounts",
+    "transferBetweenAccountsTitleText": "Transfer between your accounts — not counted in Expenses/Income. See pair in Details.",
+    "possibleTransferTitleText": "Auto-detected by beneficiary bank — likely transfer to {bank}. Check in Details.",
+    "possibleTransferText": "possible transfer",
+    "internalTransferText": "⇄ internal",
+    "internalTransferTitleText": "Internal movement — not counted",
+    "swapTitle": "Swap Expense ↔ Income",
+    "noteTitle": "Note",
+    "detailsTitle": "Details",
+    "deleteTitle": "Delete transaction",
+    "deleteConfirm": "Delete this transaction?\n\n{desc}\n{date} · {value}",
+    "avgPerMonthTitle": "Total split across the {n} {monthWord} with activity in this category",
+    "avgPerMonthLabel": "Monthly average: ",
+    "monthWordSingular": "month",
+    "monthWordPlural": "months",
+    "summaryMovements": "{n} transactions",
+    "summaryRealExpenses": "Real expenses",
+    "summaryIncome": "Income",
+    "summaryInternalTransfers": "Internal transfers",
+    "summaryInternalTransfersTitle": "Internal movements (pockets, Flexible Cash Funds) — not counted as expenses",
+    "pageInfoText": "Page {current} / {total}"
   },
   "actions": {
     "swap": "Swap Expense ↔ Income",
@@ -325,7 +357,9 @@
       "shortfall": "Shortfall",
       "beyondIncome": "over income",
       "free": "free",
-      "noIncomeTarget": "Set monthly income target above to see remaining and % committed."
+      "noIncomeTarget": "Set monthly income target above to see remaining and % committed.",
+      "pctOfIncomeText": "{pct}% of income",
+      "pctFreeOrOverText": "{pct}% {label}"
     }
   },
   "settings": {
@@ -556,6 +590,7 @@
     "ok": "OK",
     "apply": "Apply",
     "reset": "Reset",
-    "export": "Export CSV"
+    "export": "Export CSV",
+    "editItemTitle": "Edit {name}"
   }
 }
