@@ -1,0 +1,418 @@
+{
+  "app": {
+    "title": "Expenses<span style=\"color:#7c3aed;\">.AI</span>",
+    "subtitle": "100% local & private expense dashboard"
+  },
+  "header": {
+    "language": "Language",
+    "theme": "Theme",
+    "print": "Print report"
+  },
+  "dropZone": {
+    "title": "Drag PDFs here or click to select",
+    "subtitle": "Bank statements (Revolut, BIL, etc.) — text PDFs, not scanned images",
+    "btnPickFiles": "Choose files",
+    "btnPickFolder": "Choose folder"
+  },
+  "fileList": {
+    "title": "Imported files",
+    "reading": "Reading...",
+    "error": "Read error",
+    "noPdfs": "No PDFs found. Select .pdf files",
+    "noValuesFound": "No values found in expected format (e.g., 12,34 € , € 1,234.56 or 1 234,56 €). Open the PDF and try selecting the amount with your mouse — if you can't select it, it's a scanned PDF (image) and needs OCR. Use \"Add manual transaction\" as an alternative.",
+    "extractedText": "Extracted text (first 1200 chars) — copy and send if error persists:",
+    "duplicatesSkipped": "duplicates skipped (identical date+description+value)",
+    "enriched": "enriched with new details",
+    "nothingNew": "Nothing new",
+    "inheritedCategories": "inherited from saved categories"
+  },
+  "kpis": {
+    "balance": "Current balance",
+    "totalExpenses": "Total spent",
+    "count": "Transactions",
+    "average": "Avg per expense",
+    "topCategory": "Top category",
+    "topCategoryValue": "Value & % of total",
+    "insight": "Insight",
+    "insightDetail": "Insight detail",
+    "savingsRate": "Savings rate",
+    "saved": "left over this period",
+    "overspent": "over income",
+    "noIncome": "no income this period",
+    "balanceSubDefault": "Income − expenses from all history · set an opening balance in Settings if prior data is missing",
+    "transactionsLabel": "{count} transactions",
+    "avgTicket": "Avg ticket",
+    "perTransaction": "per transaction",
+    "insightTitle": "What weighs the most?",
+    "insightDefault": "Add PDFs to see insights."
+  },
+  "filters": {
+    "searchPlaceholder": "Search description, category, file...",
+    "allCategories": "All categories",
+    "allPeriods": "All periods",
+    "typeAll": "All",
+    "typeExpense": "Expenses only",
+    "typeIncome": "Income only",
+    "bankAll": "All account types",
+    "bankNone": "No type identified",
+    "periodChips": {
+      "all": "All"
+    }
+  },
+  "table": {
+    "columns": {
+      "select": "Select",
+      "date": "Date",
+      "description": "Description",
+      "expense": "Expense",
+      "income": "Income",
+      "category": "Category",
+      "actions": "Actions"
+    },
+    "empty": "No transactions in this filter.",
+    "noValue": "—",
+    "cardSettlement": "Card statement",
+    "cardSettlementTitle": "Single card statement debit — not counted (individual purchases already counted)",
+    "transferBetweenAccounts": "between accounts",
+    "transferBetweenAccountsTitle": "Transfer between your accounts — not counted in Expenses/Income. See pair in Details.",
+    "possibleTransfer": "possible transfer",
+    "possibleTransferTitlePrefix": "Auto-detected by beneficiary bank — likely transfer to ",
+    "internalTransfer": "internal",
+    "internalTransferTitle": "Internal movement — not counted",
+    "summary": "transactions",
+    "realExpenses": "Real expenses",
+    "income": "Income",
+    "internalTransfers": "Internal transfers",
+    "monthlyAverage": "Monthly average",
+    "pageInfo": "Page {current} / {total}",
+    "prevPage": "Previous",
+    "nextPage": "Next"
+  },
+  "actions": {
+    "swap": "Swap Expense ↔ Income",
+    "note": "Note",
+    "details": "Details",
+    "delete": "Delete transaction",
+    "confirmDelete": "Delete this transaction?\n\n{desc}\n{date} · {value}",
+    "bulkActions": "Bulk actions",
+    "bulkCount": "{count} selected",
+    "bulkClear": "Clear selection",
+    "bulkDelete": "Delete selected",
+    "bulkDeleteConfirm": "Delete {n} selected transaction(s)? This cannot be undone.",
+    "bulkSwap": "Swap Expense/Income",
+    "bulkCategory": "Category...",
+    "bulkBank": "Account type...",
+    "bulkNote": "Add note",
+    "bulkLinkTransfer": "Link transfer",
+    "selectTwoTransfers": "Select exactly 2 transactions: the outgoing one (e.g. in your BIL account) and the matching incoming one (e.g. in Revolut).",
+    "selectOneExpenseOneIncome": "Select one Expense and one Income transaction — the two sides of the same transfer.",
+    "alreadyLinked": "One of the selected transactions is already linked to another transfer. Unlink first (in Details) if you want to redo.",
+    "differentValues": "Values differ ({expense} out vs {income} in) — normal if currency conversion or fees applied. Link anyway?",
+    "linkTransferSuccess": "Transfer linked successfully",
+    "unlinkTransfer": "Unlink transfer",
+    "rejectAutoTransfer": "Reject auto-detection",
+    "selectInOut": "Select an Outflow and an Inflow transaction — they are the two sides of the same transfer."
+  },
+  "modals": {
+    "manualEntry": {
+      "title": "Add manual transaction",
+      "date": "Date",
+      "value": "Amount",
+      "description": "Description",
+      "type": "Type",
+      "typeExpense": "Expense (out)",
+      "typeIncome": "Income (in)",
+      "category": "Category",
+      "cancel": "Cancel",
+      "submit": "Add",
+      "invalidValue": "Enter a valid amount"
+    },
+    "note": {
+      "title": "Note for \"{desc}\"",
+      "meta": "{date} · {value}{source}",
+      "placeholder": "Write a note...",
+      "cancel": "Cancel",
+      "delete": "Delete note",
+      "save": "Save"
+    },
+    "details": {
+      "title": "Transaction details",
+      "meta": "{date} · {value}",
+      "sourceFile": "Source file",
+      "bankType": "Account type",
+      "notIdentified": "Not identified",
+      "transferPair": "Linked to: {desc} · {date} · {value}{bank}",
+      "autoTransferInfo": "Likely destination: {bank}",
+      "close": "Close",
+      "unlinkTransfer": "Unlink transfer",
+      "rejectAutoTransfer": "Reject auto-detection"
+    },
+    "category": {
+      "titleNew": "New category",
+      "titleEdit": "Edit category",
+      "name": "Name",
+      "color": "Color",
+      "icon": "Icon",
+      "keywords": "Keywords (comma-separated)",
+      "cancel": "Cancel",
+      "submitNew": "Create category",
+      "submitEdit": "Save changes"
+    },
+    "bulkNote": {
+      "title": "Add note to {count} transactions",
+      "count": "{count} transactions",
+      "placeholder": "Note for all selected...",
+      "cancel": "Cancel",
+      "save": "Save note"
+    }
+  },
+  "charts": {
+    "mode": {
+      "donut": "Donut",
+      "bar": "Bars"
+    },
+    "compareMode": {
+      "bars": "Grouped bars",
+      "lines": "Overlaid lines"
+    },
+    "budgetScope": {
+      "month": "Current month",
+      "quarter": "Quarter",
+      "year": "Year"
+    },
+    "cashflowMode": {
+      "monthly": "Monthly",
+      "cumulative": "Cumulative"
+    },
+    "legends": {
+      "compare": "Legend (click to isolate category)",
+      "monthlyExpenses": "Monthly expenses",
+      "byCategory": "By category",
+      "byMerchant": "Top merchants",
+      "distribution": "Distribution",
+      "dayOfWeek": "By day of week",
+      "compareCategoryMonth": "Category × Month",
+      "trend": "Trend",
+      "cashflow": "Cash flow"
+    }
+  },
+  "dashboard": {
+    "periodLabel": "Period",
+    "periodExpenses": "Expenses this period:",
+    "periodIncome": "Income:",
+    "sectionOverview": "01 · Overview",
+    "sectionWhereItGoes": "02 · Where it goes",
+    "sectionPatterns": "03 · Patterns over time"
+  },
+  "budget": {
+    "title": "Budget by category",
+    "incomeTarget": "Monthly income target (€)",
+    "placeholder": "No target",
+    "summary": {
+      "totalBudgeted": "Total budgeted",
+      "incomeTarget": "Income target",
+      "ofIncome": "% of income",
+      "remaining": "Remaining",
+      "shortfall": "Shortfall",
+      "beyondIncome": "over income",
+      "free": "free",
+      "noIncomeTarget": "Set monthly income target above to see remaining and % committed."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "tabs": {
+      "general": "General",
+      "data": "Data",
+      "ai": "Local AI (Ollama)",
+      "categories": "Categories",
+      "banks": "Account types"
+    },
+    "general": {
+      "demoData": "Load demo data",
+      "exportCsv": "Export CSV",
+      "clearAll": "Clear all",
+      "clearConfirm": "Clear {count} transactions?"
+    },
+    "data": {
+      "title": "Data persistence",
+      "localStorage": "Saving in browser (localStorage)",
+      "folder": "Saving to folder \"{name}\"",
+      "folderSub": "gastos-data.json is written directly to your computer on every change.",
+      "localStorageSub": "Choose a folder to save gastos-data.json directly on your computer.",
+      "chooseFolder": "Choose folder",
+      "changeFolder": "Change folder",
+      "saveNow": "Save now",
+      "saveNowSuccess": "gastos-data.json saved to folder \"{name}\"",
+      "saveNowSuccessLocal": "Saved in browser (localStorage). Click \"Choose folder\" to save directly on computer.",
+      "exportJson": "Download JSON backup",
+      "importJson": "Restore JSON backup",
+      "importSuccess": "Backup restored: {count} transactions",
+      "importError": "Invalid file: {error}",
+      "storageFull": "Browser storage full — choose a folder or download backup"
+    },
+    "ai": {
+      "title": "Auto-categorization with local AI",
+      "url": "Ollama URL",
+      "model": "Model",
+      "testConnection": "Test connection",
+      "autoCategorize": "Auto-categorize on import",
+      "categorizeNow": "Categorize with local AI",
+      "categorizing": "Categorizing...",
+      "status": {
+        "online": "online",
+        "offline": "offline",
+        "busy": "categorizing...",
+        "hasModel": "online · {model}"
+      },
+      "log": {
+        "nothingToCategorize": "Nothing to categorize (no Expenses).",
+        "allCategorized": "All {count} expenses already categorized — nothing to do. ✅",
+        "starting": "Starting: {count} descriptions → {model} @ {url}",
+        "batchProgress": "Batch {current}/{total}: {applied} categorized",
+        "batchError": "Error in batch {batch}: {error}",
+        "corsError": "CORS error — run: OLLAMA_ORIGINS=\"*\" ollama serve",
+        "completed": "Done: {done} transactions re-categorized with {model}."
+      }
+    },
+    "categories": {
+      "add": "Add category",
+      "edit": "Edit",
+      "keywordsHelp": "Words that trigger auto-suggestion for this category"
+    },
+    "banks": {
+      "title": "Account types / banks",
+      "add": "Add type",
+      "name": "Name",
+      "icon": "Icon",
+      "keywords": "Keywords for auto-detection"
+    }
+  },
+  "openingBalance": {
+    "title": "Opening balance",
+    "date": "Date",
+    "value": "Value (€)",
+    "save": "Save opening balance",
+    "clear": "Clear opening balance",
+    "statusSet": "Set: {value} on {date}",
+    "statusNone": "No opening balance set — Cumulative cash flow starts from zero."
+  },
+  "anomalies": {
+    "title": "Unusual expenses detected",
+    "description": "These transactions have values far above the category pattern. Review each:",
+    "accept": "Accept (real expense)",
+    "alwaysAccept": "Always accept this description",
+    "reject": "Ignore (not an expense)",
+    "close": "Close"
+  },
+  "printReport": {
+    "title": "Expenses.AI — Expense Report",
+    "generated": "generated on {date}",
+    "kpis": {
+      "totalExpenses": "TOTAL SPENT",
+      "income": "INCOME",
+      "balance": "PERIOD BALANCE",
+      "savingsRate": "SAVINGS RATE"
+    },
+    "sections": {
+      "byCategory": "Expenses by category",
+      "monthlyEvolution": "Monthly evolution",
+      "topMerchants": "Top merchants",
+      "statement": "Statement — {count} transactions{category}"
+    },
+    "tableHeaders": {
+      "date": "Date",
+      "description": "Description",
+      "category": "Category",
+      "expense": "Expense",
+      "income": "Income"
+    },
+    "footer": "Generated by Expenses.AI — 100% local & private · {date}"
+  },
+  "categories": {
+    "alimentacao": "Food & Groceries",
+    "transporte": "Transport",
+    "moradia": "Housing",
+    "contas": "Bills & Services",
+    "saude": "Health",
+    "lazer": "Leisure",
+    "compras": "Shopping",
+    "educacao": "Education",
+    "outros": "Other",
+    "transferencia": "Internal transfer",
+    "cartao": "Card Payment"
+  },
+  "bankTypes": {
+    "REVOLUT": "Revolut",
+    "BIL": "BIL",
+    "BIL_CARD": "BIL Card",
+    "OTHER": "Other"
+  },
+  "months": {
+    "short": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ],
+    "long": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ]
+  },
+  "days": {
+    "short": [
+      "Sun",
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
+    "long": [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday"
+    ]
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "apply": "Apply",
+    "reset": "Reset",
+    "export": "Export CSV"
+  }
+}

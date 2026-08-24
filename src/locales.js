@@ -42,7 +42,12 @@ window.GASTOS_LOCALES = {
       "saved": "sobrando no período",
       "overspent": "além da renda",
       "noIncome": "sem entradas no período",
-      "balanceSubDefault": "Entradas − saídas de todo o histórico · defina um saldo inicial em Configurações se faltar dado anterior"
+      "balanceSubDefault": "Entradas − saídas de todo o histórico · defina um saldo inicial em Configurações se faltar dado anterior",
+      "transactionsLabel": "{count} transações",
+      "avgTicket": "Ticket médio",
+      "perTransaction": "por transação",
+      "insightTitle": "O que mais pesa?",
+      "insightDefault": "Adicione PDFs para ver insights."
     },
     "filters": {
       "searchPlaceholder": "Buscar descrição, categoria, arquivo...",
@@ -193,6 +198,14 @@ window.GASTOS_LOCALES = {
         "trend": "Tendência",
         "cashflow": "Fluxo de caixa"
       }
+    },
+    "dashboard": {
+      "periodLabel": "Período",
+      "periodExpenses": "Gastos no período:",
+      "periodIncome": "Entradas:",
+      "sectionOverview": "01 · Visão geral",
+      "sectionWhereItGoes": "02 · Para onde vai",
+      "sectionPatterns": "03 · Padrões no tempo"
     },
     "budget": {
       "title": "Orçamento por categoria",
@@ -447,7 +460,12 @@ window.GASTOS_LOCALES = {
       "saved": "left over this period",
       "overspent": "over income",
       "noIncome": "no income this period",
-      "balanceSubDefault": "Income − expenses from all history · set an opening balance in Settings if prior data is missing"
+      "balanceSubDefault": "Income − expenses from all history · set an opening balance in Settings if prior data is missing",
+      "transactionsLabel": "{count} transactions",
+      "avgTicket": "Avg ticket",
+      "perTransaction": "per transaction",
+      "insightTitle": "What weighs the most?",
+      "insightDefault": "Add PDFs to see insights."
     },
     "filters": {
       "searchPlaceholder": "Search description, category, file...",
@@ -598,6 +616,14 @@ window.GASTOS_LOCALES = {
         "trend": "Trend",
         "cashflow": "Cash flow"
       }
+    },
+    "dashboard": {
+      "periodLabel": "Period",
+      "periodExpenses": "Expenses this period:",
+      "periodIncome": "Income:",
+      "sectionOverview": "01 · Overview",
+      "sectionWhereItGoes": "02 · Where it goes",
+      "sectionPatterns": "03 · Patterns over time"
     },
     "budget": {
       "title": "Budget by category",
