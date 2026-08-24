@@ -172,7 +172,8 @@ window.GASTOS_LOCALES = {
     "charts": {
       "mode": {
         "donut": "Rosca",
-        "bar": "Barras"
+        "bar": "Barras",
+        "waterfall": "Cascata"
       },
       "compareMode": {
         "bars": "Barras agrupadas",
@@ -181,11 +182,73 @@ window.GASTOS_LOCALES = {
       "budgetScope": {
         "month": "Mês atual",
         "quarter": "Trimestre",
-        "year": "Ano"
+        "year": "Ano",
+        "cumulative": "Acumulado"
       },
       "cashflowMode": {
         "monthly": "Mensal",
-        "cumulative": "Acumulado"
+        "cumulative": "Acumulado",
+        "forecast": "Previsão"
+      },
+      "cashflow": {
+        "title": "Fluxo de caixa",
+        "hintCumulative": "· saldo acumulado ao longo do tempo",
+        "subtitle": "Entradas − saídas reais, sem transferências internas. Verde = sobrando, vermelho = consumindo reserva."
+      },
+      "category": {
+        "title": "Onde seu dinheiro vai",
+        "hintByCategory": "· por categoria"
+      },
+      "monthChart": {
+        "title": "Evolução mensal",
+        "legendLabel": "Total mensal ·"
+      },
+      "merchantChart": {
+        "title": "Top estabelecimentos / descrições",
+        "subtitle": "Quem mais levou seu dinheiro no período"
+      },
+      "histogram": {
+        "title": "Distribuição de valores",
+        "badge": "Histograma",
+        "hint": "Picos indicam faixa de gasto mais comum. Use para identificar micro-gastos recorrentes."
+      },
+      "trend": {
+        "title": "Tendência de gastos",
+        "subtitle": "Média móvel (3 meses) vs gasto mensal"
+      },
+      "recurring": {
+        "title": "Gastos recorrentes detectados",
+        "subtitle": "Mesma descrição em vários meses — assinaturas e fixos"
+      },
+      "dow": {
+        "subtitle": "Onde seus gastos se concentram"
+      },
+      "calendar": {
+        "title": "Calendário de gastos",
+        "subtitle": "Cor mais forte = dia com mais gasto — pico de salário, fim de semana, etc."
+      },
+      "compare": {
+        "title": "Comparativo por categoria",
+        "hintBars": "· barras lado a lado por mês",
+        "hintLines": "· tendência de cada categoria mês a mês",
+        "hintCumulative": "· real sobreposto à meta acumulada dos {n} meses do período — suaviza picos isolados (férias, etc.)",
+        "hintThisMonth": "· real sobreposto à meta definida em Configurações, mês mais recente",
+        "tabBars": "Barras",
+        "tabLines": "Linhas",
+        "tabBudget": "Orçamento",
+        "cumulativeTitle": "Soma o orçamento e o gasto real de todos os meses do período — evita que um mês fora da curva (férias, etc.) pareça um estouro isolado",
+        "noBudgetDefined": "Nenhuma categoria tem orçamento definido ainda. Defina metas em <b>Configurações → Orçamentos mensais</b>."
+      },
+      "waterfall": {
+        "income": "Renda",
+        "otherCategories": "Outras categorias",
+        "balance": "Saldo",
+        "howToRead": "Como ler:",
+        "explanation": "começa na sua renda do período e desce categoria por categoria até o que sobrou.",
+        "legendIncomePositive": "Renda / saldo positivo",
+        "legendNegative": "Saldo negativo",
+        "legendOtherGrouped": "Outras categorias agrupadas",
+        "emptyState": "Sem dados ainda — adicione PDFs ou use o exemplo."
       },
       "legends": {
         "compare": "Legenda (clique para isolar categoria)",
@@ -302,6 +365,7 @@ window.GASTOS_LOCALES = {
     },
     "anomalies": {
       "title": "Gastos estranhos detectados",
+      "subtitle": "Cobranças repetidas, valores fora do padrão e picos de gasto — vale conferir",
       "description": "Estas transações têm valores muito acima do padrão da categoria. Revise cada uma:",
       "accept": "Aceitar (é gasto real)",
       "alwaysAccept": "Sempre aceitar esta descrição",
@@ -590,7 +654,8 @@ window.GASTOS_LOCALES = {
     "charts": {
       "mode": {
         "donut": "Donut",
-        "bar": "Bars"
+        "bar": "Bars",
+        "waterfall": "Waterfall"
       },
       "compareMode": {
         "bars": "Grouped bars",
@@ -599,11 +664,73 @@ window.GASTOS_LOCALES = {
       "budgetScope": {
         "month": "Current month",
         "quarter": "Quarter",
-        "year": "Year"
+        "year": "Year",
+        "cumulative": "Cumulative"
       },
       "cashflowMode": {
         "monthly": "Monthly",
-        "cumulative": "Cumulative"
+        "cumulative": "Cumulative",
+        "forecast": "Forecast"
+      },
+      "cashflow": {
+        "title": "Cash flow",
+        "hintCumulative": "· cumulative balance over time",
+        "subtitle": "Income − real expenses, excluding internal transfers. Green = surplus, red = drawing down reserves."
+      },
+      "category": {
+        "title": "Where your money goes",
+        "hintByCategory": "· by category"
+      },
+      "monthChart": {
+        "title": "Monthly evolution",
+        "legendLabel": "Monthly total ·"
+      },
+      "merchantChart": {
+        "title": "Top merchants / descriptions",
+        "subtitle": "Who took most of your money this period"
+      },
+      "histogram": {
+        "title": "Value distribution",
+        "badge": "Histogram",
+        "hint": "Peaks show the most common spending range. Use it to spot recurring micro-expenses."
+      },
+      "trend": {
+        "title": "Spending trend",
+        "subtitle": "3-month moving average vs monthly spend"
+      },
+      "recurring": {
+        "title": "Recurring charges detected",
+        "subtitle": "Same description across several months — subscriptions and fixed costs"
+      },
+      "dow": {
+        "subtitle": "Where your spending concentrates"
+      },
+      "calendar": {
+        "title": "Spending calendar",
+        "subtitle": "Stronger color = day with more spending — payday, weekend, etc."
+      },
+      "compare": {
+        "title": "Category comparison",
+        "hintBars": "· side-by-side bars per month",
+        "hintLines": "· each category's trend month by month",
+        "hintCumulative": "· actuals overlaid on the cumulative target across {n} months — smooths out one-off spikes (vacations, etc.)",
+        "hintThisMonth": "· actuals overlaid on the target set in Settings, most recent month",
+        "tabBars": "Bars",
+        "tabLines": "Lines",
+        "tabBudget": "Budget",
+        "cumulativeTitle": "Sums the budget and real spend across every month in the period — keeps one outlier month (vacation, etc.) from looking like a blown budget",
+        "noBudgetDefined": "No category has a budget set yet. Set targets in <b>Settings → Monthly budgets</b>."
+      },
+      "waterfall": {
+        "income": "Income",
+        "otherCategories": "Other categories",
+        "balance": "Balance",
+        "howToRead": "How to read:",
+        "explanation": "starts at your income for the period and works down category by category to what's left.",
+        "legendIncomePositive": "Income / positive balance",
+        "legendNegative": "Negative balance",
+        "legendOtherGrouped": "Other categories grouped",
+        "emptyState": "No data yet — add PDFs or use the example."
       },
       "legends": {
         "compare": "Legend (click to isolate category)",
@@ -720,6 +847,7 @@ window.GASTOS_LOCALES = {
     },
     "anomalies": {
       "title": "Unusual expenses detected",
+      "subtitle": "Repeated charges, out-of-pattern values and spending spikes — worth a look",
       "description": "These transactions have values far above the category pattern. Review each:",
       "accept": "Accept (real expense)",
       "alwaysAccept": "Always accept this description",

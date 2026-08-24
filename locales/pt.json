@@ -169,7 +169,8 @@
   "charts": {
     "mode": {
       "donut": "Rosca",
-      "bar": "Barras"
+      "bar": "Barras",
+      "waterfall": "Cascata"
     },
     "compareMode": {
       "bars": "Barras agrupadas",
@@ -178,11 +179,73 @@
     "budgetScope": {
       "month": "Mês atual",
       "quarter": "Trimestre",
-      "year": "Ano"
+      "year": "Ano",
+      "cumulative": "Acumulado"
     },
     "cashflowMode": {
       "monthly": "Mensal",
-      "cumulative": "Acumulado"
+      "cumulative": "Acumulado",
+      "forecast": "Previsão"
+    },
+    "cashflow": {
+      "title": "Fluxo de caixa",
+      "hintCumulative": "· saldo acumulado ao longo do tempo",
+      "subtitle": "Entradas − saídas reais, sem transferências internas. Verde = sobrando, vermelho = consumindo reserva."
+    },
+    "category": {
+      "title": "Onde seu dinheiro vai",
+      "hintByCategory": "· por categoria"
+    },
+    "monthChart": {
+      "title": "Evolução mensal",
+      "legendLabel": "Total mensal ·"
+    },
+    "merchantChart": {
+      "title": "Top estabelecimentos / descrições",
+      "subtitle": "Quem mais levou seu dinheiro no período"
+    },
+    "histogram": {
+      "title": "Distribuição de valores",
+      "badge": "Histograma",
+      "hint": "Picos indicam faixa de gasto mais comum. Use para identificar micro-gastos recorrentes."
+    },
+    "trend": {
+      "title": "Tendência de gastos",
+      "subtitle": "Média móvel (3 meses) vs gasto mensal"
+    },
+    "recurring": {
+      "title": "Gastos recorrentes detectados",
+      "subtitle": "Mesma descrição em vários meses — assinaturas e fixos"
+    },
+    "dow": {
+      "subtitle": "Onde seus gastos se concentram"
+    },
+    "calendar": {
+      "title": "Calendário de gastos",
+      "subtitle": "Cor mais forte = dia com mais gasto — pico de salário, fim de semana, etc."
+    },
+    "compare": {
+      "title": "Comparativo por categoria",
+      "hintBars": "· barras lado a lado por mês",
+      "hintLines": "· tendência de cada categoria mês a mês",
+      "hintCumulative": "· real sobreposto à meta acumulada dos {n} meses do período — suaviza picos isolados (férias, etc.)",
+      "hintThisMonth": "· real sobreposto à meta definida em Configurações, mês mais recente",
+      "tabBars": "Barras",
+      "tabLines": "Linhas",
+      "tabBudget": "Orçamento",
+      "cumulativeTitle": "Soma o orçamento e o gasto real de todos os meses do período — evita que um mês fora da curva (férias, etc.) pareça um estouro isolado",
+      "noBudgetDefined": "Nenhuma categoria tem orçamento definido ainda. Defina metas em <b>Configurações → Orçamentos mensais</b>."
+    },
+    "waterfall": {
+      "income": "Renda",
+      "otherCategories": "Outras categorias",
+      "balance": "Saldo",
+      "howToRead": "Como ler:",
+      "explanation": "começa na sua renda do período e desce categoria por categoria até o que sobrou.",
+      "legendIncomePositive": "Renda / saldo positivo",
+      "legendNegative": "Saldo negativo",
+      "legendOtherGrouped": "Outras categorias agrupadas",
+      "emptyState": "Sem dados ainda — adicione PDFs ou use o exemplo."
     },
     "legends": {
       "compare": "Legenda (clique para isolar categoria)",
@@ -299,6 +362,7 @@
   },
   "anomalies": {
     "title": "Gastos estranhos detectados",
+    "subtitle": "Cobranças repetidas, valores fora do padrão e picos de gasto — vale conferir",
     "description": "Estas transações têm valores muito acima do padrão da categoria. Revise cada uma:",
     "accept": "Aceitar (é gasto real)",
     "alwaysAccept": "Sempre aceitar esta descrição",
