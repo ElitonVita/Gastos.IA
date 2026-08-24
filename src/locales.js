@@ -273,7 +273,8 @@ window.GASTOS_LOCALES = {
         "noIncomeTargetTitle": "Meta de renda não definida",
         "noIncomeTargetText": "Usando a média das últimas entradas ({avg}/mês) — defina uma meta em Configurações → Orçamentos mensais pra uma previsão mais intencional.",
         "noBudgetCatsTitle": "Categorias sem meta",
-        "noBudgetCatsText": "{n} categoria(s) sem orçamento usam a média histórica: {names}."
+        "noBudgetCatsText": "{n} categoria(s) sem orçamento usam a média histórica: {names}.",
+        "forecastSuffix": " (prev.)"
       },
       "cashflowDatasetLabels": {
         "monthly": "Saldo do mês",
@@ -919,7 +920,8 @@ window.GASTOS_LOCALES = {
         "noIncomeTargetTitle": "No income target set",
         "noIncomeTargetText": "Using the average of recent income ({avg}/month) — set a target in Settings → Monthly budgets for a more intentional forecast.",
         "noBudgetCatsTitle": "Categories without a target",
-        "noBudgetCatsText": "{n} categor(y/ies) without a budget use the historical average: {names}."
+        "noBudgetCatsText": "{n} categor(y/ies) without a budget use the historical average: {names}.",
+        "forecastSuffix": " (forecast)"
       },
       "cashflowDatasetLabels": {
         "monthly": "Monthly balance",

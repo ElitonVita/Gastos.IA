@@ -1178,7 +1178,7 @@ function updateCharts(){
 
         const combined = cumData.concat(forecastData);
         const splitIdx = cumData.length; // a partir daqui é projeção, não histórico real
-        cashflowChart.data.labels = monthsAll.concat(forecastKeys).map((k,i)=> i<splitIdx ? monthLabel(k) : monthLabel(k)+' (prev.)');
+        cashflowChart.data.labels = monthsAll.concat(forecastKeys).map((k,i)=> i<splitIdx ? monthLabel(k) : monthLabel(k)+window.i18n.t('charts.cashflow.forecastSuffix'));
         cashflowChart.data.datasets=[{
           label: window.i18n.t('charts.cashflowDatasetLabels.forecast'), data: combined, fill:true, tension:0.3,
           borderColor: '#8b5cf6',
