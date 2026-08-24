@@ -235,12 +235,12 @@ function renderTable(){
     // "Cartão BIL"/tipo de conta já aparece discreto embaixo da descrição (bankBadge) — aqui só sinaliza o que é
     // relevante além disso: a fatura consolidada não contabilizada, uma transferência entre contas, ou uma transferência interna comum.
     const intBadge = t.cardSettlement
-      ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 text-[10px] font-bold align-middle" title="${window.i18n.t('table.cardSettlementTitleText')}"><i class="ri-bank-card-fill"></i> ${window.i18n.t('table.cardSettlementText')}</span>`
+      ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 text-[10px] font-bold align-middle" title="${window.i18n.t('table.cardSettlementTitle')}"><i class="ri-bank-card-fill"></i> ${window.i18n.t('table.cardSettlement')}</span>`
       : (t.transferLinked
-        ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 text-[10px] font-bold align-middle" title="${window.i18n.t('table.transferBetweenAccountsTitleText')}"><i class="ri-arrow-left-right-line"></i> ${window.i18n.t('table.transferBetweenAccountsText')}</span>`
+        ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 text-[10px] font-bold align-middle" title="${window.i18n.t('table.transferBetweenAccountsTitle')}"><i class="ri-arrow-left-right-line"></i> ${window.i18n.t('table.transferBetweenAccounts')}</span>`
         : (t.autoTransfer
-          ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 border border-dashed border-cyan-300 dark:border-cyan-800 text-[10px] font-bold align-middle" title="${window.i18n.t('table.possibleTransferTitleText', {bank: escapeHtml(bankLabel(t.meta&&t.meta.transferToBank))})}"><i class="ri-arrow-left-right-line"></i> ${window.i18n.t('table.possibleTransferText')}</span>`
-          : (t.internal ? ` <span class="inline-flex items-center px-1.5 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-300 text-[10px] font-bold align-middle" title="${window.i18n.t('table.internalTransferTitleText')}">${window.i18n.t('table.internalTransferText')}</span>` : '')));
+          ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 border border-dashed border-cyan-300 dark:border-cyan-800 text-[10px] font-bold align-middle" title="${window.i18n.t('table.possibleTransferTitleText', {bank: escapeHtml(bankLabel(t.meta&&t.meta.transferToBank))})}"><i class="ri-arrow-left-right-line"></i> ${window.i18n.t('table.possibleTransfer')}</span>`
+          : (t.internal ? ` <span class="inline-flex items-center px-1.5 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-300 text-[10px] font-bold align-middle" title="${window.i18n.t('table.internalTransferTitle')}">⇄ ${window.i18n.t('table.internalTransfer')}</span>` : '')));
     const bankBadge = t.bank ? `<div class="text-[11px] text-zinc-400 dark:text-zinc-500 flex items-center gap-1 mt-0.5"><i class="${bankIcon(t.bank)}"></i> ${escapeHtml(bankLabel(t.bank))}</div>` : '';
     return `<tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition ${t.internal?'opacity-70':''} ${selectedTxIds.has(t.id)?'bg-violet-50 dark:bg-violet-950/30':''}">
       <td class="px-3 py-2.5 text-center"><input type="checkbox" class="rowSelect rounded border-zinc-300 dark:border-zinc-600 text-violet-600 focus:ring-violet-500/40" data-select="${t.id}" ${selectedTxIds.has(t.id)?'checked':''}></td>
@@ -255,10 +255,10 @@ function renderTable(){
       </td>
       <td class="px-4 py-2.5">
         <div class="flex items-center justify-end gap-1">
-          <button title="${window.i18n.t('table.swapTitle')}" data-swap="${t.id}" class="swapBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700" style="display:${(t.saida||t.entrada)?'flex':'none'}"><i class="ri-swap-line"></i></button>
-          <button title="${window.i18n.t('table.noteTitle')}" data-note="${t.id}" class="noteBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700 ${t.note?'text-amber-500 border-amber-300':''}"><i class="ri-sticky-note-line"></i></button>
-          <button title="${window.i18n.t('table.detailsTitle')}" data-details="${t.id}" class="detailsBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700"><i class="ri-information-line"></i></button>
-          <button title="${window.i18n.t('table.deleteTitle')}" data-del="${t.id}" class="delBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] text-zinc-400 hover:bg-red-50 hover:text-red-600 hover:border-red-200 dark:hover:bg-red-950/40 dark:hover:text-red-400 dark:hover:border-red-900 transition"><i class="ri-delete-bin-line"></i></button>
+          <button title="${window.i18n.t('actions.swap')}" data-swap="${t.id}" class="swapBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700" style="display:${(t.saida||t.entrada)?'flex':'none'}"><i class="ri-swap-line"></i></button>
+          <button title="${window.i18n.t('actions.note')}" data-note="${t.id}" class="noteBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700 ${t.note?'text-amber-500 border-amber-300':''}"><i class="ri-sticky-note-line"></i></button>
+          <button title="${window.i18n.t('actions.details')}" data-details="${t.id}" class="detailsBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700"><i class="ri-information-line"></i></button>
+          <button title="${window.i18n.t('actions.delete')}" data-del="${t.id}" class="delBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] text-zinc-400 hover:bg-red-50 hover:text-red-600 hover:border-red-200 dark:hover:bg-red-950/40 dark:hover:text-red-400 dark:hover:border-red-900 transition"><i class="ri-delete-bin-line"></i></button>
         </div>
       </td>
     </tr>`;
@@ -292,7 +292,7 @@ function renderTable(){
   body.querySelectorAll('.delBtn').forEach(b=>{
     b.addEventListener('click', e=>{
       const id=e.currentTarget.dataset.del; const tx=transactions.find(x=>x.id===id); if(!tx) return;
-      if(!confirm(window.i18n.t('table.deleteConfirm', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString('pt-BR'), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
+      if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString('pt-BR'), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
       transactions = transactions.filter(x=>x.id!==id);
       selectedTxIds.delete(id);
       renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
@@ -344,11 +344,11 @@ function renderTable(){
       if(saidaSum>0) parts.push(`<span class="text-red-600 font-bold">${fmtEUR(saidaSum/catMonths)}</span>`);
       if(entradaSum>0) parts.push(`<span class="text-emerald-600 font-bold">${fmtEUR(entradaSum/catMonths)}</span>`);
       const monthWord = catMonths===1 ? window.i18n.t('table.monthWordSingular') : window.i18n.t('table.monthWordPlural');
-      avgLabel = ` · <span title="${window.i18n.t('table.avgPerMonthTitle', {n: catMonths, monthWord})}">${window.i18n.t('table.avgPerMonthLabel')}${parts.join(' / ')}</span>`;
+      avgLabel = ` · <span title="${window.i18n.t('table.avgPerMonthTitle', {n: catMonths, monthWord})}">${window.i18n.t('table.monthlyAverage')}: ${parts.join(' / ')}</span>`;
     }
   }
-  document.getElementById('txSummary').innerHTML = `<span class="font-semibold">${window.i18n.t('table.summaryMovements', {n: totalRows})}</span> · ${window.i18n.t('table.summaryRealExpenses')}: <span class="text-red-600 font-bold">${fmtEUR(saidaSum)}</span> · ${window.i18n.t('table.summaryIncome')}: <span class="text-emerald-600 font-bold">${fmtEUR(entradaSum)}</span>${transfSum?` · <span title="${window.i18n.t('table.summaryInternalTransfersTitle')}">${window.i18n.t('table.summaryInternalTransfers')}: ${fmtEUR(transfSum)}</span>`:''}${avgLabel}`;
-  document.getElementById('pageInfo').textContent = window.i18n.t('table.pageInfoText', {current: currentPage, total: totalPages});
+  document.getElementById('txSummary').innerHTML = `<span class="font-semibold">${totalRows} ${window.i18n.t('table.summary')}</span> · ${window.i18n.t('table.realExpenses')}: <span class="text-red-600 font-bold">${fmtEUR(saidaSum)}</span> · ${window.i18n.t('table.income')}: <span class="text-emerald-600 font-bold">${fmtEUR(entradaSum)}</span>${transfSum?` · <span title="${window.i18n.t('table.summaryInternalTransfersTitle')}">${window.i18n.t('table.internalTransfers')}: ${fmtEUR(transfSum)}</span>`:''}${avgLabel}`;
+  document.getElementById('pageInfo').textContent = window.i18n.t('table.pageInfo', {current: currentPage, total: totalPages});
   document.getElementById('prevPage').disabled = currentPage<=1;
   document.getElementById('nextPage').disabled = currentPage>=totalPages;
 }
@@ -730,7 +730,7 @@ function renderAnomalyDialogBody(a){
       b.addEventListener('click', e=>{
         const id=e.currentTarget.dataset.id;
         const tx=transactions.find(x=>x.id===id); if(!tx) return;
-        if(!confirm(window.i18n.t('table.deleteConfirm', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString('pt-BR'), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
+        if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString('pt-BR'), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
         transactions = transactions.filter(x=>x.id!==id);
         selectedTxIds.delete(id);
         renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
