@@ -304,6 +304,7 @@ window.GASTOS_LOCALES = {
     },
     "settings": {
       "title": "Configurações",
+      "backToDashboard": "← Voltar ao dashboard",
       "tabs": {
         "general": "Geral",
         "data": "Dados",
@@ -323,6 +324,9 @@ window.GASTOS_LOCALES = {
         "folder": "Salvando na pasta \"{name}\"",
         "folderSub": "gastos-data.json é gravado direto no seu computador a cada mudança.",
         "localStorageSub": "Escolha uma pasta para gravar gastos-data.json direto no seu computador.",
+        "localStorageSubHtml": "Escolha uma pasta para gravar <code>gastos-data.json</code> direto no seu computador.",
+        "compatNote": "Funciona no Chrome e Edge. Sem pasta escolhida, tudo continua salvo automaticamente no navegador.",
+        "quotaBannerHtml": "<span class=\"font-bold\">Armazenamento do navegador cheio.</span> Escolha uma pasta acima ou <button id=\"quotaDlBtn\" class=\"underline font-bold\">baixe backup JSON</button> e limpe dados antigos em <span class=\"font-mono\">localStorage</span>.",
         "chooseFolder": "Escolher pasta",
         "changeFolder": "Trocar pasta",
         "saveNow": "Salvar agora",
@@ -339,6 +343,10 @@ window.GASTOS_LOCALES = {
         "url": "URL do Ollama",
         "model": "Modelo",
         "testConnection": "Testar conexão",
+        "statusChecking": "a verificar...",
+        "testButton": "Testar",
+        "saveJsonNowTitle": "Salvar gastos-data.json agora",
+        "footerNote": "100% offline · <span class=\"text-zinc-400\">{model}</span> já detectado ({size}) · Nada sai da sua rede.",
         "autoCategorize": "Categorizar automaticamente ao importar",
         "categorizeNow": "Categorizar com IA local",
         "categorizing": "Categorizando...",
@@ -360,15 +368,35 @@ window.GASTOS_LOCALES = {
       },
       "categories": {
         "add": "Adicionar categoria",
+        "addShort": "+ Nova",
+        "hint": "Clique numa fatia do gráfico ou no chip para filtrar a tabela lá embaixo.",
         "edit": "Editar",
         "keywordsHelp": "Palavras que fazem a categoria ser sugerida automaticamente"
       },
       "banks": {
         "title": "Tipos de conta / banco",
         "add": "Adicionar tipo",
+        "addShort": "+ Novo",
+        "hint": "Detectado automaticamente ao importar PDFs (BIL, Cartão BIL, Revolut). Crie outros tipos se usar mais contas — aparece discretamente abaixo da descrição na tabela de transações, e pode ser ajustado por transação ou em massa.",
         "name": "Nome",
         "icon": "Ícone",
         "keywords": "Palavras-chave para detecção automática"
+      },
+      "importPdfs": {
+        "title": "Importar PDFs",
+        "badge": "Arraste ou selecione",
+        "localNote": "100% local — nada sai do seu PC · € (1.234,56 €)",
+        "readingProgress": "Lendo PDFs...",
+        "formatHint": "<span class=\"font-bold\">Formato:</span> Data, Descrição, <b class=\"text-red-600\">Saída</b>, <b class=\"text-emerald-600\">Entrada</b>, Saldo. Só <b>Saídas</b> entram nos gráficos. Duplicatas são ignoradas automaticamente.",
+        "formatHintExtra": "Testado com extratos <b>Revolut</b>. Datas numéricas (dd.mm.aaaa, comuns em bancos europeus como <b>BIL Luxembourg</b>) também são reconhecidas — se o seu extrato não importar corretamente, veja como reportar em <b>Configurações → Dados</b> ou ajuste manualmente na tabela.",
+        "dragAnywhereHint": "Você também pode arrastar PDFs em qualquer lugar da página do dashboard."
+      },
+      "budget": {
+        "cardTitle": "Orçamentos mensais",
+        "hint": "Defina uma meta de gasto por categoria — habilita o modo \"Orçamento\" no comparativo do dashboard e alimenta a aba <b>Previsão</b> do Fluxo de caixa.",
+        "incomeTargetLabel": "Meta de renda mensal",
+        "incomeTargetPlaceholder": "Ex: 3000",
+        "footerHint": "Categorias sem meta usam a média dos últimos meses na Previsão — não precisa preencher tudo."
       }
     },
     "openingBalance": {
@@ -378,7 +406,12 @@ window.GASTOS_LOCALES = {
       "save": "Salvar saldo inicial",
       "clear": "Limpar saldo inicial",
       "statusSet": "Definido: {value} em {date}",
-      "statusNone": "Nenhum saldo inicial definido — o Fluxo de caixa acumulado começa do zero."
+      "statusNone": "Nenhum saldo inicial definido — o Fluxo de caixa acumulado começa do zero.",
+      "explanation": "Se o extrato começa no meio do caminho (ex: janeiro/2026) e falta uma entrada anterior a ele (ex: o salário de dezembro que pagou o começo de janeiro), informe aqui o saldo que você tinha um dia antes do primeiro extrato importado. Esse valor entra tanto no <b>Saldo atual</b> (topo do painel) quanto no início do gráfico de <b>Fluxo de caixa acumulado</b>. Alternativa: em vez de preencher aqui, lance uma <b>transação manual do tipo Entrada</b> em dezembro com o total que você tinha — dá no mesmo, mas não use os dois ao mesmo tempo pra não contar em dobro.",
+      "dateLabel": "Saldo em",
+      "valuePlaceholder": "Ex: 3200.00",
+      "saveShort": "Salvar",
+      "removeShort": "Remover"
     },
     "anomalies": {
       "title": "Gastos estranhos detectados",
@@ -803,6 +836,7 @@ window.GASTOS_LOCALES = {
     },
     "settings": {
       "title": "Settings",
+      "backToDashboard": "← Back to dashboard",
       "tabs": {
         "general": "General",
         "data": "Data",
@@ -822,6 +856,9 @@ window.GASTOS_LOCALES = {
         "folder": "Saving to folder \"{name}\"",
         "folderSub": "gastos-data.json is written directly to your computer on every change.",
         "localStorageSub": "Choose a folder to save gastos-data.json directly on your computer.",
+        "localStorageSubHtml": "Choose a folder to save <code>gastos-data.json</code> directly on your computer.",
+        "compatNote": "Works in Chrome and Edge. Without a folder chosen, everything still saves automatically in the browser.",
+        "quotaBannerHtml": "<span class=\"font-bold\">Browser storage full.</span> Choose a folder above or <button id=\"quotaDlBtn\" class=\"underline font-bold\">download JSON backup</button> and clear old data in <span class=\"font-mono\">localStorage</span>.",
         "chooseFolder": "Choose folder",
         "changeFolder": "Change folder",
         "saveNow": "Save now",
@@ -838,6 +875,10 @@ window.GASTOS_LOCALES = {
         "url": "Ollama URL",
         "model": "Model",
         "testConnection": "Test connection",
+        "statusChecking": "checking...",
+        "testButton": "Test",
+        "saveJsonNowTitle": "Save gastos-data.json now",
+        "footerNote": "100% offline · <span class=\"text-zinc-400\">{model}</span> already detected ({size}) · Nothing leaves your network.",
         "autoCategorize": "Auto-categorize on import",
         "categorizeNow": "Categorize with local AI",
         "categorizing": "Categorizing...",
@@ -859,15 +900,35 @@ window.GASTOS_LOCALES = {
       },
       "categories": {
         "add": "Add category",
+        "addShort": "+ New",
+        "hint": "Click a chart slice or the chip to filter the table below.",
         "edit": "Edit",
         "keywordsHelp": "Words that trigger auto-suggestion for this category"
       },
       "banks": {
         "title": "Account types / banks",
         "add": "Add type",
+        "addShort": "+ New",
+        "hint": "Auto-detected when importing PDFs (BIL, BIL Card, Revolut). Create other types if you use more accounts — shows discreetly under the description in the transactions table, and can be adjusted per transaction or in bulk.",
         "name": "Name",
         "icon": "Icon",
         "keywords": "Keywords for auto-detection"
+      },
+      "importPdfs": {
+        "title": "Import PDFs",
+        "badge": "Drag or select",
+        "localNote": "100% local — nothing leaves your PC · € (1,234.56 €)",
+        "readingProgress": "Reading PDFs...",
+        "formatHint": "<span class=\"font-bold\">Format:</span> Date, Description, <b class=\"text-red-600\">Expense</b>, <b class=\"text-emerald-600\">Income</b>, Balance. Only <b>Expenses</b> feed the charts. Duplicates are skipped automatically.",
+        "formatHintExtra": "Tested with <b>Revolut</b> statements. Numeric dates (dd.mm.yyyy, common at European banks like <b>BIL Luxembourg</b>) are also recognized — if your statement doesn't import correctly, see how to report it in <b>Settings → Data</b> or edit manually in the table.",
+        "dragAnywhereHint": "You can also drag PDFs anywhere on the dashboard page."
+      },
+      "budget": {
+        "cardTitle": "Monthly budgets",
+        "hint": "Set a spending target per category — enables \"Budget\" mode in the dashboard comparison and feeds the cash flow <b>Forecast</b> tab.",
+        "incomeTargetLabel": "Monthly income target",
+        "incomeTargetPlaceholder": "e.g. 3000",
+        "footerHint": "Categories without a target use the average of recent months in the Forecast — no need to fill in everything."
       }
     },
     "openingBalance": {
@@ -877,7 +938,12 @@ window.GASTOS_LOCALES = {
       "save": "Save opening balance",
       "clear": "Clear opening balance",
       "statusSet": "Set: {value} on {date}",
-      "statusNone": "No opening balance set — Cumulative cash flow starts from zero."
+      "statusNone": "No opening balance set — Cumulative cash flow starts from zero.",
+      "explanation": "If the statement starts partway through (e.g. January/2026) and is missing an entry before it (e.g. December's salary that paid for the start of January), enter here the balance you had one day before the first imported statement. This value feeds both the <b>Current balance</b> (top of the dashboard) and the start of the <b>Cumulative cash flow</b> chart. Alternative: instead of filling this in, log a <b>manual Income transaction</b> in December with the total you had — same result, but don't use both at once or it'll double-count.",
+      "dateLabel": "Balance on",
+      "valuePlaceholder": "e.g. 3200.00",
+      "saveShort": "Save",
+      "removeShort": "Remove"
     },
     "anomalies": {
       "title": "Unusual expenses detected",

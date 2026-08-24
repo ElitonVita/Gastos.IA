@@ -301,6 +301,7 @@
   },
   "settings": {
     "title": "Settings",
+    "backToDashboard": "← Back to dashboard",
     "tabs": {
       "general": "General",
       "data": "Data",
@@ -320,6 +321,9 @@
       "folder": "Saving to folder \"{name}\"",
       "folderSub": "gastos-data.json is written directly to your computer on every change.",
       "localStorageSub": "Choose a folder to save gastos-data.json directly on your computer.",
+      "localStorageSubHtml": "Choose a folder to save <code>gastos-data.json</code> directly on your computer.",
+      "compatNote": "Works in Chrome and Edge. Without a folder chosen, everything still saves automatically in the browser.",
+      "quotaBannerHtml": "<span class=\"font-bold\">Browser storage full.</span> Choose a folder above or <button id=\"quotaDlBtn\" class=\"underline font-bold\">download JSON backup</button> and clear old data in <span class=\"font-mono\">localStorage</span>.",
       "chooseFolder": "Choose folder",
       "changeFolder": "Change folder",
       "saveNow": "Save now",
@@ -336,6 +340,10 @@
       "url": "Ollama URL",
       "model": "Model",
       "testConnection": "Test connection",
+      "statusChecking": "checking...",
+      "testButton": "Test",
+      "saveJsonNowTitle": "Save gastos-data.json now",
+      "footerNote": "100% offline · <span class=\"text-zinc-400\">{model}</span> already detected ({size}) · Nothing leaves your network.",
       "autoCategorize": "Auto-categorize on import",
       "categorizeNow": "Categorize with local AI",
       "categorizing": "Categorizing...",
@@ -357,15 +365,35 @@
     },
     "categories": {
       "add": "Add category",
+      "addShort": "+ New",
+      "hint": "Click a chart slice or the chip to filter the table below.",
       "edit": "Edit",
       "keywordsHelp": "Words that trigger auto-suggestion for this category"
     },
     "banks": {
       "title": "Account types / banks",
       "add": "Add type",
+      "addShort": "+ New",
+      "hint": "Auto-detected when importing PDFs (BIL, BIL Card, Revolut). Create other types if you use more accounts — shows discreetly under the description in the transactions table, and can be adjusted per transaction or in bulk.",
       "name": "Name",
       "icon": "Icon",
       "keywords": "Keywords for auto-detection"
+    },
+    "importPdfs": {
+      "title": "Import PDFs",
+      "badge": "Drag or select",
+      "localNote": "100% local — nothing leaves your PC · € (1,234.56 €)",
+      "readingProgress": "Reading PDFs...",
+      "formatHint": "<span class=\"font-bold\">Format:</span> Date, Description, <b class=\"text-red-600\">Expense</b>, <b class=\"text-emerald-600\">Income</b>, Balance. Only <b>Expenses</b> feed the charts. Duplicates are skipped automatically.",
+      "formatHintExtra": "Tested with <b>Revolut</b> statements. Numeric dates (dd.mm.yyyy, common at European banks like <b>BIL Luxembourg</b>) are also recognized — if your statement doesn't import correctly, see how to report it in <b>Settings → Data</b> or edit manually in the table.",
+      "dragAnywhereHint": "You can also drag PDFs anywhere on the dashboard page."
+    },
+    "budget": {
+      "cardTitle": "Monthly budgets",
+      "hint": "Set a spending target per category — enables \"Budget\" mode in the dashboard comparison and feeds the cash flow <b>Forecast</b> tab.",
+      "incomeTargetLabel": "Monthly income target",
+      "incomeTargetPlaceholder": "e.g. 3000",
+      "footerHint": "Categories without a target use the average of recent months in the Forecast — no need to fill in everything."
     }
   },
   "openingBalance": {
@@ -375,7 +403,12 @@
     "save": "Save opening balance",
     "clear": "Clear opening balance",
     "statusSet": "Set: {value} on {date}",
-    "statusNone": "No opening balance set — Cumulative cash flow starts from zero."
+    "statusNone": "No opening balance set — Cumulative cash flow starts from zero.",
+    "explanation": "If the statement starts partway through (e.g. January/2026) and is missing an entry before it (e.g. December's salary that paid for the start of January), enter here the balance you had one day before the first imported statement. This value feeds both the <b>Current balance</b> (top of the dashboard) and the start of the <b>Cumulative cash flow</b> chart. Alternative: instead of filling this in, log a <b>manual Income transaction</b> in December with the total you had — same result, but don't use both at once or it'll double-count.",
+    "dateLabel": "Balance on",
+    "valuePlaceholder": "e.g. 3200.00",
+    "saveShort": "Save",
+    "removeShort": "Remove"
   },
   "anomalies": {
     "title": "Unusual expenses detected",

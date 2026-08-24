@@ -341,7 +341,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 <div id="viewSettings" class="hidden max-w-[1360px] mx-auto px-4 md:px-6 py-6 space-y-6">
   <div class="flex items-center justify-between">
     <h2 class="text-xl font-extrabold tracking-tight flex items-center gap-2"><i class="ri-settings-3-line text-violet-600"></i> <span data-i18n="settings.title">Configurações</span></h2>
-    <button onclick="showView('main')" class="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-bold">← Voltar ao dashboard</button>
+    <button onclick="showView('main')" data-i18n="settings.backToDashboard" class="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-bold">← Voltar ao dashboard</button>
   </div>
   <!-- Row 1: IA Local (+ Tipos de conta logo abaixo, no espaço que sobra) | Importar PDFs -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
@@ -351,7 +351,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
       <div class="absolute -top-12 -right-12 w-32 h-32 bg-violet-600/20 rounded-full blur-2xl"></div>
       <div class="flex items-center justify-between mb-3 relative">
         <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-sparkling-2-fill text-violet-400"></i> IA Local <span class="font-normal text-zinc-400">· Ollama</span></h3>
-        <span id="ollamaStatus" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-[11px] font-bold"><span class="w-1.5 h-1.5 rounded-full bg-zinc-500" id="ollamaDot"></span><span id="ollamaStatusText">a verificar...</span></span>
+        <span id="ollamaStatus" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-[11px] font-bold"><span class="w-1.5 h-1.5 rounded-full bg-zinc-500" id="ollamaDot"></span><span id="ollamaStatusText" data-i18n="settings.ai.statusChecking">a verificar...</span></span>
       </div>
       <div class="grid grid-cols-2 gap-2 mb-3 relative">
         <label class="text-[11px] font-semibold text-zinc-400">URL Ollama <input id="ollamaUrl" value="http://localhost:11434" class="mt-1 w-full px-2.5 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-xs font-mono text-white placeholder-zinc-500 focus:outline-none focus:border-violet-500"></label>
@@ -359,33 +359,33 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
       </div>
       <div class="flex gap-2 relative">
         <button id="btnOllamaCategorize" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-bold transition disabled:opacity-40 disabled:cursor-not-allowed"><i class="ri-magic-line"></i> Categorizar com IA local</button>
-        <button id="btnOllamaTest" class="px-3 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-xs font-bold transition" title="Testar conexão">Testar</button>
-        <button id="btnSaveJson" class="px-3 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-xs font-bold transition" title="Salvar gastos-data.json agora"><i class="ri-save-line"></i></button>
+        <button id="btnOllamaTest" data-i18n="settings.ai.testButton" data-i18n-title="settings.ai.testConnection" class="px-3 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-xs font-bold transition" title="Testar conexão">Testar</button>
+        <button id="btnSaveJson" data-i18n-title="settings.ai.saveJsonNowTitle" class="px-3 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-xs font-bold transition" title="Salvar gastos-data.json agora"><i class="ri-save-line"></i></button>
       </div>
       <label class="flex items-center gap-2 mt-3 cursor-pointer relative">
         <input type="checkbox" id="ollamaAuto" class="rounded border-zinc-600 bg-zinc-800 text-violet-600 focus:ring-violet-600">
         <span class="text-xs font-medium text-zinc-300">Auto-categorizar ao importar PDF</span>
       </label>
       <div id="ollamaLog" class="mt-3 hidden p-2.5 rounded-xl bg-black/40 border border-zinc-700 text-[11px] font-mono leading-relaxed max-h-[160px] overflow-auto whitespace-pre-wrap"></div>
-      <p class="text-[11px] text-zinc-500 mt-2 relative">100% offline · <span class="text-zinc-400">gemma4:latest</span> já detectado (9.6 GB) · Nada sai da sua rede.</p>
+      <p class="text-[11px] text-zinc-500 mt-2 relative" data-i18n="settings.ai.footerNote" data-i18n-html="true">100% offline · <span class="text-zinc-400">gemma4:latest</span> já detectado (9.6 GB) · Nada sai da sua rede.</p>
     </div>
 
     <!-- Tipos de conta -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
       <div class="flex items-center justify-between mb-3">
         <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-bank-line text-violet-600"></i> Tipos de conta</h3>
-        <button id="btnAddBankType" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900">+ Novo</button>
+        <button id="btnAddBankType" data-i18n="settings.banks.addShort" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900">+ Novo</button>
       </div>
       <div id="bankTypeChips" class="flex flex-wrap gap-2"></div>
-      <p class="text-[11px] text-zinc-500 mt-3">Detectado automaticamente ao importar PDFs (BIL, Cartão BIL, Revolut). Crie outros tipos se usar mais contas — aparece discretamente abaixo da descrição na tabela de transações, e pode ser ajustado por transação ou em massa.</p>
+      <p class="text-[11px] text-zinc-500 mt-3" data-i18n="settings.banks.hint">Detectado automaticamente ao importar PDFs (BIL, Cartão BIL, Revolut). Crie outros tipos se usar mais contas — aparece discretamente abaixo da descrição na tabela de transações, e pode ser ajustado por transação ou em massa.</p>
     </div>
     </div>
 
     <!-- Importar PDFs -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
       <div class="flex items-center justify-between mb-3">
-        <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-folder-3-line text-violet-600"></i> Importar PDFs</h3>
-        <span class="text-[11px] font-medium px-2 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500">Arraste ou selecione</span>
+        <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-folder-3-line text-violet-600"></i> <span data-i18n="settings.importPdfs.title">Importar PDFs</span></h3>
+        <span class="text-[11px] font-medium px-2 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500" data-i18n="settings.importPdfs.badge">Arraste ou selecione</span>
       </div>
       <div id="dropZone" class="group relative rounded-2xl border-2 border-dashed border-zinc-200 dark:border-zinc-700 bg-zinc-50/60 dark:bg-zinc-800/40 p-6 text-center cursor-pointer hover:border-violet-300 dark:hover:border-violet-700 transition">
         <input id="fileInput" type="file" accept=".pdf" multiple class="hidden">
@@ -397,9 +397,9 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
           <button id="btnPickFiles" data-i18n="dropZone.btnPickFiles" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700 transition">Selecionar PDFs</button>
           <button id="btnPickFolder" data-i18n="dropZone.btnPickFolder" class="px-4 py-2 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition">Selecionar pasta</button>
         </div>
-        <p class="text-[11px] text-zinc-400 mt-3">100% local — nada sai do seu PC · € (1.234,56 €)</p>
+        <p class="text-[11px] text-zinc-400 mt-3" data-i18n="settings.importPdfs.localNote">100% local — nada sai do seu PC · € (1.234,56 €)</p>
         <div id="progressWrap" class="hidden mt-4 text-left">
-          <div class="flex justify-between text-[11px] font-medium text-zinc-500 mb-1"><span id="progressLabel">Lendo PDFs...</span><span id="progressPct">0%</span></div>
+          <div class="flex justify-between text-[11px] font-medium text-zinc-500 mb-1"><span id="progressLabel" data-i18n="settings.importPdfs.readingProgress">Lendo PDFs...</span><span id="progressPct">0%</span></div>
           <div class="h-1.5 rounded-full bg-zinc-200 dark:bg-zinc-700 overflow-hidden"><div id="progressBar" class="h-full bg-violet-600 rounded-full transition-all" style="width:0%"></div></div>
         </div>
       </div>
@@ -407,12 +407,12 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
       <div class="mt-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 p-3 flex gap-3">
         <i class="ri-lightbulb-flash-line text-amber-600 dark:text-amber-400 text-lg shrink-0 mt-0.5"></i>
         <div class="text-xs leading-relaxed text-amber-900 dark:text-amber-200">
-          <span class="font-bold">Formato:</span> Data, Descrição, <b class="text-red-600">Saída</b>, <b class="text-emerald-600">Entrada</b>, Saldo. Só <b>Saídas</b> entram nos gráficos. Duplicatas são ignoradas automaticamente.
-          <div class="mt-1.5 pt-1.5 border-t border-amber-200 dark:border-amber-900">Testado com extratos <b>Revolut</b>. Datas numéricas (dd.mm.aaaa, comuns em bancos europeus como <b>BIL Luxembourg</b>) também são reconhecidas — se o seu extrato não importar corretamente, veja como reportar em <b>Configurações → Dados</b> ou ajuste manualmente na tabela.</div>
+          <span data-i18n="settings.importPdfs.formatHint" data-i18n-html="true"><span class="font-bold">Formato:</span> Data, Descrição, <b class="text-red-600">Saída</b>, <b class="text-emerald-600">Entrada</b>, Saldo. Só <b>Saídas</b> entram nos gráficos. Duplicatas são ignoradas automaticamente.</span>
+          <div class="mt-1.5 pt-1.5 border-t border-amber-200 dark:border-amber-900" data-i18n="settings.importPdfs.formatHintExtra" data-i18n-html="true">Testado com extratos <b>Revolut</b>. Datas numéricas (dd.mm.aaaa, comuns em bancos europeus como <b>BIL Luxembourg</b>) também são reconhecidas — se o seu extrato não importar corretamente, veja como reportar em <b>Configurações → Dados</b> ou ajuste manualmente na tabela.</div>
         </div>
       </div>
-      <p class="text-[11px] text-zinc-500 mt-2"><i class="ri-drag-move-2-line"></i> Você também pode arrastar PDFs em qualquer lugar da página do dashboard.</p>
-      <button id="btnDemo" class="mt-3 w-full inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-semibold hover:opacity-90 transition"><i class="ri-flashlight-line"></i> Ver com dados de exemplo</button>
+      <p class="text-[11px] text-zinc-500 mt-2"><i class="ri-drag-move-2-line"></i> <span data-i18n="settings.importPdfs.dragAnywhereHint">Você também pode arrastar PDFs em qualquer lugar da página do dashboard.</span></p>
+      <button id="btnDemo" class="mt-3 w-full inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-semibold hover:opacity-90 transition"><i class="ri-flashlight-line"></i> <span data-i18n="settings.general.demoData">Ver com dados de exemplo</span></button>
     </div>
   </div>
 
@@ -422,24 +422,24 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
     <!-- Category editor -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
       <div class="flex items-center justify-between mb-3">
-        <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-price-tag-3-line text-violet-600"></i> Categorias</h3>
-        <button id="btnAddCat" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900">+ Nova</button>
+        <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-price-tag-3-line text-violet-600"></i> <span data-i18n="settings.tabs.categories">Categorias</span></h3>
+        <button id="btnAddCat" data-i18n="settings.categories.addShort" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900">+ Nova</button>
       </div>
       <div id="categoryChips" class="flex flex-wrap gap-2"></div>
-      <p class="text-[11px] text-zinc-500 mt-3">Clique numa fatia do gráfico ou no chip para filtrar a tabela lá embaixo.</p>
+      <p class="text-[11px] text-zinc-500 mt-3" data-i18n="settings.categories.hint">Clique numa fatia do gráfico ou no chip para filtrar a tabela lá embaixo.</p>
     </div>
 
     <!-- Saldo inicial -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
-      <h3 class="font-bold text-sm flex items-center gap-2 mb-1"><i class="ri-scales-3-line text-violet-600"></i> Saldo inicial</h3>
-      <p class="text-[11px] text-zinc-500 mb-3">Se o extrato começa no meio do caminho (ex: janeiro/2026) e falta uma entrada anterior a ele (ex: o salário de dezembro que pagou o começo de janeiro), informe aqui o saldo que você tinha um dia antes do primeiro extrato importado. Esse valor entra tanto no <b>Saldo atual</b> (topo do painel) quanto no início do gráfico de <b>Fluxo de caixa acumulado</b>. Alternativa: em vez de preencher aqui, lance uma <b>transação manual do tipo Entrada</b> em dezembro com o total que você tinha — dá no mesmo, mas não use os dois ao mesmo tempo pra não contar em dobro.</p>
+      <h3 class="font-bold text-sm flex items-center gap-2 mb-1"><i class="ri-scales-3-line text-violet-600"></i> <span data-i18n="openingBalance.title">Saldo inicial</span></h3>
+      <p class="text-[11px] text-zinc-500 mb-3" data-i18n="openingBalance.explanation" data-i18n-html="true">Se o extrato começa no meio do caminho (ex: janeiro/2026) e falta uma entrada anterior a ele (ex: o salário de dezembro que pagou o começo de janeiro), informe aqui o saldo que você tinha um dia antes do primeiro extrato importado. Esse valor entra tanto no <b>Saldo atual</b> (topo do painel) quanto no início do gráfico de <b>Fluxo de caixa acumulado</b>. Alternativa: em vez de preencher aqui, lance uma <b>transação manual do tipo Entrada</b> em dezembro com o total que você tinha — dá no mesmo, mas não use os dois ao mesmo tempo pra não contar em dobro.</p>
       <div class="grid grid-cols-2 gap-2">
-        <label class="text-xs font-semibold block">Saldo em <input type="date" id="obDate" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
-        <label class="text-xs font-semibold block">Valor <input type="number" step="0.01" id="obValue" placeholder="Ex: 3200.00" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
+        <label class="text-xs font-semibold block"><span data-i18n="openingBalance.dateLabel">Saldo em</span> <input type="date" id="obDate" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
+        <label class="text-xs font-semibold block">Valor <input type="number" step="0.01" id="obValue" placeholder="Ex: 3200.00" data-i18n-placeholder="openingBalance.valuePlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
       </div>
       <div class="flex items-center flex-wrap gap-2 mt-3">
-        <button id="btnSaveOpeningBalance" type="button" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700">Salvar</button>
-        <button id="btnClearOpeningBalance" type="button" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 text-xs font-bold">Remover</button>
+        <button id="btnSaveOpeningBalance" type="button" data-i18n="openingBalance.saveShort" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700">Salvar</button>
+        <button id="btnClearOpeningBalance" type="button" data-i18n="openingBalance.removeShort" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 text-xs font-bold">Remover</button>
         <span id="obStatus" class="text-[11px] text-zinc-500"></span>
       </div>
     </div>
@@ -447,41 +447,41 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 
     <!-- Orçamentos mensais -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
-      <h3 class="font-bold text-sm flex items-center gap-2 mb-1"><i class="ri-flag-line text-violet-600"></i> Orçamentos mensais</h3>
-      <p class="text-[11px] text-zinc-500 mb-3">Defina uma meta de gasto por categoria — habilita o modo "Orçamento" no comparativo do dashboard e alimenta a aba <b>Previsão</b> do Fluxo de caixa.</p>
+      <h3 class="font-bold text-sm flex items-center gap-2 mb-1"><i class="ri-flag-line text-violet-600"></i> <span data-i18n="settings.budget.cardTitle">Orçamentos mensais</span></h3>
+      <p class="text-[11px] text-zinc-500 mb-3" data-i18n="settings.budget.hint" data-i18n-html="true">Defina uma meta de gasto por categoria — habilita o modo "Orçamento" no comparativo do dashboard e alimenta a aba <b>Previsão</b> do Fluxo de caixa.</p>
       <label class="text-xs font-semibold flex items-center justify-between gap-3 mb-3 pb-3 border-b border-zinc-100 dark:border-zinc-800">
-        <span class="flex items-center gap-1.5"><i class="ri-money-euro-circle-line text-emerald-600"></i> Meta de renda mensal</span>
-        <input type="number" min="0" step="10" id="incomeTargetInput" placeholder="Ex: 3000" class="w-32 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-xs font-mono text-right text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400">
+        <span class="flex items-center gap-1.5"><i class="ri-money-euro-circle-line text-emerald-600"></i> <span data-i18n="settings.budget.incomeTargetLabel">Meta de renda mensal</span></span>
+        <input type="number" min="0" step="10" id="incomeTargetInput" placeholder="Ex: 3000" data-i18n-placeholder="settings.budget.incomeTargetPlaceholder" class="w-32 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-xs font-mono text-right text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400">
       </label>
       <div id="budgetList" class="space-y-1.5"></div>
       <div id="budgetSummaryBox" class="mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-800"></div>
-      <p class="text-[11px] text-zinc-500 mt-3">Categorias sem meta usam a média dos últimos meses na Previsão — não precisa preencher tudo.</p>
+      <p class="text-[11px] text-zinc-500 mt-3" data-i18n="settings.budget.footerHint">Categorias sem meta usam a média dos últimos meses na Previsão — não precisa preencher tudo.</p>
     </div>
   </div>
 
   <!-- Row 3: Dados -->
   <div class="grid grid-cols-1 gap-6">
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
-      <h3 class="font-bold text-sm flex items-center gap-2 mb-3"><i class="ri-database-2-line text-violet-600"></i> Dados</h3>
+      <h3 class="font-bold text-sm flex items-center gap-2 mb-3"><i class="ri-database-2-line text-violet-600"></i> <span data-i18n="settings.tabs.data">Dados</span></h3>
       <div id="fsStatusBox" class="flex items-center justify-between gap-3 p-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 mb-3">
         <div class="flex items-center gap-2.5 min-w-0">
           <span id="fsStatusDot" class="w-2 h-2 rounded-full shrink-0 bg-zinc-400"></span>
           <div class="min-w-0">
-            <p id="fsStatusText" class="text-xs font-bold truncate">Salvando no navegador (localStorage)</p>
-            <p id="fsStatusSub" class="text-[11px] text-zinc-500">Escolha uma pasta para gravar <code class="font-mono">gastos-data.json</code> direto no seu computador.</p>
+            <p id="fsStatusText" data-i18n="settings.data.localStorage" class="text-xs font-bold truncate">Salvando no navegador (localStorage)</p>
+            <p id="fsStatusSub" data-i18n="settings.data.localStorageSubHtml" data-i18n-html="true" class="text-[11px] text-zinc-500">Escolha uma pasta para gravar <code class="font-mono">gastos-data.json</code> direto no seu computador.</p>
           </div>
         </div>
-        <button id="btnChooseFolder" class="shrink-0 px-3 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold hover:opacity-90 transition whitespace-nowrap"><i class="ri-folder-open-line"></i> Escolher pasta</button>
+        <button id="btnChooseFolder" class="shrink-0 px-3 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold hover:opacity-90 transition whitespace-nowrap"><i class="ri-folder-open-line"></i> <span data-i18n="settings.data.chooseFolder">Escolher pasta</span></button>
       </div>
       <div class="flex flex-wrap gap-2">
-        <button id="btnSaveJsonNow" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700"><i class="ri-save-line"></i> Salvar agora</button>
-        <button id="btnExportJson" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 text-xs font-bold"><i class="ri-download-line"></i> Baixar backup JSON</button>
-        <label class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 text-xs font-bold cursor-pointer"><i class="ri-upload-line"></i> Restaurar backup<input type="file" id="fileImportJson" accept=".json" class="hidden"></label>
+        <button id="btnSaveJsonNow" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700"><i class="ri-save-line"></i> <span data-i18n="settings.data.saveNow">Salvar agora</span></button>
+        <button id="btnExportJson" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 text-xs font-bold"><i class="ri-download-line"></i> <span data-i18n="settings.data.exportJson">Baixar backup JSON</span></button>
+        <label class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 text-xs font-bold cursor-pointer"><i class="ri-upload-line"></i> <span data-i18n="settings.data.importJson">Restaurar backup</span><input type="file" id="fileImportJson" accept=".json" class="hidden"></label>
       </div>
-      <p class="text-[11px] text-zinc-500 mt-2">Funciona no Chrome e Edge. Sem pasta escolhida, tudo continua salvo automaticamente no navegador.</p>
+      <p class="text-[11px] text-zinc-500 mt-2" data-i18n="settings.data.compatNote">Funciona no Chrome e Edge. Sem pasta escolhida, tudo continua salvo automaticamente no navegador.</p>
       <div id="quotaBanner" class="hidden mt-3 p-3 rounded-xl border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30 flex items-start gap-2.5">
         <i class="ri-alarm-warning-fill text-red-600 dark:text-red-400 mt-0.5"></i>
-        <div class="text-xs leading-relaxed text-red-800 dark:text-red-300">
+        <div class="text-xs leading-relaxed text-red-800 dark:text-red-300" data-i18n="settings.data.quotaBannerHtml" data-i18n-html="true">
           <span class="font-bold">Armazenamento do navegador cheio.</span> Escolha uma pasta acima ou <button id="quotaDlBtn" class="underline font-bold">baixe backup JSON</button> e limpe dados antigos em <span class="font-mono">localStorage</span>.
         </div>
         <button onclick="this.parentElement.classList.add('hidden')" class="ml-auto text-red-400 hover:text-red-600 shrink-0"><i class="ri-close-line"></i></button>
