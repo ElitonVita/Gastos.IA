@@ -477,7 +477,16 @@
       "importJson": "Restore JSON backup",
       "importSuccess": "Backup restored: {count} transactions",
       "importError": "Invalid file: {error}",
-      "storageFull": "Browser storage full — choose a folder or download backup"
+      "storageFull": "Browser storage full — choose a folder or download backup",
+      "folderApiUnsupported": "Choosing a folder works in Chrome and Edge. In this browser, data keeps saving automatically right here (localStorage).",
+      "quotaFull": "⚠️ Browser storage full — choose a folder in Settings → Data or download a JSON backup.",
+      "restoredFromFolder": "Restored from gastos-data.json ({count} transactions, {date})",
+      "savedToFolderLog": "💾 gastos-data.json saved to folder \"{name}\"",
+      "savedToLocalLog": "💾 saved in browser (localStorage) — use \"Choose folder\" in Settings → Data to save to your computer",
+      "savedToFolderAlert": "✅ gastos-data.json saved to folder \"{name}\"",
+      "savedToLocalAlert": "✅ Saved in browser (localStorage). Click \"Choose folder\" to save directly to your computer.",
+      "fixedBilCardMigration": "🔧 {n} BIL card purchase(s), imported before the fix, were recategorized and now count as an Expense again.",
+      "fixedTransfersMigration": "🔧 {n} transaction(s) identified as a transfer between your accounts (by beneficiary bank) — no longer counted as Expense/Income."
     },
     "ai": {
       "title": "Auto-categorization with local AI",
@@ -554,6 +563,7 @@
     "clear": "Clear opening balance",
     "statusSet": "Set: {value} on {date}",
     "statusNone": "No opening balance set — Cumulative cash flow starts from zero.",
+    "invalidInput": "Enter a valid date and amount.",
     "explanation": "If the statement starts partway through (e.g. January/2026) and is missing an entry before it (e.g. December's salary that paid for the start of January), enter here the balance you had one day before the first imported statement. This value feeds both the <b>Current balance</b> (top of the dashboard) and the start of the <b>Cumulative cash flow</b> chart. Alternative: instead of filling this in, log a <b>manual Income transaction</b> in December with the total you had — same result, but don't use both at once or it'll double-count.",
     "dateLabel": "Balance on",
     "valuePlaceholder": "e.g. 3200.00",

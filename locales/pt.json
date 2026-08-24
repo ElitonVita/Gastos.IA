@@ -477,7 +477,16 @@
       "importJson": "Restaurar backup JSON",
       "importSuccess": "Backup restaurado: {count} transações",
       "importError": "Arquivo inválido: {error}",
-      "storageFull": "Armazenamento do navegador cheio — escolha uma pasta ou baixe backup"
+      "storageFull": "Armazenamento do navegador cheio — escolha uma pasta ou baixe backup",
+      "folderApiUnsupported": "Escolher pasta funciona no Chrome e Edge. Nesse navegador, os dados continuam salvos automaticamente aqui mesmo (localStorage).",
+      "quotaFull": "⚠️ Armazenamento do navegador cheio — escolha uma pasta em Configurações → Dados ou baixe backup JSON.",
+      "restoredFromFolder": "Restaurado de gastos-data.json ({count} transações, {date})",
+      "savedToFolderLog": "💾 gastos-data.json salvo na pasta \"{name}\"",
+      "savedToLocalLog": "💾 salvo no navegador (localStorage) — use \"Escolher pasta\" em Configurações → Dados para gravar no computador",
+      "savedToFolderAlert": "✅ gastos-data.json salvo na pasta \"{name}\"",
+      "savedToLocalAlert": "✅ Salvo no navegador (localStorage). Clique em \"Escolher pasta\" para gravar direto no computador.",
+      "fixedBilCardMigration": "🔧 {n} compra(s) do cartão BIL, importadas antes da correção, foram recategorizadas e voltaram a contar como Gasto.",
+      "fixedTransfersMigration": "🔧 {n} transação(ões) identificadas como transferência entre suas contas (pelo banco do beneficiário) — não contam mais como Gasto/Entrada."
     },
     "ai": {
       "title": "Categorização automática com IA local",
@@ -554,6 +563,7 @@
     "clear": "Limpar saldo inicial",
     "statusSet": "Definido: {value} em {date}",
     "statusNone": "Nenhum saldo inicial definido — o Fluxo de caixa acumulado começa do zero.",
+    "invalidInput": "Informe uma data e um valor válidos.",
     "explanation": "Se o extrato começa no meio do caminho (ex: janeiro/2026) e falta uma entrada anterior a ele (ex: o salário de dezembro que pagou o começo de janeiro), informe aqui o saldo que você tinha um dia antes do primeiro extrato importado. Esse valor entra tanto no <b>Saldo atual</b> (topo do painel) quanto no início do gráfico de <b>Fluxo de caixa acumulado</b>. Alternativa: em vez de preencher aqui, lance uma <b>transação manual do tipo Entrada</b> em dezembro com o total que você tinha — dá no mesmo, mas não use os dois ao mesmo tempo pra não contar em dobro.",
     "dateLabel": "Saldo em",
     "valuePlaceholder": "Ex: 3200.00",

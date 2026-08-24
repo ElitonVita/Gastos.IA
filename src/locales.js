@@ -488,7 +488,16 @@ window.GASTOS_LOCALES = {
         "importJson": "Restaurar backup JSON",
         "importSuccess": "Backup restaurado: {count} transações",
         "importError": "Arquivo inválido: {error}",
-        "storageFull": "Armazenamento do navegador cheio — escolha uma pasta ou baixe backup"
+        "storageFull": "Armazenamento do navegador cheio — escolha uma pasta ou baixe backup",
+        "folderApiUnsupported": "Escolher pasta funciona no Chrome e Edge. Nesse navegador, os dados continuam salvos automaticamente aqui mesmo (localStorage).",
+        "quotaFull": "⚠️ Armazenamento do navegador cheio — escolha uma pasta em Configurações → Dados ou baixe backup JSON.",
+        "restoredFromFolder": "Restaurado de gastos-data.json ({count} transações, {date})",
+        "savedToFolderLog": "💾 gastos-data.json salvo na pasta \"{name}\"",
+        "savedToLocalLog": "💾 salvo no navegador (localStorage) — use \"Escolher pasta\" em Configurações → Dados para gravar no computador",
+        "savedToFolderAlert": "✅ gastos-data.json salvo na pasta \"{name}\"",
+        "savedToLocalAlert": "✅ Salvo no navegador (localStorage). Clique em \"Escolher pasta\" para gravar direto no computador.",
+        "fixedBilCardMigration": "🔧 {n} compra(s) do cartão BIL, importadas antes da correção, foram recategorizadas e voltaram a contar como Gasto.",
+        "fixedTransfersMigration": "🔧 {n} transação(ões) identificadas como transferência entre suas contas (pelo banco do beneficiário) — não contam mais como Gasto/Entrada."
       },
       "ai": {
         "title": "Categorização automática com IA local",
@@ -565,6 +574,7 @@ window.GASTOS_LOCALES = {
       "clear": "Limpar saldo inicial",
       "statusSet": "Definido: {value} em {date}",
       "statusNone": "Nenhum saldo inicial definido — o Fluxo de caixa acumulado começa do zero.",
+      "invalidInput": "Informe uma data e um valor válidos.",
       "explanation": "Se o extrato começa no meio do caminho (ex: janeiro/2026) e falta uma entrada anterior a ele (ex: o salário de dezembro que pagou o começo de janeiro), informe aqui o saldo que você tinha um dia antes do primeiro extrato importado. Esse valor entra tanto no <b>Saldo atual</b> (topo do painel) quanto no início do gráfico de <b>Fluxo de caixa acumulado</b>. Alternativa: em vez de preencher aqui, lance uma <b>transação manual do tipo Entrada</b> em dezembro com o total que você tinha — dá no mesmo, mas não use os dois ao mesmo tempo pra não contar em dobro.",
       "dateLabel": "Saldo em",
       "valuePlaceholder": "Ex: 3200.00",
@@ -1194,7 +1204,16 @@ window.GASTOS_LOCALES = {
         "importJson": "Restore JSON backup",
         "importSuccess": "Backup restored: {count} transactions",
         "importError": "Invalid file: {error}",
-        "storageFull": "Browser storage full — choose a folder or download backup"
+        "storageFull": "Browser storage full — choose a folder or download backup",
+        "folderApiUnsupported": "Choosing a folder works in Chrome and Edge. In this browser, data keeps saving automatically right here (localStorage).",
+        "quotaFull": "⚠️ Browser storage full — choose a folder in Settings → Data or download a JSON backup.",
+        "restoredFromFolder": "Restored from gastos-data.json ({count} transactions, {date})",
+        "savedToFolderLog": "💾 gastos-data.json saved to folder \"{name}\"",
+        "savedToLocalLog": "💾 saved in browser (localStorage) — use \"Choose folder\" in Settings → Data to save to your computer",
+        "savedToFolderAlert": "✅ gastos-data.json saved to folder \"{name}\"",
+        "savedToLocalAlert": "✅ Saved in browser (localStorage). Click \"Choose folder\" to save directly to your computer.",
+        "fixedBilCardMigration": "🔧 {n} BIL card purchase(s), imported before the fix, were recategorized and now count as an Expense again.",
+        "fixedTransfersMigration": "🔧 {n} transaction(s) identified as a transfer between your accounts (by beneficiary bank) — no longer counted as Expense/Income."
       },
       "ai": {
         "title": "Auto-categorization with local AI",
@@ -1271,6 +1290,7 @@ window.GASTOS_LOCALES = {
       "clear": "Clear opening balance",
       "statusSet": "Set: {value} on {date}",
       "statusNone": "No opening balance set — Cumulative cash flow starts from zero.",
+      "invalidInput": "Enter a valid date and amount.",
       "explanation": "If the statement starts partway through (e.g. January/2026) and is missing an entry before it (e.g. December's salary that paid for the start of January), enter here the balance you had one day before the first imported statement. This value feeds both the <b>Current balance</b> (top of the dashboard) and the start of the <b>Cumulative cash flow</b> chart. Alternative: instead of filling this in, log a <b>manual Income transaction</b> in December with the total you had — same result, but don't use both at once or it'll double-count.",
       "dateLabel": "Balance on",
       "valuePlaceholder": "e.g. 3200.00",
