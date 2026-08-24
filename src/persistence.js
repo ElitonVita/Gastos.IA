@@ -129,8 +129,8 @@ function _writeLocalStorage(state){
     const isQuota = e && (e.name==='QuotaExceededError' || e.code===22 || /quota/i.test(e.message||''));
     if(isQuota){
       const banner = document.getElementById('quotaBanner');
-      if(banner) banner.classList.remove('hidden');
       // i18n: intentionally not translated — developer-facing console diagnostics, never rendered in the UI.
+      if(banner) banner.classList.remove('hidden');
       else console.warn('localStorage cheio — escolha uma pasta ou baixe backup');
       ollamaLog(t('settings.data.quotaFull'), true);
     }
@@ -146,7 +146,10 @@ async function _writeFsDir(state){
     await w.close();
     // i18n: intentionally not translated — developer-facing console diagnostics, never rendered in the UI.
     console.log('gastos-data.json salvo na pasta');
-  }catch(e){ console.warn('falhou salvar json na pasta',e); }
+  }catch(e){
+    // i18n: intentionally not translated — developer-facing console diagnostics, never rendered in the UI.
+    console.warn('falhou salvar json na pasta',e);
+  }
 }
 async function persistState(){
   clearTimeout(saveTimer);
