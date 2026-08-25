@@ -295,7 +295,12 @@ function applySameDescription(changedTx, silent){
 // restaurar backup) pra qualquer lugar que itere `categories` diretamente (chips, dropdowns, orçamento)
 // já sair ordenado, sem precisar duplicar o sort em cada render.
 function sortCategoriesAlpha(){
-  categories.sort((a,b)=>catDisplayName(a).localeCompare(catDisplayName(b),'pt-BR'));
+  // Nota: não usa catDisplayName aqui de propósito — esta função roda no
+  // bootstrap do módulo (linha ~86), antes de DEFAULT_CATEGORY_IDS/DEFAULT_CAT_NAMES
+  // serem inicializadas (TDZ), o que derruba o app inteiro. Ordenar pelo nome
+  // bruto também não muda nada na prática nesse ponto do carregamento, já que
+  // as traduções ainda nem foram aplicadas.
+  categories.sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
 }
 function normalizeDescKey(d){
   // lowercase + remove números de cartão/refs e espaços extras — agrupa variações do mesmo merchant
