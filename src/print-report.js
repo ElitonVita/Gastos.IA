@@ -61,7 +61,7 @@ function buildPrintReport(){
         <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;">€</div>
         <div>
           <div style="font-size:18px;font-weight:800;">Gastos<span style="color:#7c3aed;">.AI</span> — ${t('printReport.subtitle')}</div>
-          <div style="font-size:11px;color:#71717a;">${periodLabel}${catFilterLabel?t('printReport.categoryClause',{name:escapeHtml(catFilterLabel)}):''}${catFilterLabel?'':''} · ${t('printReport.generated',{date:genStr})}</div>
+          <div style="font-size:11px;color:#71717a;">${periodLabel}${catFilterLabel?t('printReport.categoryClause',{name:escapeHtml(catFilterLabel)}):''} · ${t('printReport.generated',{date:genStr})}</div>
         </div>
       </div>
 
