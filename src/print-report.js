@@ -105,7 +105,7 @@ function buildPrintReport(){
       </div>
 
       <div>
-        <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#3f3f46;margin-bottom:8px;">${t('printReport.sections.statement', {count: rows.length, category: catFilterLabel?t('printReport.categoryClause',{name:escapeHtml(catFilterLabel)}):''})}}</div>
+        <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#3f3f46;margin-bottom:8px;">${t('printReport.sections.statement', {count: rows.length, category: catFilterLabel?t('printReport.categoryClause',{name:escapeHtml(catFilterLabel)}):''})}</div>
         <table style="width:100%;">
           <thead><tr style="border-bottom:2px solid #27272a;">
             <th style="text-align:left;padding:5px 6px;font-size:10px;">${t('printReport.tableHeaders.date')}</th>
