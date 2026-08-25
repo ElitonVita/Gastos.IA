@@ -1233,7 +1233,7 @@ function updateCharts(){
         if(monthsToZero<=24) boxes.push({ level:'danger', title: window.i18n.t('charts.cashflow.zeroBalanceTitle'), text: monthsToZero===1 ? window.i18n.t('charts.cashflow.zeroBalanceTextSingular', {n: monthsToZero}) : window.i18n.t('charts.cashflow.zeroBalanceTextPlural', {n: monthsToZero}) });
       }
       if(!f.usesIncomeTarget) boxes.push({ level:'warn', title: window.i18n.t('charts.cashflow.noIncomeTargetTitle'), text: window.i18n.t('charts.cashflow.noIncomeTargetText', {avg: fmtEUR(f.avgIncome)}) });
-      if(f.noBudgetCats.length) boxes.push({ level:'warn', title: window.i18n.t('charts.cashflow.noBudgetCatsTitle'), text: window.i18n.t('charts.cashflow.noBudgetCatsText', {n: f.noBudgetCats.length, names: f.noBudgetCats.map(c=>c.name).join(', ')}) });
+      if(f.noBudgetCats.length) boxes.push({ level:'warn', title: window.i18n.t('charts.cashflow.noBudgetCatsTitle'), text: window.i18n.t('charts.cashflow.noBudgetCatsText', {n: f.noBudgetCats.length, names: f.noBudgetCats.map(c=>catDisplayName(c)).join(', ')}) });
       tipsEl.innerHTML = boxes.slice(0,4).map(b=>{
         const cls = b.level==='ok' ? 'border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/30'
           : b.level==='danger' ? 'border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30'

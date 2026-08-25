@@ -1,7 +1,8 @@
 {
   "app": {
     "title": "Gastos<span style=\"color:#7c3aed;\">.AI</span>",
-    "subtitle": "Dashboard de despesas 100% local e privado"
+    "subtitle": "Dashboard de despesas 100% local e privado",
+    "pageTitle": "Gastos.AI — Dashboard de Despesas em PDF"
   },
   "header": {
     "language": "Idioma",

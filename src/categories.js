@@ -295,7 +295,7 @@ function applySameDescription(changedTx, silent){
 // restaurar backup) pra qualquer lugar que itere `categories` diretamente (chips, dropdowns, orçamento)
 // já sair ordenado, sem precisar duplicar o sort em cada render.
 function sortCategoriesAlpha(){
-  categories.sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+  categories.sort((a,b)=>catDisplayName(a).localeCompare(catDisplayName(b),'pt-BR'));
 }
 function normalizeDescKey(d){
   // lowercase + remove números de cartão/refs e espaços extras — agrupa variações do mesmo merchant

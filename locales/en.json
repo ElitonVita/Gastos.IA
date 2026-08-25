@@ -1,7 +1,8 @@
 {
   "app": {
     "title": "Expenses<span style=\"color:#7c3aed;\">.AI</span>",
-    "subtitle": "100% local & private expense dashboard"
+    "subtitle": "100% local & private expense dashboard",
+    "pageTitle": "Gastos.AI — Expense Dashboard"
   },
   "header": {
     "language": "Language",

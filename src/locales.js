@@ -4,7 +4,8 @@ window.GASTOS_LOCALES = {
   "pt": {
     "app": {
       "title": "Gastos<span style=\"color:#7c3aed;\">.AI</span>",
-      "subtitle": "Dashboard de despesas 100% local e privado"
+      "subtitle": "Dashboard de despesas 100% local e privado",
+      "pageTitle": "Gastos.AI — Dashboard de Despesas em PDF"
     },
     "header": {
       "language": "Idioma",
@@ -728,7 +729,8 @@ window.GASTOS_LOCALES = {
   "en": {
     "app": {
       "title": "Expenses<span style=\"color:#7c3aed;\">.AI</span>",
-      "subtitle": "100% local & private expense dashboard"
+      "subtitle": "100% local & private expense dashboard",
+      "pageTitle": "Gastos.AI — Expense Dashboard"
     },
     "header": {
       "language": "Language",
