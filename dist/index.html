@@ -2191,21 +2191,28 @@ function getAvailableLangs() {
   ];
 }
 
+// Re-render every view that's built dynamically in JS (as opposed to the static
+// data-i18n-tagged markup that applyTranslations() handles) so it picks up the
+// current language. Shared by switchLanguage() (user clicks a flag) and initI18n()
+// (first page load) so the two call lists can't drift apart.
+function reRenderDynamicContent() {
+  if (typeof renderCategoryChips === 'function') renderCategoryChips();
+  if (typeof renderTable === 'function') renderTable();
+  if (typeof updateCharts === 'function') updateCharts();
+  if (typeof updateKPIs === 'function') updateKPIs();
+  if (typeof renderBankTypeChips === 'function') renderBankTypeChips();
+  if (typeof refreshPeriodOptions === 'function') refreshPeriodOptions();
+  if (typeof updateOpeningBalanceStatus === 'function') updateOpeningBalanceStatus();
+  if (typeof updateFsStatus === 'function') updateFsStatus();
+}
+
 async function switchLanguage(lang) {
   if (lang === currentLang) return;
   const success = await loadTranslations(lang);
   if (success) {
     applyTranslations();
     updateLanguageSelector();
-    // Re-render all dynamic content
-    if (typeof renderCategoryChips === 'function') renderCategoryChips();
-    if (typeof renderTable === 'function') renderTable();
-    if (typeof updateCharts === 'function') updateCharts();
-    if (typeof updateKPIs === 'function') updateKPIs();
-    if (typeof renderBankTypeChips === 'function') renderBankTypeChips();
-    if (typeof refreshPeriodOptions === 'function') refreshPeriodOptions();
-    if (typeof updateOpeningBalanceStatus === 'function') updateOpeningBalanceStatus();
-    if (typeof updateFsStatus === 'function') updateFsStatus();
+    reRenderDynamicContent();
   }
 }
 
@@ -2268,6 +2275,13 @@ async function initI18n() {
   await loadTranslations(savedLang);
   updateLanguageSelector();
   applyTranslations();
+  // The very first render pass (persistence.js's top-level load code, which runs as
+  // soon as it's parsed — before this async function's await resolves) happens before
+  // `translations` is populated, so every dynamic view rendered at that point shows
+  // raw i18n keys / "Translation missing" warnings. Re-run the same dynamic re-render
+  // list switchLanguage() uses so the app is in a correct state without needing the
+  // user to click a language button first.
+  reRenderDynamicContent();
 }
 
 // Export for use in other modules
