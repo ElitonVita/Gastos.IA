@@ -317,7 +317,7 @@ document.getElementById('btnExport').addEventListener('click', ()=>{
     t.saida!=null? t.saida.toFixed(2).replace('.',','):'',
     t.entrada!=null? t.entrada.toFixed(2).replace('.',','):'',
     t.balanco!=null? t.balanco.toFixed(2).replace('.',','):'',
-    catById(t.cat).name,
+    catDisplayName(catById(t.cat)),
     t.source
   ].join(';'));
   const csv=[header.join(';'),...rows].join('\n');

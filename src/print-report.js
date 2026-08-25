@@ -10,7 +10,7 @@ function getReportRows(){
   if(filterBank==='__none__') rows = rows.filter(t=>!t.bank);
   else if(filterBank) rows = rows.filter(t=>t.bank===filterBank);
   const q=(document.getElementById('searchTx')?.value||'').toLowerCase();
-  if(q) rows = rows.filter(t=> (t.desc+' '+t.source+' '+catById(t.cat).name+' '+(t.saida||'')+' '+(t.entrada||'')).toLowerCase().includes(q));
+  if(q) rows = rows.filter(t=> (t.desc+' '+t.source+' '+catDisplayName(catById(t.cat))+' '+(t.saida||'')+' '+(t.entrada||'')).toLowerCase().includes(q));
   rows.sort((a,b)=> (b.realDate||b.date) - (a.realDate||a.date)); // ordena pela data real do gasto, não pela data de pagamento da fatura
   return rows;
 }
@@ -26,7 +26,7 @@ function buildPrintReport(){
   let periodLabel=t('filters.allPeriods');
   if(typeof periodFilter==='string' && /^\d{4}-\d{2}$/.test(periodFilter)) periodLabel = monthLabel(periodFilter);
   else if(typeof periodFilter==='string' && periodFilter.startsWith('year:')) periodLabel = periodFilter.slice(5);
-  const catFilterLabel = activeCatFilter ? catById(activeCatFilter).name : null;
+  const catFilterLabel = activeCatFilter ? catDisplayName(catById(activeCatFilter)) : null;
 
   // resumo (KPIs, categoria, evolução, top estabelecimentos) segue período + categoria selecionada,
   // mas NÃO o filtro Saída/Entrada da tabela — senão "Entradas" sempre daria 0 com "Só Saídas" ativo
@@ -79,7 +79,7 @@ function buildPrintReport(){
           const c=catById(id); const pct=catTotal>0?Math.round(v/catTotal*100):0;
           return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:11px;">
             <span style="width:10px;height:10px;border-radius:50%;background:${c.color};flex-shrink:0;"></span>
-            <span style="width:150px;font-weight:600;">${escapeHtml(c.name)}</span>
+            <span style="width:150px;font-weight:600;">${escapeHtml(catDisplayName(c))}</span>
             <span style="flex:1;background:#f4f4f5;border-radius:4px;height:8px;overflow:hidden;"><span style="display:block;height:100%;width:${pct}%;background:${c.color};"></span></span>
             <span style="width:80px;text-align:right;font-weight:700;font-family:monospace;">${fmtEUR(v)}</span>
             <span style="width:36px;text-align:right;color:#71717a;">${pct}%</span>
@@ -120,7 +120,7 @@ function buildPrintReport(){
               return `<tr style="border-bottom:1px solid #f4f4f5;">
                 <td style="padding:4px 6px;font-size:10px;font-family:monospace;white-space:nowrap;">${(t.realDate||t.date).toLocaleDateString('pt-BR')}</td>
                 <td style="padding:4px 6px;font-size:10px;">${escapeHtml(t.desc.slice(0,50))}</td>
-                <td style="padding:4px 6px;font-size:10px;white-space:nowrap;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${c.color};margin-right:4px;"></span>${escapeHtml(c.name)}</td>
+                <td style="padding:4px 6px;font-size:10px;white-space:nowrap;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${c.color};margin-right:4px;"></span>${escapeHtml(catDisplayName(c))}</td>
                 <td style="padding:4px 6px;font-size:10px;text-align:right;font-family:monospace;color:#dc2626;font-weight:600;">${t.saida?fmtEUR(t.saida):''}</td>
                 <td style="padding:4px 6px;font-size:10px;text-align:right;font-family:monospace;color:#059669;font-weight:600;">${t.entrada?fmtEUR(t.entrada):''}</td>
               </tr>`;
