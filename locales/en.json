@@ -394,7 +394,8 @@
       "tabLines": "Lines",
       "tabBudget": "Budget",
       "cumulativeTitle": "Sums the budget and real spend across every month in the period — keeps one outlier month (vacation, etc.) from looking like a blown budget",
-      "noBudgetDefined": "No category has a budget set yet. Set targets in <b>Settings → Monthly budgets</b>."
+      "noBudgetDefined": "No category has a budget set yet. Set targets in <b>Settings → Monthly budgets</b>.",
+      "budgetEndTitle": "This is where the {value} budget runs out"
     },
     "waterfall": {
       "income": "Income",

@@ -405,7 +405,8 @@ window.GASTOS_LOCALES = {
         "tabLines": "Linhas",
         "tabBudget": "Orçamento",
         "cumulativeTitle": "Soma o orçamento e o gasto real de todos os meses do período — evita que um mês fora da curva (férias, etc.) pareça um estouro isolado",
-        "noBudgetDefined": "Nenhuma categoria tem orçamento definido ainda. Defina metas em <b>Configurações → Orçamentos mensais</b>."
+        "noBudgetDefined": "Nenhuma categoria tem orçamento definido ainda. Defina metas em <b>Configurações → Orçamentos mensais</b>.",
+        "budgetEndTitle": "Aqui é onde a meta de {value} acabou"
       },
       "waterfall": {
         "income": "Renda",
@@ -1128,7 +1129,8 @@ window.GASTOS_LOCALES = {
         "tabLines": "Lines",
         "tabBudget": "Budget",
         "cumulativeTitle": "Sums the budget and real spend across every month in the period — keeps one outlier month (vacation, etc.) from looking like a blown budget",
-        "noBudgetDefined": "No category has a budget set yet. Set targets in <b>Settings → Monthly budgets</b>."
+        "noBudgetDefined": "No category has a budget set yet. Set targets in <b>Settings → Monthly budgets</b>.",
+        "budgetEndTitle": "This is where the {value} budget runs out"
       },
       "waterfall": {
         "income": "Income",

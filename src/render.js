@@ -51,7 +51,7 @@ function renderBudgetList(){
       </span>
       <span class="relative shrink-0 w-[110px]">
         <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] text-zinc-400">€</span>
-        <input type="number" min="0" step="10" data-budget="${c.id}" value="${c.budget||''}" placeholder="Sem meta" class="budgetInput w-full pl-6 pr-2 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-xs font-mono text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400">
+        <input type="number" min="0" step="10" data-budget="${c.id}" value="${c.budget||''}" placeholder="${window.i18n.t('budget.placeholder')}" class="budgetInput w-full pl-6 pr-2 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-xs font-mono text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400">
       </span>
     </label>
   `).join('');
@@ -1059,7 +1059,7 @@ function updateCharts(){
             <div class="relative h-4 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
               <div class="absolute inset-y-0 left-0 rounded-full" style="width:${baseWidth}%; background:linear-gradient(90deg, ${c.color}, #4c0519)"></div>
               ${over ? `<div class="absolute inset-y-0" style="left:${budgetMarkerPct}%; width:${overflowWidth}%; background:repeating-linear-gradient(135deg, #4c0519, #4c0519 5px, #1a0505 5px, #1a0505 10px)"></div>` : ''}
-              ${over ? `<div class="absolute inset-y-0 w-[3px] bg-white" style="left:${budgetMarkerPct}%; box-shadow:0 0 0 1px rgba(0,0,0,0.55)" title="Aqui é onde a meta de ${fmtEUR(budgetTotal)} acabou"></div>` : ''}
+              ${over ? `<div class="absolute inset-y-0 w-[3px] bg-white" style="left:${budgetMarkerPct}%; box-shadow:0 0 0 1px rgba(0,0,0,0.55)" title="${escapeHtml(window.i18n.t('charts.compare.budgetEndTitle', {value: fmtEUR(budgetTotal)}))}"></div>` : ''}
             </div>
           </div>`;
         }).join('');
