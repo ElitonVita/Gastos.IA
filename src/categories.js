@@ -105,7 +105,10 @@ let budgetScope = 'month'; // 'month' = só o mês mais recente | 'cumulative' =
 let cashflowMode = 'cumulative';
 
 // ---------- Helpers ----------
-const fmtEUR = v => (v==null||isNaN(v)?'€ 0,00':Number(v).toLocaleString('de-DE',{style:'currency',currency:'EUR'}));
+// Locale tag for Date/Number formatting, driven by the current UI language — so dates
+// and currency follow the language toggle instead of being frozen to pt-BR/de-DE.
+const localeTag = () => window.i18n.getCurrentLang() === 'en' ? 'en-US' : 'pt-BR';
+const fmtEUR = v => Number(v==null||isNaN(v)?0:v).toLocaleString(localeTag(),{style:'currency',currency:'EUR'});
 const fmtBRL = fmtEUR; // compat alias
 const parseDate = s => {
   if(!s) return null;
@@ -117,7 +120,7 @@ const parseDate = s => {
   const d=new Date(s); return isNaN(d)?null:d;
 };
 const monthKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-const monthLabel = k => { const [y,m]=k.split('-'); return new Date(y,m-1,1).toLocaleDateString('pt-BR',{month:'short',year:'numeric'})};
+const monthLabel = k => { const [y,m]=k.split('-'); return new Date(y,m-1,1).toLocaleDateString(localeTag(),{month:'short',year:'numeric'})};
 
 function categorize(text){
   const t = text.toLowerCase();

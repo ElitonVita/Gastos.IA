@@ -2,7 +2,7 @@ let noteTarget=null;
 function openNoteDialog(tx){
   noteTarget=tx;
   document.getElementById('noteTxDesc').textContent=tx.desc;
-  document.getElementById('noteTxMeta').textContent=`${(tx.realDate||tx.date).toLocaleDateString('pt-BR')} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}${tx.source?' · '+tx.source:''}`;
+  document.getElementById('noteTxMeta').textContent=`${(tx.realDate||tx.date).toLocaleDateString(localeTag())} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}${tx.source?' · '+tx.source:''}`;
   document.getElementById('noteText').value=tx.note||'';
   document.getElementById('btnNoteDelete').classList.toggle('hidden', !tx.note);
   noteDialog.showModal();
@@ -35,14 +35,14 @@ function openDetailsDialog(tx){
   detailsTarget=tx;
   document.getElementById('detailsTxDesc').textContent=tx.desc;
   const displayDate = tx.realDate||tx.date;
-  document.getElementById('detailsTxMeta').textContent=`${displayDate.toLocaleDateString('pt-BR')} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}`;
+  document.getElementById('detailsTxMeta').textContent=`${displayDate.toLocaleDateString(localeTag())} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}`;
   const bSel=document.getElementById('detailsBankSelect');
   bSel.innerHTML = `<option value="">${window.i18n.t('modals.details.notIdentified')}</option>` + bankTypes.map(b=>`<option value="${b.id}" ${b.id===tx.bank?'selected':''}>${escapeHtml(bankDisplayName(b))}</option>`).join('');
   const transferBox=document.getElementById('detailsTransferBox');
   const pair = tx.transferGroupId ? transactions.find(t=>t.transferGroupId===tx.transferGroupId && t!==tx) : null;
   transferBox.classList.toggle('hidden', !pair);
   if(pair){
-    document.getElementById('detailsTransferPair').textContent = window.i18n.t('modals.details.transferPair', {desc: pair.desc, date: (pair.realDate||pair.date).toLocaleDateString('pt-BR'), value: fmtEUR(pair.saida||pair.entrada||0), bank: pair.bank?' · '+bankLabel(pair.bank):''});
+    document.getElementById('detailsTransferPair').textContent = window.i18n.t('modals.details.transferPair', {desc: pair.desc, date: (pair.realDate||pair.date).toLocaleDateString(localeTag()), value: fmtEUR(pair.saida||pair.entrada||0), bank: pair.bank?' · '+bankLabel(pair.bank):''});
   }
   const autoBox=document.getElementById('detailsAutoTransferBox');
   const showAuto = !!tx.autoTransfer && !pair;
@@ -52,7 +52,7 @@ function openDetailsDialog(tx){
     document.getElementById('detailsAutoTransferInfo').textContent = toBank ? window.i18n.t('modals.details.autoTransferInfo', {bank: toBank}) : '';
   }
   const rows=[[window.i18n.t('modals.details.sourceFile'), tx.source||'—']];
-  if(tx.realDate && +tx.realDate!==+tx.date) rows.push([window.i18n.t('modals.details.consideredDateLabel'), tx.date.toLocaleDateString('pt-BR')]);
+  if(tx.realDate && +tx.realDate!==+tx.date) rows.push([window.i18n.t('modals.details.consideredDateLabel'), tx.date.toLocaleDateString(localeTag())]);
   const meta=tx.meta||{};
   const labels = getMetaLabels();
   for(const k of Object.keys(labels)){ if(meta[k]) rows.push([labels[k], meta[k]]); }

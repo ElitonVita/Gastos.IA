@@ -1177,7 +1177,7 @@ window.GASTOS_LOCALES = {
         "statusChecking": "a verificar...",
         "testButton": "Testar",
         "saveJsonNowTitle": "Salvar gastos-data.json agora",
-        "footerNote": "100% offline · <span class=\"text-zinc-400\">{model}</span> já detectado ({size}) · Nada sai da sua rede.",
+        "footerNote": "100% offline · <span class=\"text-zinc-400\">gemma4:latest</span> já detectado (9.6 GB) · Nada sai da sua rede.",
         "autoCategorize": "Categorizar automaticamente ao importar",
         "categorizeNow": "Categorizar com IA local",
         "categorizing": "Categorizando...",
@@ -1901,7 +1901,7 @@ window.GASTOS_LOCALES = {
         "statusChecking": "checking...",
         "testButton": "Test",
         "saveJsonNowTitle": "Save gastos-data.json now",
-        "footerNote": "100% offline · <span class=\"text-zinc-400\">{model}</span> already detected ({size}) · Nothing leaves your network.",
+        "footerNote": "100% offline · <span class=\"text-zinc-400\">gemma4:latest</span> already detected (9.6 GB) · Nothing leaves your network.",
         "autoCategorize": "Auto-categorize on import",
         "categorizeNow": "Categorize with local AI",
         "categorizing": "Categorizing...",
@@ -2404,7 +2404,10 @@ let budgetScope = 'month'; // 'month' = só o mês mais recente | 'cumulative' =
 let cashflowMode = 'cumulative';
 
 // ---------- Helpers ----------
-const fmtEUR = v => (v==null||isNaN(v)?'€ 0,00':Number(v).toLocaleString('de-DE',{style:'currency',currency:'EUR'}));
+// Locale tag for Date/Number formatting, driven by the current UI language — so dates
+// and currency follow the language toggle instead of being frozen to pt-BR/de-DE.
+const localeTag = () => window.i18n.getCurrentLang() === 'en' ? 'en-US' : 'pt-BR';
+const fmtEUR = v => Number(v==null||isNaN(v)?0:v).toLocaleString(localeTag(),{style:'currency',currency:'EUR'});
 const fmtBRL = fmtEUR; // compat alias
 const parseDate = s => {
   if(!s) return null;
@@ -2416,7 +2419,7 @@ const parseDate = s => {
   const d=new Date(s); return isNaN(d)?null:d;
 };
 const monthKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-const monthLabel = k => { const [y,m]=k.split('-'); return new Date(y,m-1,1).toLocaleDateString('pt-BR',{month:'short',year:'numeric'})};
+const monthLabel = k => { const [y,m]=k.split('-'); return new Date(y,m-1,1).toLocaleDateString(localeTag(),{month:'short',year:'numeric'})};
 
 function categorize(text){
   const t = text.toLowerCase();
@@ -2981,7 +2984,7 @@ function extractBILCardStatement(structuredPages, sourceName, statementDate){
     const meta = {};
     if(town) meta.town = town;
     if(dateProcessedStr && dateProcessedStr!==txDateStr) meta.dateProcessed = dateProcessedStr;
-    if(statementDate) meta.paymentDate = statementDate.toLocaleDateString('pt-BR');
+    if(statementDate) meta.paymentDate = statementDate.toLocaleDateString(localeTag());
     results.push({
       id: `${sourceName}-bilcard-${results.length}-${Math.random().toString(36).slice(2,6)}`,
       // data usada em relatórios/orçamentos mensais = data em que o cartão foi pago (se conhecida); a tabela mostra a data real via realDate
@@ -3573,7 +3576,7 @@ function renderTable(){
   const pageRows = rows.slice(start, start+PAGE_SIZE);
   body.innerHTML = pageRows.map(t=>{
     const c=catById(t.cat);
-    const d=(t.realDate||t.date).toLocaleDateString('pt-BR'); // mostra a data real do gasto (mesmo quando t.date é a data de pagamento da fatura)
+    const d=(t.realDate||t.date).toLocaleDateString(localeTag()); // mostra a data real do gasto (mesmo quando t.date é a data de pagamento da fatura)
     const saidaStr = t.saida!=null ? fmtEUR(t.saida) : '<span class="text-zinc-300">—</span>';
     const entradaStr = t.entrada!=null ? fmtEUR(t.entrada) : '<span class="text-zinc-300">—</span>';
     const hasValue = (t.saida!=null && t.saida>0) || (t.entrada!=null && t.entrada>0);
@@ -3640,7 +3643,7 @@ function renderTable(){
   body.querySelectorAll('.delBtn').forEach(b=>{
     b.addEventListener('click', e=>{
       const id=e.currentTarget.dataset.del; const tx=transactions.find(x=>x.id===id); if(!tx) return;
-      if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString('pt-BR'), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
+      if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString(localeTag()), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
       transactions = transactions.filter(x=>x.id!==id);
       selectedTxIds.delete(id);
       renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
@@ -3730,7 +3733,7 @@ function updateKPIs(){
     if(el && subEl){
       el.textContent = fmtEUR(bal.total);
       subEl.textContent = (openingBalance && openingBalance.value!=null)
-        ? window.i18n.t('kpis.balanceSubWithOpening', {value: fmtEUR(bal.base), date: openingBalance.date.toLocaleDateString('pt-BR')})
+        ? window.i18n.t('kpis.balanceSubWithOpening', {value: fmtEUR(bal.base), date: openingBalance.date.toLocaleDateString(localeTag())})
         : window.i18n.t('kpis.balanceSubDefault');
     }
   }
@@ -3996,7 +3999,7 @@ function detectAnomalies(txP){
         if(z>=3 && d.total>m*2){
           const dayTxs = spend.filter(t=>dayKey(t.date)===dayKey(d.date));
           anomalies.push({ type:'spike-day', severity:'medium', txs:dayTxs, date:d.date, aid:anomalyId('spike-day',[],d.date),
-            text: window.i18n.t('anomalies.messages.spikeDay', {date: d.date.toLocaleDateString('pt-BR'), total: fmtEUR(d.total), count: d.count, avg: fmtEUR(m)}) });
+            text: window.i18n.t('anomalies.messages.spikeDay', {date: d.date.toLocaleDateString(localeTag()), total: fmtEUR(d.total), count: d.count, avg: fmtEUR(m)}) });
         }
       });
     }
@@ -4024,7 +4027,7 @@ function renderAnomalies(txP){
     return `<div class="p-3 rounded-xl border ${high?'border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30':'border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/30'}">
       <div class="flex items-start justify-between gap-3">
         <div class="min-w-0">
-          <p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="${icons[a.type]||'ri-error-warning-fill'}"></i> ${a.date.toLocaleDateString('pt-BR')}</p>
+          <p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="${icons[a.type]||'ri-error-warning-fill'}"></i> ${a.date.toLocaleDateString(localeTag())}</p>
           <p class="text-[11px] ${high?'text-red-700/80 dark:text-red-400/70':'text-amber-700/80 dark:text-amber-400/70'} mt-1 leading-relaxed">${escapeHtml(a.text)}</p>
         </div>
         <button type="button" class="anomalyResolveBtn shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-bold ${high?'bg-red-600 hover:bg-red-700':'bg-amber-600 hover:bg-amber-700'} text-white whitespace-nowrap" data-aid="${escapeHtml(a.aid)}">${window.i18n.t('anomalies.messages.resolveButton')}</button>
@@ -4048,7 +4051,7 @@ function openAnomalyDialog(aid){
 function renderAnomalyDialogBody(a){
   const high=a.severity==='high';
   document.getElementById('anomalyDialogSummary').innerHTML =
-    `<p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="ri-${high?'alarm-warning-fill':'error-warning-fill'}"></i> ${a.date.toLocaleDateString('pt-BR')}</p>
+    `<p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="ri-${high?'alarm-warning-fill':'error-warning-fill'}"></i> ${a.date.toLocaleDateString(localeTag())}</p>
      <p class="text-[12px] text-zinc-600 dark:text-zinc-300 mt-1 leading-relaxed">${escapeHtml(a.text)}</p>`;
   // "Sempre aceitar" só faz sentido quando a anomalia gira em torno de UMA descrição (duplicidade, outlier de
   // estabelecimento/global) — pico de gasto num dia não tem uma descrição única pra generalizar.
@@ -4068,7 +4071,7 @@ function renderAnomalyDialogBody(a){
         <span class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-white" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>
         <span class="flex-1 min-w-0">
           <span class="block text-[13px] font-semibold truncate">${escapeHtml(t.desc)}</span>
-          <span class="text-[11px] text-zinc-500">${(t.realDate||t.date).toLocaleDateString('pt-BR')} · ${escapeHtml(catDisplayName(c))}${t.bank?` · ${escapeHtml(bankLabel(t.bank))}`:''}${t.note?` · ${escapeHtml(t.note)}`:''}</span>
+          <span class="text-[11px] text-zinc-500">${(t.realDate||t.date).toLocaleDateString(localeTag())} · ${escapeHtml(catDisplayName(c))}${t.bank?` · ${escapeHtml(bankLabel(t.bank))}`:''}${t.note?` · ${escapeHtml(t.note)}`:''}</span>
         </span>
         <span class="font-bold font-mono text-[13px] shrink-0 text-red-600 dark:text-red-400">${fmtEUR(t.saida||t.entrada||0)}</span>
         <button type="button" class="anomalyTxDelBtn shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30" data-id="${t.id}" title="${window.i18n.t('actions.delete')}"><i class="ri-delete-bin-line"></i></button>
@@ -4078,7 +4081,7 @@ function renderAnomalyDialogBody(a){
       b.addEventListener('click', e=>{
         const id=e.currentTarget.dataset.id;
         const tx=transactions.find(x=>x.id===id); if(!tx) return;
-        if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString('pt-BR'), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
+        if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString(localeTag()), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
         transactions = transactions.filter(x=>x.id!==id);
         selectedTxIds.delete(id);
         renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
@@ -4555,7 +4558,7 @@ function updateCharts(){
           pointBackgroundColor: cumData.map(v=>v>=0?'#10b981':'#ef4444')
         }];
         document.getElementById('cashflowHint').textContent = (openingBalance && openingBalance.value!=null)
-          ? window.i18n.t('charts.cashflow.hintWithOpening', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString('pt-BR')})
+          ? window.i18n.t('charts.cashflow.hintWithOpening', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString(localeTag())})
           : window.i18n.t('charts.cashflow.hintCumulative');
         if(subEl) subEl.textContent = window.i18n.t('charts.cashflow.subtitle');
       }
@@ -5026,7 +5029,7 @@ let noteTarget=null;
 function openNoteDialog(tx){
   noteTarget=tx;
   document.getElementById('noteTxDesc').textContent=tx.desc;
-  document.getElementById('noteTxMeta').textContent=`${(tx.realDate||tx.date).toLocaleDateString('pt-BR')} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}${tx.source?' · '+tx.source:''}`;
+  document.getElementById('noteTxMeta').textContent=`${(tx.realDate||tx.date).toLocaleDateString(localeTag())} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}${tx.source?' · '+tx.source:''}`;
   document.getElementById('noteText').value=tx.note||'';
   document.getElementById('btnNoteDelete').classList.toggle('hidden', !tx.note);
   noteDialog.showModal();
@@ -5059,14 +5062,14 @@ function openDetailsDialog(tx){
   detailsTarget=tx;
   document.getElementById('detailsTxDesc').textContent=tx.desc;
   const displayDate = tx.realDate||tx.date;
-  document.getElementById('detailsTxMeta').textContent=`${displayDate.toLocaleDateString('pt-BR')} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}`;
+  document.getElementById('detailsTxMeta').textContent=`${displayDate.toLocaleDateString(localeTag())} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}`;
   const bSel=document.getElementById('detailsBankSelect');
   bSel.innerHTML = `<option value="">${window.i18n.t('modals.details.notIdentified')}</option>` + bankTypes.map(b=>`<option value="${b.id}" ${b.id===tx.bank?'selected':''}>${escapeHtml(bankDisplayName(b))}</option>`).join('');
   const transferBox=document.getElementById('detailsTransferBox');
   const pair = tx.transferGroupId ? transactions.find(t=>t.transferGroupId===tx.transferGroupId && t!==tx) : null;
   transferBox.classList.toggle('hidden', !pair);
   if(pair){
-    document.getElementById('detailsTransferPair').textContent = window.i18n.t('modals.details.transferPair', {desc: pair.desc, date: (pair.realDate||pair.date).toLocaleDateString('pt-BR'), value: fmtEUR(pair.saida||pair.entrada||0), bank: pair.bank?' · '+bankLabel(pair.bank):''});
+    document.getElementById('detailsTransferPair').textContent = window.i18n.t('modals.details.transferPair', {desc: pair.desc, date: (pair.realDate||pair.date).toLocaleDateString(localeTag()), value: fmtEUR(pair.saida||pair.entrada||0), bank: pair.bank?' · '+bankLabel(pair.bank):''});
   }
   const autoBox=document.getElementById('detailsAutoTransferBox');
   const showAuto = !!tx.autoTransfer && !pair;
@@ -5076,7 +5079,7 @@ function openDetailsDialog(tx){
     document.getElementById('detailsAutoTransferInfo').textContent = toBank ? window.i18n.t('modals.details.autoTransferInfo', {bank: toBank}) : '';
   }
   const rows=[[window.i18n.t('modals.details.sourceFile'), tx.source||'—']];
-  if(tx.realDate && +tx.realDate!==+tx.date) rows.push([window.i18n.t('modals.details.consideredDateLabel'), tx.date.toLocaleDateString('pt-BR')]);
+  if(tx.realDate && +tx.realDate!==+tx.date) rows.push([window.i18n.t('modals.details.consideredDateLabel'), tx.date.toLocaleDateString(localeTag())]);
   const meta=tx.meta||{};
   const labels = getMetaLabels();
   for(const k of Object.keys(labels)){ if(meta[k]) rows.push([labels[k], meta[k]]); }
@@ -5481,7 +5484,7 @@ function updateOpeningBalanceStatus(){
   const statusEl=document.getElementById('obStatus'), dateEl=document.getElementById('obDate'), valEl=document.getElementById('obValue');
   if(!statusEl) return;
   if(openingBalance && openingBalance.value!=null){
-    statusEl.textContent = t('openingBalance.statusSet', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString('pt-BR')});
+    statusEl.textContent = t('openingBalance.statusSet', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString(localeTag())});
     if(dateEl) dateEl.value = dayKey(openingBalance.date);
     if(valEl) valEl.value = openingBalance.value;
   } else {
@@ -5777,7 +5780,7 @@ function buildPrintReport(){
   const topMerch=Object.entries(byDesc).sort((a,b)=>b[1]-a[1]).slice(0,8);
 
   const now = new Date();
-  const genStr = now.toLocaleDateString('pt-BR')+' '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  const genStr = now.toLocaleDateString(localeTag())+' '+now.toLocaleTimeString(localeTag(),{hour:'2-digit',minute:'2-digit'});
 
   document.getElementById('printReport').innerHTML = `
     <div style="max-width:800px;margin:0 auto;color:#18181b;">
@@ -5842,7 +5845,7 @@ function buildPrintReport(){
             ${rows.map(t=>{
               const c=catById(t.cat);
               return `<tr style="border-bottom:1px solid #f4f4f5;">
-                <td style="padding:4px 6px;font-size:10px;font-family:monospace;white-space:nowrap;">${(t.realDate||t.date).toLocaleDateString('pt-BR')}</td>
+                <td style="padding:4px 6px;font-size:10px;font-family:monospace;white-space:nowrap;">${(t.realDate||t.date).toLocaleDateString(localeTag())}</td>
                 <td style="padding:4px 6px;font-size:10px;">${escapeHtml(t.desc.slice(0,50))}</td>
                 <td style="padding:4px 6px;font-size:10px;white-space:nowrap;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${c.color};margin-right:4px;"></span>${escapeHtml(catDisplayName(c))}</td>
                 <td style="padding:4px 6px;font-size:10px;text-align:right;font-family:monospace;color:#dc2626;font-weight:600;">${t.saida?fmtEUR(t.saida):''}</td>

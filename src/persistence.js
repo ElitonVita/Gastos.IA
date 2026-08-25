@@ -70,7 +70,7 @@ function updateOpeningBalanceStatus(){
   const statusEl=document.getElementById('obStatus'), dateEl=document.getElementById('obDate'), valEl=document.getElementById('obValue');
   if(!statusEl) return;
   if(openingBalance && openingBalance.value!=null){
-    statusEl.textContent = t('openingBalance.statusSet', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString('pt-BR')});
+    statusEl.textContent = t('openingBalance.statusSet', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString(localeTag())});
     if(dateEl) dateEl.value = dayKey(openingBalance.date);
     if(valEl) valEl.value = openingBalance.value;
   } else {

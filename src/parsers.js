@@ -348,7 +348,7 @@ function extractBILCardStatement(structuredPages, sourceName, statementDate){
     const meta = {};
     if(town) meta.town = town;
     if(dateProcessedStr && dateProcessedStr!==txDateStr) meta.dateProcessed = dateProcessedStr;
-    if(statementDate) meta.paymentDate = statementDate.toLocaleDateString('pt-BR');
+    if(statementDate) meta.paymentDate = statementDate.toLocaleDateString(localeTag());
     results.push({
       id: `${sourceName}-bilcard-${results.length}-${Math.random().toString(36).slice(2,6)}`,
       // data usada em relatórios/orçamentos mensais = data em que o cartão foi pago (se conhecida); a tabela mostra a data real via realDate

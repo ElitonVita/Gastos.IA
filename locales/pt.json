@@ -498,7 +498,7 @@
       "statusChecking": "a verificar...",
       "testButton": "Testar",
       "saveJsonNowTitle": "Salvar gastos-data.json agora",
-      "footerNote": "100% offline · <span class=\"text-zinc-400\">{model}</span> já detectado ({size}) · Nada sai da sua rede.",
+      "footerNote": "100% offline · <span class=\"text-zinc-400\">gemma4:latest</span> já detectado (9.6 GB) · Nada sai da sua rede.",
       "autoCategorize": "Categorizar automaticamente ao importar",
       "categorizeNow": "Categorizar com IA local",
       "categorizing": "Categorizando...",

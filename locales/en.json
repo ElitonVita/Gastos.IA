@@ -498,7 +498,7 @@
       "statusChecking": "checking...",
       "testButton": "Test",
       "saveJsonNowTitle": "Save gastos-data.json now",
-      "footerNote": "100% offline · <span class=\"text-zinc-400\">{model}</span> already detected ({size}) · Nothing leaves your network.",
+      "footerNote": "100% offline · <span class=\"text-zinc-400\">gemma4:latest</span> already detected (9.6 GB) · Nothing leaves your network.",
       "autoCategorize": "Auto-categorize on import",
       "categorizeNow": "Categorize with local AI",
       "categorizing": "Categorizing...",

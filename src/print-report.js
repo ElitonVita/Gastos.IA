@@ -53,7 +53,7 @@ function buildPrintReport(){
   const topMerch=Object.entries(byDesc).sort((a,b)=>b[1]-a[1]).slice(0,8);
 
   const now = new Date();
-  const genStr = now.toLocaleDateString('pt-BR')+' '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  const genStr = now.toLocaleDateString(localeTag())+' '+now.toLocaleTimeString(localeTag(),{hour:'2-digit',minute:'2-digit'});
 
   document.getElementById('printReport').innerHTML = `
     <div style="max-width:800px;margin:0 auto;color:#18181b;">
@@ -118,7 +118,7 @@ function buildPrintReport(){
             ${rows.map(t=>{
               const c=catById(t.cat);
               return `<tr style="border-bottom:1px solid #f4f4f5;">
-                <td style="padding:4px 6px;font-size:10px;font-family:monospace;white-space:nowrap;">${(t.realDate||t.date).toLocaleDateString('pt-BR')}</td>
+                <td style="padding:4px 6px;font-size:10px;font-family:monospace;white-space:nowrap;">${(t.realDate||t.date).toLocaleDateString(localeTag())}</td>
                 <td style="padding:4px 6px;font-size:10px;">${escapeHtml(t.desc.slice(0,50))}</td>
                 <td style="padding:4px 6px;font-size:10px;white-space:nowrap;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${c.color};margin-right:4px;"></span>${escapeHtml(catDisplayName(c))}</td>
                 <td style="padding:4px 6px;font-size:10px;text-align:right;font-family:monospace;color:#dc2626;font-weight:600;">${t.saida?fmtEUR(t.saida):''}</td>

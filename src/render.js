@@ -225,7 +225,7 @@ function renderTable(){
   const pageRows = rows.slice(start, start+PAGE_SIZE);
   body.innerHTML = pageRows.map(t=>{
     const c=catById(t.cat);
-    const d=(t.realDate||t.date).toLocaleDateString('pt-BR'); // mostra a data real do gasto (mesmo quando t.date é a data de pagamento da fatura)
+    const d=(t.realDate||t.date).toLocaleDateString(localeTag()); // mostra a data real do gasto (mesmo quando t.date é a data de pagamento da fatura)
     const saidaStr = t.saida!=null ? fmtEUR(t.saida) : '<span class="text-zinc-300">—</span>';
     const entradaStr = t.entrada!=null ? fmtEUR(t.entrada) : '<span class="text-zinc-300">—</span>';
     const hasValue = (t.saida!=null && t.saida>0) || (t.entrada!=null && t.entrada>0);
@@ -292,7 +292,7 @@ function renderTable(){
   body.querySelectorAll('.delBtn').forEach(b=>{
     b.addEventListener('click', e=>{
       const id=e.currentTarget.dataset.del; const tx=transactions.find(x=>x.id===id); if(!tx) return;
-      if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString('pt-BR'), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
+      if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString(localeTag()), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
       transactions = transactions.filter(x=>x.id!==id);
       selectedTxIds.delete(id);
       renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
@@ -382,7 +382,7 @@ function updateKPIs(){
     if(el && subEl){
       el.textContent = fmtEUR(bal.total);
       subEl.textContent = (openingBalance && openingBalance.value!=null)
-        ? window.i18n.t('kpis.balanceSubWithOpening', {value: fmtEUR(bal.base), date: openingBalance.date.toLocaleDateString('pt-BR')})
+        ? window.i18n.t('kpis.balanceSubWithOpening', {value: fmtEUR(bal.base), date: openingBalance.date.toLocaleDateString(localeTag())})
         : window.i18n.t('kpis.balanceSubDefault');
     }
   }
@@ -648,7 +648,7 @@ function detectAnomalies(txP){
         if(z>=3 && d.total>m*2){
           const dayTxs = spend.filter(t=>dayKey(t.date)===dayKey(d.date));
           anomalies.push({ type:'spike-day', severity:'medium', txs:dayTxs, date:d.date, aid:anomalyId('spike-day',[],d.date),
-            text: window.i18n.t('anomalies.messages.spikeDay', {date: d.date.toLocaleDateString('pt-BR'), total: fmtEUR(d.total), count: d.count, avg: fmtEUR(m)}) });
+            text: window.i18n.t('anomalies.messages.spikeDay', {date: d.date.toLocaleDateString(localeTag()), total: fmtEUR(d.total), count: d.count, avg: fmtEUR(m)}) });
         }
       });
     }
@@ -676,7 +676,7 @@ function renderAnomalies(txP){
     return `<div class="p-3 rounded-xl border ${high?'border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30':'border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/30'}">
       <div class="flex items-start justify-between gap-3">
         <div class="min-w-0">
-          <p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="${icons[a.type]||'ri-error-warning-fill'}"></i> ${a.date.toLocaleDateString('pt-BR')}</p>
+          <p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="${icons[a.type]||'ri-error-warning-fill'}"></i> ${a.date.toLocaleDateString(localeTag())}</p>
           <p class="text-[11px] ${high?'text-red-700/80 dark:text-red-400/70':'text-amber-700/80 dark:text-amber-400/70'} mt-1 leading-relaxed">${escapeHtml(a.text)}</p>
         </div>
         <button type="button" class="anomalyResolveBtn shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-bold ${high?'bg-red-600 hover:bg-red-700':'bg-amber-600 hover:bg-amber-700'} text-white whitespace-nowrap" data-aid="${escapeHtml(a.aid)}">${window.i18n.t('anomalies.messages.resolveButton')}</button>
@@ -700,7 +700,7 @@ function openAnomalyDialog(aid){
 function renderAnomalyDialogBody(a){
   const high=a.severity==='high';
   document.getElementById('anomalyDialogSummary').innerHTML =
-    `<p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="ri-${high?'alarm-warning-fill':'error-warning-fill'}"></i> ${a.date.toLocaleDateString('pt-BR')}</p>
+    `<p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="ri-${high?'alarm-warning-fill':'error-warning-fill'}"></i> ${a.date.toLocaleDateString(localeTag())}</p>
      <p class="text-[12px] text-zinc-600 dark:text-zinc-300 mt-1 leading-relaxed">${escapeHtml(a.text)}</p>`;
   // "Sempre aceitar" só faz sentido quando a anomalia gira em torno de UMA descrição (duplicidade, outlier de
   // estabelecimento/global) — pico de gasto num dia não tem uma descrição única pra generalizar.
@@ -720,7 +720,7 @@ function renderAnomalyDialogBody(a){
         <span class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-white" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>
         <span class="flex-1 min-w-0">
           <span class="block text-[13px] font-semibold truncate">${escapeHtml(t.desc)}</span>
-          <span class="text-[11px] text-zinc-500">${(t.realDate||t.date).toLocaleDateString('pt-BR')} · ${escapeHtml(catDisplayName(c))}${t.bank?` · ${escapeHtml(bankLabel(t.bank))}`:''}${t.note?` · ${escapeHtml(t.note)}`:''}</span>
+          <span class="text-[11px] text-zinc-500">${(t.realDate||t.date).toLocaleDateString(localeTag())} · ${escapeHtml(catDisplayName(c))}${t.bank?` · ${escapeHtml(bankLabel(t.bank))}`:''}${t.note?` · ${escapeHtml(t.note)}`:''}</span>
         </span>
         <span class="font-bold font-mono text-[13px] shrink-0 text-red-600 dark:text-red-400">${fmtEUR(t.saida||t.entrada||0)}</span>
         <button type="button" class="anomalyTxDelBtn shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30" data-id="${t.id}" title="${window.i18n.t('actions.delete')}"><i class="ri-delete-bin-line"></i></button>
@@ -730,7 +730,7 @@ function renderAnomalyDialogBody(a){
       b.addEventListener('click', e=>{
         const id=e.currentTarget.dataset.id;
         const tx=transactions.find(x=>x.id===id); if(!tx) return;
-        if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString('pt-BR'), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
+        if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString(localeTag()), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
         transactions = transactions.filter(x=>x.id!==id);
         selectedTxIds.delete(id);
         renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
@@ -1207,7 +1207,7 @@ function updateCharts(){
           pointBackgroundColor: cumData.map(v=>v>=0?'#10b981':'#ef4444')
         }];
         document.getElementById('cashflowHint').textContent = (openingBalance && openingBalance.value!=null)
-          ? window.i18n.t('charts.cashflow.hintWithOpening', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString('pt-BR')})
+          ? window.i18n.t('charts.cashflow.hintWithOpening', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString(localeTag())})
           : window.i18n.t('charts.cashflow.hintCumulative');
         if(subEl) subEl.textContent = window.i18n.t('charts.cashflow.subtitle');
       }
