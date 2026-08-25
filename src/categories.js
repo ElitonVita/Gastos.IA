@@ -149,22 +149,30 @@ function bankIcon(b){ const x=bankById(b); return x ? x.icon : 'ri-bank-line'; }
 // verbatim — there's no locale key for a category the user invented themselves.
 const DEFAULT_CATEGORY_IDS = new Set(DEFAULT_CATEGORIES.map(c=>c.id));
 const DEFAULT_BANK_TYPE_IDS = new Set(DEFAULT_BANK_TYPES.map(b=>b.id));
+// Snapshot of each default id's ORIGINAL Portuguese name, captured once here (before any
+// user edit can happen) — used to detect whether the user has renamed a default category/
+// bank-type through the same edit dialog used for custom ones. If `.name` still matches the
+// original default, we know it's untouched and safe to translate live; if it no longer
+// matches, the user renamed it and that custom name must win over the locale translation,
+// exactly like a user-created category (see catDisplayName/bankDisplayName below).
+const DEFAULT_CAT_NAMES = new Map(DEFAULT_CATEGORIES.map(c=>[c.id,c.name]));
+const DEFAULT_BANK_TYPE_NAMES = new Map(DEFAULT_BANK_TYPES.map(b=>[b.id,b.name]));
 
 function catDisplayName(cat){
   if (!cat) return '';
-  if (DEFAULT_CATEGORY_IDS.has(cat.id)) {
+  if (DEFAULT_CATEGORY_IDS.has(cat.id) && cat.name === DEFAULT_CAT_NAMES.get(cat.id)) {
     const translated = t(`categories.${cat.id}`);
     return translated === `categories.${cat.id}` ? cat.name : translated; // t() returns the key itself on a miss — fall back to stored name
   }
-  return cat.name;
+  return cat.name; // user renamed this default (or it's a custom category) — their name always wins
 }
 function bankDisplayName(bank){
   if (!bank) return '';
-  if (DEFAULT_BANK_TYPE_IDS.has(bank.id)) {
+  if (DEFAULT_BANK_TYPE_IDS.has(bank.id) && bank.name === DEFAULT_BANK_TYPE_NAMES.get(bank.id)) {
     const translated = t(`bankTypes.${bank.id}`);
     return translated === `bankTypes.${bank.id}` ? bank.name : translated;
   }
-  return bank.name;
+  return bank.name; // user renamed this default (or it's a custom bank type) — their name always wins
 }
 
 // ---------- Icon picker (nova categoria) ----------
