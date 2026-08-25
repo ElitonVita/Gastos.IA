@@ -16,23 +16,23 @@ function renderCategoryChips(){
     chip.className=`inline-flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded-full text-xs font-bold border transition ${active?'text-white shadow-md':'bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200'}`;
     chip.style.background = active? c.color : '';
     chip.style.borderColor = active? c.color : c.color+'40';
-    chip.innerHTML=`<span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] shrink-0" style="background:${active?'rgba(255,255,255,0.25)':c.color};color:${active?'white':'white'}"><i class="${catIcon(c)}"></i></span>${escapeHtml(c.name)} <span class="opacity-60 font-mono">${transactions.filter(t=>t.cat===c.id).length||0}</span>`;
+    chip.innerHTML=`<span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] shrink-0" style="background:${active?'rgba(255,255,255,0.25)':c.color};color:${active?'white':'white'}"><i class="${catIcon(c)}"></i></span>${escapeHtml(catDisplayName(c))} <span class="opacity-60 font-mono">${transactions.filter(t=>t.cat===c.id).length||0}</span>`;
     chip.onclick=()=>{ activeCatFilter = activeCatFilter===c.id? null : c.id; renderCategoryChips(); renderTable(); updateCharts(); };
     item.appendChild(chip);
     const editBtn=document.createElement('button');
     editBtn.type='button';
-    editBtn.title=window.i18n.t('common.editItemTitle', {name: escapeHtml(c.name)});
+    editBtn.title=window.i18n.t('common.editItemTitle', {name: escapeHtml(catDisplayName(c))});
     editBtn.className='w-7 h-7 shrink-0 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-400 hover:text-violet-600 dark:hover:text-violet-400 hover:border-violet-300 dark:hover:border-violet-700 flex items-center justify-center text-[12px] transition';
     editBtn.innerHTML='<i class="ri-pencil-fill"></i>';
     editBtn.onclick=(e)=>{ e.stopPropagation(); openCategoryDialog(c.id); };
     item.appendChild(editBtn);
     wrap.appendChild(item);
-    const o=document.createElement('option'); o.value=c.id; o.textContent=c.name;
+    const o=document.createElement('option'); o.value=c.id; o.textContent=catDisplayName(c);
     if(mSel) mSel.appendChild(o.cloneNode(true));
   });
   // filtro de categoria da tabela de transações — em ordem alfabética, separado da ordem dos chips
-  [...categories].sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')).forEach(c=>{
-    const o=document.createElement('option'); o.value=c.id; o.textContent=c.name;
+  [...categories].sort((a,b)=>catDisplayName(a).localeCompare(catDisplayName(b),'pt-BR')).forEach(c=>{
+    const o=document.createElement('option'); o.value=c.id; o.textContent=catDisplayName(c);
     sel.appendChild(o);
   });
   sel.value = activeCatFilter||'';
@@ -47,7 +47,7 @@ function renderBudgetList(){
     <label class="flex items-center gap-3 py-1">
       <span class="flex items-center gap-2 flex-1 min-w-0 text-[13px] font-semibold">
         <span class="w-6 h-6 rounded-full flex items-center justify-center text-[11px] text-white shrink-0" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>
-        <span class="truncate">${escapeHtml(c.name)}</span>
+        <span class="truncate">${escapeHtml(catDisplayName(c))}</span>
       </span>
       <span class="relative shrink-0 w-[110px]">
         <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] text-zinc-400">€</span>
@@ -174,9 +174,9 @@ function renderBulkBar(){
   bar.classList.toggle('hidden', n===0);
   const countEl=document.getElementById('bulkCount'); if(countEl) countEl.textContent=n;
   const catSel=document.getElementById('bulkCatSelect');
-  if(catSel) catSel.innerHTML = `<option value="">${window.i18n.t('actions.bulkCategory')}</option>` + categories.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+  if(catSel) catSel.innerHTML = `<option value="">${window.i18n.t('actions.bulkCategory')}</option>` + categories.map(c=>`<option value="${c.id}">${escapeHtml(catDisplayName(c))}</option>`).join('');
   const bankSel=document.getElementById('bulkBankSelect');
-  if(bankSel) bankSel.innerHTML = `<option value="">${window.i18n.t('actions.bulkBank')}</option>` + bankTypes.map(b=>`<option value="${b.id}">${escapeHtml(b.name)}</option>`).join('');
+  if(bankSel) bankSel.innerHTML = `<option value="">${window.i18n.t('actions.bulkBank')}</option>` + bankTypes.map(b=>`<option value="${b.id}">${escapeHtml(bankDisplayName(b))}</option>`).join('');
 }
 function renderTable(){
   // remove da seleção ids que não existem mais (ex: após restaurar backup)
@@ -196,14 +196,14 @@ function renderTable(){
   if(filterType==='entrada') rows = rows.filter(t=>t.entrada!=null && t.entrada>0);
   if(filterBank==='__none__') rows = rows.filter(t=>!t.bank);
   else if(filterBank) rows = rows.filter(t=>t.bank===filterBank);
-  if(q) rows = rows.filter(t=> (t.desc+' '+t.source+' '+catById(t.cat).name+' '+(t.saida||'')+' '+(t.entrada||'')).toLowerCase().includes(q));
+  if(q) rows = rows.filter(t=> (t.desc+' '+t.source+' '+catDisplayName(catById(t.cat))+' '+(t.saida||'')+' '+(t.entrada||'')).toLowerCase().includes(q));
   // ordenação clicável pelos títulos das colunas (data, descrição, saída, entrada, categoria) — tableSort guarda a escolha atual
   const sortComparators = {
     date: (a,b)=> (a.realDate||a.date) - (b.realDate||b.date), // data real do gasto, não a data de pagamento da fatura
     desc: (a,b)=> (a.desc||'').localeCompare(b.desc||'','pt-BR'),
     saida: (a,b)=> (a.saida||0) - (b.saida||0),
     entrada: (a,b)=> (a.entrada||0) - (b.entrada||0),
-    cat: (a,b)=> catById(a.cat).name.localeCompare(catById(b.cat).name,'pt-BR'),
+    cat: (a,b)=> catDisplayName(catById(a.cat)).localeCompare(catDisplayName(catById(b.cat)),'pt-BR'),
   };
   const sortCmp = sortComparators[tableSort.key] || sortComparators.date;
   rows.sort((a,b)=> tableSort.dir==='asc' ? sortCmp(a,b) : -sortCmp(a,b));
@@ -250,7 +250,7 @@ function renderTable(){
       <td class="px-3 py-2.5 text-right font-bold font-mono text-[13px] whitespace-nowrap ${t.entrada?'text-emerald-600 dark:text-emerald-400':''}">${entradaStr}</td>
       <td class="px-3 py-2.5">
         ${needCat ? `<select data-id="${t.id}" class="catSelect w-full text-[11px] font-bold px-2 py-1 rounded-full border text-white shadow-sm" style="background:${c.color};border-color:${c.color}">
-          ${categories.map(cc=>`<option value="${cc.id}" ${cc.id===t.cat?'selected':''} style="color:#111">${cc.name}</option>`).join('')}
+          ${categories.map(cc=>`<option value="${cc.id}" ${cc.id===t.cat?'selected':''} style="color:#111">${escapeHtml(catDisplayName(cc))}</option>`).join('')}
         </select>` : `<span class="text-[11px] text-zinc-400">—</span>`}
       </td>
       <td class="px-4 py-2.5">
@@ -401,9 +401,9 @@ function updateKPIs(){
   const top = Object.entries(byCat).sort((a,b)=>b[1]-a[1])[0];
   if(top){
     const c=catById(top[0]);
-    document.getElementById('kpiTopCat').innerHTML = `<span class="inline-flex w-5 h-5 rounded-full items-center justify-center text-[10px] text-white align-middle mr-1" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>${escapeHtml(c.name)}`;
+    document.getElementById('kpiTopCat').innerHTML = `<span class="inline-flex w-5 h-5 rounded-full items-center justify-center text-[10px] text-white align-middle mr-1" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>${escapeHtml(catDisplayName(c))}`;
     document.getElementById('kpiTopCatVal').textContent = window.i18n.t('kpis.topCategoryValueText', {value: fmtEUR(top[1]), pct: Math.round(top[1]/total*100)});
-    document.getElementById('kpiInsight').textContent = window.i18n.t('kpis.insightMainText', {cat: c.name});
+    document.getElementById('kpiInsight').textContent = window.i18n.t('kpis.insightMainText', {cat: catDisplayName(c)});
     document.getElementById('kpiInsightSub').textContent = window.i18n.t('kpis.insightSubText', {value: fmtEUR(top[1]), pct: Math.round(top[1]/total*100)});
   } else {
     document.getElementById('kpiTopCat').textContent='—';
@@ -720,7 +720,7 @@ function renderAnomalyDialogBody(a){
         <span class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-white" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>
         <span class="flex-1 min-w-0">
           <span class="block text-[13px] font-semibold truncate">${escapeHtml(t.desc)}</span>
-          <span class="text-[11px] text-zinc-500">${(t.realDate||t.date).toLocaleDateString('pt-BR')} · ${escapeHtml(c.name)}${t.bank?` · ${escapeHtml(bankLabel(t.bank))}`:''}${t.note?` · ${escapeHtml(t.note)}`:''}</span>
+          <span class="text-[11px] text-zinc-500">${(t.realDate||t.date).toLocaleDateString('pt-BR')} · ${escapeHtml(catDisplayName(c))}${t.bank?` · ${escapeHtml(bankLabel(t.bank))}`:''}${t.note?` · ${escapeHtml(t.note)}`:''}</span>
         </span>
         <span class="font-bold font-mono text-[13px] shrink-0 text-red-600 dark:text-red-400">${fmtEUR(t.saida||t.entrada||0)}</span>
         <button type="button" class="anomalyTxDelBtn shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30" data-id="${t.id}" title="${window.i18n.t('actions.delete')}"><i class="ri-delete-bin-line"></i></button>
@@ -869,7 +869,7 @@ function updateCharts(){
   const byCat={}; const byCatCount={};
   txP.forEach(t=>{ if(t.saida && !t.internal){ byCat[t.cat]=(byCat[t.cat]||0)+t.saida; byCatCount[t.cat]=(byCatCount[t.cat]||0)+1; }});
   const catEntries=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
-  const labels=catEntries.map(([id])=>catById(id).name);
+  const labels=catEntries.map(([id])=>catDisplayName(catById(id)));
   const ids=catEntries.map(([id])=>id);
   const vals=catEntries.map(([,v])=>Math.round(v*100)/100);
   const colors=catEntries.map(([id])=>catById(id).color);
@@ -889,7 +889,7 @@ function updateCharts(){
     let running = totalIncome;
     top.forEach(([id,v])=>{
       const c=catById(id); const start = running-v;
-      wRanges.push([start, running]); wColors.push(c.color); wLabels.push(c.name); wIds.push(id);
+      wRanges.push([start, running]); wColors.push(c.color); wLabels.push(catDisplayName(c)); wIds.push(id);
       running = start;
     });
     if(restVal>0.005){
@@ -927,7 +927,7 @@ function updateCharts(){
         <div class="flex items-center justify-between gap-3 pl-2.5 pr-3 py-1.5 rounded-lg border transition hover:bg-zinc-50 dark:hover:bg-zinc-800/60 ${active?'shadow-sm':''}" style="${active?`background:${c.color}14;border-color:${c.color}`:'border-color:transparent'}">
           <span class="flex items-center gap-2 min-w-0">
             <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white shrink-0" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>
-            <span class="text-[13px] font-semibold truncate">${escapeHtml(c.name)}</span>
+            <span class="text-[13px] font-semibold truncate">${escapeHtml(catDisplayName(c))}</span>
             <span class="text-[10px] text-zinc-400 font-mono shrink-0">${count}</span>
           </span>
           <span class="flex items-baseline gap-1.5 shrink-0">
@@ -1052,7 +1052,7 @@ function updateCharts(){
             <div class="flex items-center justify-between gap-3 text-xs mb-1.5">
               <span class="font-semibold flex items-center gap-1.5 min-w-0">
                 <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white shrink-0" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>
-                <span class="truncate">${escapeHtml(c.name)}</span>
+                <span class="truncate">${escapeHtml(catDisplayName(c))}</span>
               </span>
               <span class="font-mono shrink-0 ${over?'text-red-600 dark:text-red-400 font-bold':'text-zinc-500'}">${fmtEUR(real)} / ${fmtEUR(budgetTotal)} <span class="opacity-70">(${pctLabel}%)</span></span>
             </div>
@@ -1095,8 +1095,8 @@ function updateCharts(){
         const c=catById(cid);
         const data=lastN.map(k=>{ let s=0; txP.forEach(t=>{ if(t.cat===cid&&t.saida&&!t.internal&&monthKey(t.date)===k) s+=t.saida; }); return Math.round(s*100)/100; });
         return compareMode==='lines'
-          ? { label:c.name, catId:cid, data, borderColor:c.color, backgroundColor:c.color, pointRadius:3, pointHoverRadius:5, borderWidth:2.5, tension:0.35, fill:false }
-          : { label:c.name, catId:cid, data, backgroundColor:c.color, borderRadius:6 };
+          ? { label:catDisplayName(c), catId:cid, data, borderColor:c.color, backgroundColor:c.color, pointRadius:3, pointHoverRadius:5, borderWidth:2.5, tension:0.35, fill:false }
+          : { label:catDisplayName(c), catId:cid, data, backgroundColor:c.color, borderRadius:6 };
       });
       compareChart.update();
       document.getElementById('compareRange').textContent = lastN.length? lastN.map(monthLabel).join(' · ') : '';
@@ -1157,7 +1157,7 @@ function updateCharts(){
           return keys.length ? keys.reduce((s,k)=>s+byMonth[k],0)/keys.length : 0;
         };
         const catEstimates = categories.filter(c=>c.id!=='transferencia').map(c=>({
-          name:c.name, usesBudget: c.budget>0, value: c.budget>0 ? c.budget : catMonthlyAvg(c.id)
+          name:catDisplayName(c), usesBudget: c.budget>0, value: c.budget>0 ? c.budget : catMonthlyAvg(c.id)
         })).filter(c=>c.value>0.005);
         const projectedMonthlyExpense = Math.round(catEstimates.reduce((s,c)=>s+c.value,0)*100)/100;
         const noBudgetCats = catEstimates.filter(c=>!c.usesBudget);

@@ -277,6 +277,7 @@ window.GASTOS_LOCALES = {
       },
       "bankType": {
         "titleNew": "Novo tipo de conta",
+        "titleEdit": "Editar tipo de conta",
         "namePlaceholder": "Ex: N26, Banco do Brasil",
         "submitNew": "Criar tipo de conta"
       }
@@ -645,7 +646,8 @@ window.GASTOS_LOCALES = {
       "educacao": "Educação",
       "outros": "Outros",
       "transferencia": "Transferência interna",
-      "cartao": "Pagamento de Cartão"
+      "cartao": "Pagamento de Cartão",
+      "propagatedLog": "Propagado: {n} transações com descrição \"{desc}\" → {category}"
     },
     "bankTypes": {
       "REVOLUT": "Revolut",
@@ -998,6 +1000,7 @@ window.GASTOS_LOCALES = {
       },
       "bankType": {
         "titleNew": "New account type",
+        "titleEdit": "Edit account type",
         "namePlaceholder": "e.g. N26, Chase",
         "submitNew": "Create account type"
       }
@@ -1366,7 +1369,8 @@ window.GASTOS_LOCALES = {
       "educacao": "Education",
       "outros": "Other",
       "transferencia": "Internal transfer",
-      "cartao": "Card Payment"
+      "cartao": "Card Payment",
+      "propagatedLog": "Propagated: {n} transactions with description \"{desc}\" → {category}"
     },
     "bankTypes": {
       "REVOLUT": "Revolut",

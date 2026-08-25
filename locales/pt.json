@@ -266,6 +266,7 @@
     },
     "bankType": {
       "titleNew": "Novo tipo de conta",
+      "titleEdit": "Editar tipo de conta",
       "namePlaceholder": "Ex: N26, Banco do Brasil",
       "submitNew": "Criar tipo de conta"
     }
@@ -634,7 +635,8 @@
     "educacao": "Educação",
     "outros": "Outros",
     "transferencia": "Transferência interna",
-    "cartao": "Pagamento de Cartão"
+    "cartao": "Pagamento de Cartão",
+    "propagatedLog": "Propagado: {n} transações com descrição \"{desc}\" → {category}"
   },
   "bankTypes": {
     "REVOLUT": "Revolut",

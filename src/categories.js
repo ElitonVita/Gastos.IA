@@ -137,8 +137,35 @@ const DEFAULT_BANK_TYPES = [
 ];
 let bankTypes = JSON.parse(JSON.stringify(DEFAULT_BANK_TYPES));
 function bankById(id){ return bankTypes.find(b=>b.id===id) || null; }
-function bankLabel(b){ const x=bankById(b); return x ? x.name : ''; }
+function bankLabel(b){ const x=bankById(b); return x ? bankDisplayName(x) : ''; }
 function bankIcon(b){ const x=bankById(b); return x ? x.icon : 'ri-bank-line'; }
+
+// i18n: DEFAULT_CATEGORIES/DEFAULT_BANK_TYPES keep their original Portuguese
+// `name:` as a fallback (used if a locale key is ever missing), but display
+// name resolution goes through catDisplayName()/bankDisplayName() so switching
+// language re-translates default entries without re-persisting a baked-in string.
+// User-created custom categories/bank-types (anything whose id isn't one of
+// DEFAULT_CATEGORIES/DEFAULT_BANK_TYPES' ids) always use their own stored `name`
+// verbatim — there's no locale key for a category the user invented themselves.
+const DEFAULT_CATEGORY_IDS = new Set(DEFAULT_CATEGORIES.map(c=>c.id));
+const DEFAULT_BANK_TYPE_IDS = new Set(DEFAULT_BANK_TYPES.map(b=>b.id));
+
+function catDisplayName(cat){
+  if (!cat) return '';
+  if (DEFAULT_CATEGORY_IDS.has(cat.id)) {
+    const translated = t(`categories.${cat.id}`);
+    return translated === `categories.${cat.id}` ? cat.name : translated; // t() returns the key itself on a miss — fall back to stored name
+  }
+  return cat.name;
+}
+function bankDisplayName(bank){
+  if (!bank) return '';
+  if (DEFAULT_BANK_TYPE_IDS.has(bank.id)) {
+    const translated = t(`bankTypes.${bank.id}`);
+    return translated === `bankTypes.${bank.id}` ? bank.name : translated;
+  }
+  return bank.name;
+}
 
 // ---------- Icon picker (nova categoria) ----------
 const ICON_CHOICES = ['ri-restaurant-2-fill','ri-cup-fill','ri-car-fill','ri-bus-2-fill','ri-plane-fill','ri-home-4-fill','ri-building-4-fill','ri-flashlight-fill','ri-heart-pulse-fill','ri-hospital-fill','ri-gamepad-fill','ri-film-fill','ri-music-2-fill','ri-shopping-bag-3-fill','ri-t-shirt-fill','ri-graduation-cap-fill','ri-book-open-fill','ri-exchange-fill','ri-bank-card-fill','ri-gift-fill','ri-wallet-3-fill','ri-plant-fill','ri-briefcase-fill','ri-tools-fill','ri-smartphone-fill','ri-shapes-fill'];
@@ -185,11 +212,11 @@ function renderBankTypeChips(){
     item.className='inline-flex items-center gap-1';
     const chip=document.createElement('span');
     chip.className='inline-flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded-full text-xs font-bold border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200';
-    chip.innerHTML=`<span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] shrink-0 bg-violet-600 text-white"><i class="${b.icon}"></i></span>${escapeHtml(b.name)} <span class="opacity-60 font-mono">${transactions.filter(t=>t.bank===b.id).length||0}</span>`;
+    chip.innerHTML=`<span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] shrink-0 bg-violet-600 text-white"><i class="${b.icon}"></i></span>${escapeHtml(bankDisplayName(b))} <span class="opacity-60 font-mono">${transactions.filter(t=>t.bank===b.id).length||0}</span>`;
     item.appendChild(chip);
     const editBtn=document.createElement('button');
     editBtn.type='button';
-    editBtn.title=`Editar ${escapeHtml(b.name)}`;
+    editBtn.title=t('common.editItemTitle', {name: escapeHtml(bankDisplayName(b))});
     editBtn.className='w-7 h-7 shrink-0 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-400 hover:text-violet-600 dark:hover:text-violet-400 hover:border-violet-300 dark:hover:border-violet-700 flex items-center justify-center text-[12px] transition';
     editBtn.innerHTML='<i class="ri-pencil-fill"></i>';
     editBtn.onclick=()=> openBankTypeDialog(b.id);
@@ -200,16 +227,16 @@ function renderBankTypeChips(){
   const sel=document.getElementById('filterBank');
   if(sel){
     const cur=sel.value;
-    sel.innerHTML = '<option value="">Todas contas</option>'
-      + bankTypes.map(b=>`<option value="${b.id}">${escapeHtml(b.name)}</option>`).join('')
-      + '<option value="__none__">Sem conta identificada</option>';
+    sel.innerHTML = `<option value="">${t('filters.bankAll')}</option>`
+      + bankTypes.map(b=>`<option value="${b.id}">${escapeHtml(bankDisplayName(b))}</option>`).join('')
+      + `<option value="__none__">${t('filters.bankNone')}</option>`;
     sel.value = Array.from(sel.options).some(o=>o.value===cur) ? cur : '';
   }
 }
 function openBankTypeDialog(editId){
   const b = editId ? bankById(editId) : null;
-  document.getElementById('bankDialogTitle').textContent = b ? 'Editar tipo de conta' : 'Novo tipo de conta';
-  document.getElementById('bankSubmitBtn').textContent = b ? 'Salvar alterações' : 'Criar tipo de conta';
+  document.getElementById('bankDialogTitle').textContent = b ? t('modals.bankType.titleEdit') : t('modals.bankType.titleNew');
+  document.getElementById('bankSubmitBtn').textContent = b ? t('modals.category.submitEdit') : t('modals.bankType.submitNew');
   document.getElementById('bEditId').value = b ? b.id : '';
   document.getElementById('bName').value = b ? b.name : '';
   const icon = b ? b.icon : BANK_ICON_CHOICES[0];
@@ -249,7 +276,7 @@ function applySameDescription(changedTx, silent){
   }
   if(n>0){
     renderCategoryChips(); updateCharts(); updateKPIs(); renderTable(); persistState();
-    if(!silent){ ollamaLog(`Propagado: ${n} transações com descrição "${changedTx.desc.slice(0,40)}" → ${catById(changedTx.cat).name}`); }
+    if(!silent){ ollamaLog(t('categories.propagatedLog', {n, desc: changedTx.desc.slice(0,40), category: catDisplayName(catById(changedTx.cat))})); }
   }
   return n;
 }

@@ -266,6 +266,7 @@
     },
     "bankType": {
       "titleNew": "New account type",
+      "titleEdit": "Edit account type",
       "namePlaceholder": "e.g. N26, Chase",
       "submitNew": "Create account type"
     }
@@ -634,7 +635,8 @@
     "educacao": "Education",
     "outros": "Other",
     "transferencia": "Internal transfer",
-    "cartao": "Card Payment"
+    "cartao": "Card Payment",
+    "propagatedLog": "Propagated: {n} transactions with description \"{desc}\" → {category}"
   },
   "bankTypes": {
     "REVOLUT": "Revolut",
