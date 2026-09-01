@@ -60,7 +60,7 @@ function openDetailsDialog(tx){
   document.getElementById('detailsExtra').innerHTML = rows.map(([label,val])=>`
     <div class="flex items-start justify-between gap-3 py-1.5 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
       <span class="text-zinc-500 shrink-0">${escapeHtml(label)}</span>
-      <span class="font-medium text-right break-all">${escapeHtml(String(val))}</span>
+      <span class="font-medium text-right break-all text-zinc-900 dark:text-zinc-100">${escapeHtml(String(val))}</span>
     </div>`).join('');
   detailsDialog.showModal();
 }
