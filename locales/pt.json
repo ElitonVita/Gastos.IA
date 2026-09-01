@@ -121,6 +121,7 @@
     "possibleTransfer": "possível transferência",
     "internalTransfer": "interna",
     "internalTransferTitle": "Movimentação interna — não contabilizada",
+    "manualEntryTitle": "Entrada manual",
     "summary": "movimentos",
     "realExpenses": "Gastos reais",
     "income": "Entradas",
@@ -141,6 +142,12 @@
     "note": "Nota",
     "details": "Detalhes",
     "delete": "Excluir transação",
+    "moreActions": "Mais ações",
+    "approveTransfer": "Aprovar como transferência interna",
+    "markInternalTransfer": "Marcar como transferência interna",
+    "unmarkInternalTransfer": "Desmarcar transferência interna",
+    "markCardStatement": "Marcar como Card statement",
+    "unmarkCardStatement": "Desmarcar Card statement",
     "confirmDelete": "Excluir esta transação?\n\n{desc}\n{date} · {value}",
     "bulkActions": "Ações em massa",
     "bulkCount": "{count} selecionadas",
@@ -489,7 +496,8 @@
       "savedToFolderAlert": "✅ gastos-data.json salvo na pasta \"{name}\"",
       "savedToLocalAlert": "✅ Salvo no navegador (localStorage). Clique em \"Escolher pasta\" para gravar direto no computador.",
       "fixedBilCardMigration": "🔧 {n} compra(s) do cartão BIL, importadas antes da correção, foram recategorizadas e voltaram a contar como Gasto.",
-      "fixedTransfersMigration": "🔧 {n} transação(ões) identificadas como transferência entre suas contas (pelo banco do beneficiário) — não contam mais como Gasto/Entrada."
+      "fixedTransfersMigration": "🔧 {n} transação(ões) identificadas como transferência entre suas contas (pelo banco do beneficiário) — não contam mais como Gasto/Entrada.",
+      "fixedDuplicatesMigration": "🔧 {n} duplicação(ões) removida(s) por conteúdo idêntico; arquivos de origem foram preservados nos detalhes."
     },
     "ai": {
       "title": "Categorização automática com IA local",
@@ -636,7 +644,7 @@
     "compras": "Compras",
     "educacao": "Educação",
     "outros": "Outros",
-    "transferencia": "Transferência interna",
+    "transferencia": "Transferência",
     "cartao": "Pagamento de Cartão",
     "propagatedLog": "Propagado: {n} transações com descrição \"{desc}\" → {category}"
   },

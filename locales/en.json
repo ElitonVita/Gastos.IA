@@ -121,6 +121,7 @@
     "possibleTransfer": "possible transfer",
     "internalTransfer": "internal",
     "internalTransferTitle": "Internal movement — not counted",
+    "manualEntryTitle": "Manual entry",
     "summary": "transactions",
     "realExpenses": "Real expenses",
     "income": "Income",
@@ -141,6 +142,12 @@
     "note": "Note",
     "details": "Details",
     "delete": "Delete transaction",
+    "moreActions": "More actions",
+    "approveTransfer": "Approve as internal transfer",
+    "markInternalTransfer": "Mark as internal transfer",
+    "unmarkInternalTransfer": "Unmark internal transfer",
+    "markCardStatement": "Mark as Card statement",
+    "unmarkCardStatement": "Unmark Card statement",
     "confirmDelete": "Delete this transaction?\n\n{desc}\n{date} · {value}",
     "bulkActions": "Bulk actions",
     "bulkCount": "{count} selected",
@@ -489,7 +496,8 @@
       "savedToFolderAlert": "✅ gastos-data.json saved to folder \"{name}\"",
       "savedToLocalAlert": "✅ Saved in browser (localStorage). Click \"Choose folder\" to save directly to your computer.",
       "fixedBilCardMigration": "🔧 {n} BIL card purchase(s), imported before the fix, were recategorized and now count as an Expense again.",
-      "fixedTransfersMigration": "🔧 {n} transaction(s) identified as a transfer between your accounts (by beneficiary bank) — no longer counted as Expense/Income."
+      "fixedTransfersMigration": "🔧 {n} transaction(s) identified as a transfer between your accounts (by beneficiary bank) — no longer counted as Expense/Income.",
+      "fixedDuplicatesMigration": "🔧 {n} duplicate transaction(s) removed by identical content; source files were preserved in Details."
     },
     "ai": {
       "title": "Auto-categorization with local AI",
@@ -636,7 +644,7 @@
     "compras": "Shopping",
     "educacao": "Education",
     "outros": "Other",
-    "transferencia": "Internal transfer",
+    "transferencia": "Transfer",
     "cartao": "Card Payment",
     "propagatedLog": "Propagated: {n} transactions with description \"{desc}\" → {category}"
   },

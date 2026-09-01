@@ -124,6 +124,7 @@ window.GASTOS_LOCALES = {
       "possibleTransfer": "possível transferência",
       "internalTransfer": "interna",
       "internalTransferTitle": "Movimentação interna — não contabilizada",
+      "manualEntryTitle": "Entrada manual",
       "summary": "movimentos",
       "realExpenses": "Gastos reais",
       "income": "Entradas",
@@ -152,6 +153,12 @@ window.GASTOS_LOCALES = {
       "note": "Nota",
       "details": "Detalhes",
       "delete": "Excluir transação",
+      "moreActions": "Mais ações",
+      "approveTransfer": "Aprovar como transferência interna",
+      "markInternalTransfer": "Marcar como transferência interna",
+      "unmarkInternalTransfer": "Desmarcar transferência interna",
+      "markCardStatement": "Marcar como Card statement",
+      "unmarkCardStatement": "Desmarcar Card statement",
       "confirmDelete": "Excluir esta transação?\n\n{desc}\n{date} · {value}",
       "bulkActions": "Ações em massa",
       "bulkCount": "{count} selecionadas",
@@ -500,7 +507,8 @@ window.GASTOS_LOCALES = {
         "savedToFolderAlert": "✅ gastos-data.json salvo na pasta \"{name}\"",
         "savedToLocalAlert": "✅ Salvo no navegador (localStorage). Clique em \"Escolher pasta\" para gravar direto no computador.",
         "fixedBilCardMigration": "🔧 {n} compra(s) do cartão BIL, importadas antes da correção, foram recategorizadas e voltaram a contar como Gasto.",
-        "fixedTransfersMigration": "🔧 {n} transação(ões) identificadas como transferência entre suas contas (pelo banco do beneficiário) — não contam mais como Gasto/Entrada."
+        "fixedTransfersMigration": "🔧 {n} transação(ões) identificadas como transferência entre suas contas (pelo banco do beneficiário) — não contam mais como Gasto/Entrada.",
+        "fixedDuplicatesMigration": "🔧 {n} duplicação(ões) removida(s) por conteúdo idêntico; arquivos de origem foram preservados nos detalhes."
       },
       "ai": {
         "title": "Categorização automática com IA local",
@@ -647,7 +655,7 @@ window.GASTOS_LOCALES = {
       "compras": "Compras",
       "educacao": "Educação",
       "outros": "Outros",
-      "transferencia": "Transferência interna",
+      "transferencia": "Transferência",
       "cartao": "Pagamento de Cartão",
       "propagatedLog": "Propagado: {n} transações com descrição \"{desc}\" → {category}"
     },
@@ -849,6 +857,7 @@ window.GASTOS_LOCALES = {
       "possibleTransfer": "possible transfer",
       "internalTransfer": "internal",
       "internalTransferTitle": "Internal movement — not counted",
+      "manualEntryTitle": "Manual entry",
       "summary": "transactions",
       "realExpenses": "Real expenses",
       "income": "Income",
@@ -877,6 +886,12 @@ window.GASTOS_LOCALES = {
       "note": "Note",
       "details": "Details",
       "delete": "Delete transaction",
+      "moreActions": "More actions",
+      "approveTransfer": "Approve as internal transfer",
+      "markInternalTransfer": "Mark as internal transfer",
+      "unmarkInternalTransfer": "Unmark internal transfer",
+      "markCardStatement": "Mark as Card statement",
+      "unmarkCardStatement": "Unmark Card statement",
       "confirmDelete": "Delete this transaction?\n\n{desc}\n{date} · {value}",
       "bulkActions": "Bulk actions",
       "bulkCount": "{count} selected",
@@ -1225,7 +1240,8 @@ window.GASTOS_LOCALES = {
         "savedToFolderAlert": "✅ gastos-data.json saved to folder \"{name}\"",
         "savedToLocalAlert": "✅ Saved in browser (localStorage). Click \"Choose folder\" to save directly to your computer.",
         "fixedBilCardMigration": "🔧 {n} BIL card purchase(s), imported before the fix, were recategorized and now count as an Expense again.",
-        "fixedTransfersMigration": "🔧 {n} transaction(s) identified as a transfer between your accounts (by beneficiary bank) — no longer counted as Expense/Income."
+        "fixedTransfersMigration": "🔧 {n} transaction(s) identified as a transfer between your accounts (by beneficiary bank) — no longer counted as Expense/Income.",
+        "fixedDuplicatesMigration": "🔧 {n} duplicate transaction(s) removed by identical content; source files were preserved in Details."
       },
       "ai": {
         "title": "Auto-categorization with local AI",
@@ -1372,7 +1388,7 @@ window.GASTOS_LOCALES = {
       "compras": "Shopping",
       "educacao": "Education",
       "outros": "Other",
-      "transferencia": "Internal transfer",
+      "transferencia": "Transfer",
       "cartao": "Card Payment",
       "propagatedLog": "Propagated: {n} transactions with description \"{desc}\" → {category}"
     },

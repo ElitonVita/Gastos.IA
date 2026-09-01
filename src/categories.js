@@ -77,7 +77,7 @@ const DEFAULT_CATEGORIES = [
     'escola','faculdade','curso','mensalidade','livro','udemy','alura','educação','educacao',
     'école','université','ecole','universite','schule','universität','universitat','scuola','università','universita'
   ] },
-  { id:'transferencia', name:'Transferência interna', color:'#a3a3fb', icon:'ri-exchange-fill', keys:['to eur flexible cash funds','to pocket','from eur flexible cash funds','from flexible cash funds','pocket withdrawal','transfer between accounts'] },
+  { id:'transferencia', name:'Transferência', color:'#a3a3fb', icon:'ri-exchange-fill', keys:['transferência','transferencia','bank transfer','virement','überweisung','bonifico'] },
   { id:'cartao', name:'Pagamento de Cartão', color:'#f59e0b', icon:'ri-bank-card-fill', keys:[] },
   { id:'outros', name:'Outros', color:'#71717a', icon:'ri-shapes-fill', keys:[] },
 ];
@@ -110,6 +110,13 @@ let cashflowMode = 'cumulative';
 const localeTag = () => window.i18n.getCurrentLang() === 'en' ? 'en-US' : 'pt-BR';
 const fmtEUR = v => Number(v==null||isNaN(v)?0:v).toLocaleString(localeTag(),{style:'currency',currency:'EUR'});
 const fmtBRL = fmtEUR; // compat alias
+// Datas de transações seguem sempre o padrão bancário europeu pedido pela interface,
+// independentemente do idioma selecionado (evita MM/DD/YYYY quando a UI está em inglês).
+const fmtTransactionDate = value => {
+  const d = value instanceof Date ? value : new Date(value);
+  if(isNaN(d)) return '';
+  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+};
 const parseDate = s => {
   if(!s) return null;
   // try dd/mm/yyyy, yyyy-mm-dd, dd-mm-yyyy
@@ -281,7 +288,6 @@ function applySameDescription(changedTx, silent){
     if(t===changedTx) continue;
     if(normalizeDescKey(t.desc)===key && !t.internal && t.cat!==changedTx.cat){
       t.cat = changedTx.cat;
-      if(changedTx.cat==='transferencia') t.internal = true; // propaga também o "não contar nos totais"
       n++;
     }
   }
@@ -309,11 +315,44 @@ function normalizeDescKey(d){
   k=k.replace(/\s+/g,' ').trim();
   return k;
 }
+// Identidade de conteúdo para deduplicação. O arquivo de origem não participa:
+// extratos sobrepostos ou renomeados devem apontar para a mesma transação.
+function transactionContentSignature(t){
+  const rawDate=t.realDate||t.date;
+  const date = rawDate instanceof Date ? rawDate : new Date(rawDate);
+  const dateKey = !isNaN(date)
+    ? `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`
+    : String(t.dateStr||rawDate||'').trim();
+  const outCents = t.saida==null ? '' : Math.round(Number(t.saida)*100);
+  const inCents = t.entrada==null ? '' : Math.round(Number(t.entrada)*100);
+  return `${dateKey}|${normalizeDescKey(t.desc)}|${outCents}|${inCents}`;
+}
+// Referências bancárias fortes evitam colapsar duas cobranças realmente distintas
+// que por acaso tenham mesma data, descrição e valor. Ausência de referência não
+// impede o match: extratos diferentes podem trazer níveis de detalhe diferentes.
+function hasConflictingTransactionIdentity(a, b){
+  const am=a.meta||{}, bm=b.meta||{};
+  for(const key of ['ourRef','endToEnd']){
+    const av=String(am[key]||'').trim().toLowerCase();
+    const bv=String(bm[key]||'').trim().toLowerCase();
+    if(av && bv && av!==bv) return true;
+  }
+  return false;
+}
 // Ao reimportar o mesmo extrato (ou um extrato equivalente), a transação já existe (mesma data+descrição+valor) —
 // em vez de descartar tudo, completa na existente qualquer detalhe que ela ainda não tinha (tipo de conta, local,
 // referências bancárias, saldo etc.), sem duplicar a linha nem sobrescrever o que o usuário já editou.
 function mergeMissingDetails(existing, incoming){
   let changed = false;
+  // Preserva a proveniência completa sem transformar o nome do arquivo em identidade.
+  const sources = [...new Set([
+    ...(existing.sourceFiles||[]), existing.source,
+    ...(incoming.sourceFiles||[]), incoming.source,
+  ].filter(Boolean))];
+  if(sources.length>1 && JSON.stringify(existing.sourceFiles||[])!==JSON.stringify(sources)){
+    existing.sourceFiles = sources;
+    changed = true;
+  }
   if(!existing.bank && incoming.bank){ existing.bank = incoming.bank; changed = true; }
   if(incoming.meta){
     if(!existing.meta) existing.meta = {};
@@ -330,6 +369,36 @@ function mergeMissingDetails(existing, incoming){
   if(existing.balanco==null && incoming.balanco!=null){ existing.balanco = incoming.balanco; changed = true; }
   return changed;
 }
+function deduplicateImportedTransactions(existingTransactions, incomingTransactions){
+  const bySignature = new Map();
+  for(const tx of existingTransactions){
+    const signature=transactionContentSignature(tx);
+    if(!bySignature.has(signature)) bySignature.set(signature, []);
+    bySignature.get(signature).push(tx);
+  }
+  const unique = [];
+  let duplicateCount = 0;
+  let enrichedCount = 0;
+  for(const tx of incomingTransactions){
+    const signature = transactionContentSignature(tx);
+    const bucket = bySignature.get(signature)||[];
+    const existing = bucket.find(candidate=>!hasConflictingTransactionIdentity(candidate, tx));
+    if(existing){
+      duplicateCount++;
+      if(mergeMissingDetails(existing, tx)) enrichedCount++;
+      continue;
+    }
+    bucket.push(tx);
+    bySignature.set(signature, bucket);
+    unique.push(tx);
+  }
+  return {unique, duplicateCount, enrichedCount};
+}
+function collapseDuplicateTransactions(list){
+  const result = deduplicateImportedTransactions([], list);
+  if(result.duplicateCount>0) list.splice(0, list.length, ...result.unique);
+  return result;
+}
 // Movimentações internas (Revolut pockets, Flexible Cash Funds etc.) — não são gastos nem receitas
 function isInternalTransfer(desc){
   const d=(desc||'').toLowerCase().trim();
@@ -337,4 +406,3 @@ function isInternalTransfer(desc){
   // Apenas padrões com keywords internas contam
   return /(^to (eur|usd|gbp|chf) )|(^to pocket)|(^from (eur|usd|gbp|chf) )|(flexible cash funds)|(^pocket (withdrawal|deposit))/i.test(d);
 }
-

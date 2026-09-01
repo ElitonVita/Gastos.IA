@@ -348,7 +348,7 @@ function extractBILCardStatement(structuredPages, sourceName, statementDate){
     const meta = {};
     if(town) meta.town = town;
     if(dateProcessedStr && dateProcessedStr!==txDateStr) meta.dateProcessed = dateProcessedStr;
-    if(statementDate) meta.paymentDate = statementDate.toLocaleDateString(localeTag());
+    if(statementDate) meta.paymentDate = fmtTransactionDate(statementDate);
     results.push({
       id: `${sourceName}-bilcard-${results.length}-${Math.random().toString(36).slice(2,6)}`,
       // data usada em relatórios/orçamentos mensais = data em que o cartão foi pago (se conhecida); a tabela mostra a data real via realDate
@@ -375,13 +375,27 @@ function extractBILCardStatement(structuredPages, sourceName, statementDate){
 //  - Entrada (+): usa o campo "By order of:" (quem enviou o dinheiro)
 //  - Saída (-):   usa o campo "Beneficiary:" (para quem foi o dinheiro)
 function extractBILStatement(structuredPages, sourceName){
-  if(!structuredPages || structuredPages.length < 3) return [];
+  if(!structuredPages || structuredPages.length===0) return [];
   const lines = structuredPages.map(pg=>pg.text);
-  // linha de cabeçalho: "DD/MM/YYYY <tipo> DD/MM/YYYY <valor> +|-"
-  const headerRe = /^(\d{2}\/\d{2}\/\d{4})\s+(.*)\s(\d{2}\/\d{2}\/\d{4})\s+(-?[\d.,]+)\s*([+\-])\s*$/;
-  const idxs=[];
-  for(let i=0;i<lines.length;i++){ if(headerRe.test(lines[i])) idxs.push(i); }
-  if(idxs.length < 2) return []; // não é este formato
+  // Cabeçalho BIL: "DD/MM/YYYY <tipo> DD/MM/YYYY <valor> +|-".
+  // Alguns PDFs colocam fragmentos da mesma linha em baselines ligeiramente
+  // diferentes. Por isso, além da linha normal, tentamos a combinação das duas
+  // linhas seguintes. O texto entre as datas continua preservado em meta.type
+  // (por exemplo, "Charge"): é o tipo bancário da transação, não uma descrição,
+  // categoria ou indicação de recorrência.
+  const headerRe = /^(\d{2}\/\d{2}\/\d{4})\s+(.+?)\s+(\d{2}\/\d{2}\/\d{4})\s+(-?[\d.,]+)\s*([+\-])\s*$/;
+  const headers=[];
+  for(let i=0;i<lines.length;i++){
+    for(let span=1;span<=3 && i+span<=lines.length;span++){
+      const candidate = lines.slice(i,i+span).join(' ').replace(/\s+/g,' ').trim();
+      const match = candidate.match(headerRe);
+      if(match){
+        headers.push({start:i, match});
+        break;
+      }
+    }
+  }
+  if(headers.length===0) return [];
 
   const stopLabelRe = /^(Remittance Info|By order of|Beneficiary|At:|Paying bank|End-to-end|Mandate reference|Creditor transaction|Payment initiation|Our Reference)/i;
   const codeLikeRe = /^[A-Z]{2,6}\d/; // referências tipo NCOR2607..., NSCT2607...
@@ -416,11 +430,10 @@ function extractBILStatement(structuredPages, sourceName){
   };
 
   const results=[];
-  for(let k=0;k<idxs.length;k++){
-    const start = idxs[k];
-    const end = (k+1<idxs.length) ? idxs[k+1] : lines.length;
-    const header = lines[start].match(headerRe);
-    if(!header) continue;
+  for(let k=0;k<headers.length;k++){
+    const start = headers[k].start;
+    const end = (k+1<headers.length) ? headers[k+1].start : lines.length;
+    const header = headers[k].match;
     const dateStr = header[1];
     const [dd,mm,yyyy] = dateStr.split('/');
     const date = new Date(+yyyy, +mm-1, +dd);
@@ -705,9 +718,8 @@ function extractTransactionsFromText(fullText, sourceName, structuredPages=null)
   // dedup
   const seen=new Set(); const dedup=[];
   for(const r of results){
-    const k=`${r.date.toISOString().slice(0,10)}|${r.desc.slice(0,30).toLowerCase()}|${r.saida}|${r.entrada}`;
+    const k=transactionContentSignature(r);
     if(seen.has(k)) continue; seen.add(k); dedup.push(r);
   }
   return tagBank(dedup, bankType);
 }
-

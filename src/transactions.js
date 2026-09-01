@@ -2,7 +2,7 @@ let noteTarget=null;
 function openNoteDialog(tx){
   noteTarget=tx;
   document.getElementById('noteTxDesc').textContent=tx.desc;
-  document.getElementById('noteTxMeta').textContent=`${(tx.realDate||tx.date).toLocaleDateString(localeTag())} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}${tx.source?' · '+tx.source:''}`;
+  document.getElementById('noteTxMeta').textContent=`${fmtTransactionDate(tx.realDate||tx.date)} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}${tx.source?' · '+tx.source:''}`;
   document.getElementById('noteText').value=tx.note||'';
   document.getElementById('btnNoteDelete').classList.toggle('hidden', !tx.note);
   noteDialog.showModal();
@@ -35,14 +35,14 @@ function openDetailsDialog(tx){
   detailsTarget=tx;
   document.getElementById('detailsTxDesc').textContent=tx.desc;
   const displayDate = tx.realDate||tx.date;
-  document.getElementById('detailsTxMeta').textContent=`${displayDate.toLocaleDateString(localeTag())} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}`;
+  document.getElementById('detailsTxMeta').textContent=`${fmtTransactionDate(displayDate)} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}`;
   const bSel=document.getElementById('detailsBankSelect');
   bSel.innerHTML = `<option value="">${window.i18n.t('modals.details.notIdentified')}</option>` + bankTypes.map(b=>`<option value="${b.id}" ${b.id===tx.bank?'selected':''}>${escapeHtml(bankDisplayName(b))}</option>`).join('');
   const transferBox=document.getElementById('detailsTransferBox');
   const pair = tx.transferGroupId ? transactions.find(t=>t.transferGroupId===tx.transferGroupId && t!==tx) : null;
   transferBox.classList.toggle('hidden', !pair);
   if(pair){
-    document.getElementById('detailsTransferPair').textContent = window.i18n.t('modals.details.transferPair', {desc: pair.desc, date: (pair.realDate||pair.date).toLocaleDateString(localeTag()), value: fmtEUR(pair.saida||pair.entrada||0), bank: pair.bank?' · '+bankLabel(pair.bank):''});
+    document.getElementById('detailsTransferPair').textContent = window.i18n.t('modals.details.transferPair', {desc: pair.desc, date: fmtTransactionDate(pair.realDate||pair.date), value: fmtEUR(pair.saida||pair.entrada||0), bank: pair.bank?' · '+bankLabel(pair.bank):''});
   }
   const autoBox=document.getElementById('detailsAutoTransferBox');
   const showAuto = !!tx.autoTransfer && !pair;
@@ -51,8 +51,9 @@ function openDetailsDialog(tx){
     const toBank = tx.meta && tx.meta.transferToBank ? bankLabel(tx.meta.transferToBank) : '';
     document.getElementById('detailsAutoTransferInfo').textContent = toBank ? window.i18n.t('modals.details.autoTransferInfo', {bank: toBank}) : '';
   }
-  const rows=[[window.i18n.t('modals.details.sourceFile'), tx.source||'—']];
-  if(tx.realDate && +tx.realDate!==+tx.date) rows.push([window.i18n.t('modals.details.consideredDateLabel'), tx.date.toLocaleDateString(localeTag())]);
+  const sourceLabel = (tx.sourceFiles&&tx.sourceFiles.length ? tx.sourceFiles : [tx.source]).filter(Boolean).join(', ') || '—';
+  const rows=[[window.i18n.t('modals.details.sourceFile'), sourceLabel]];
+  if(tx.realDate && +tx.realDate!==+tx.date) rows.push([window.i18n.t('modals.details.consideredDateLabel'), fmtTransactionDate(tx.date)]);
   const meta=tx.meta||{};
   const labels = getMetaLabels();
   for(const k of Object.keys(labels)){ if(meta[k]) rows.push([labels[k], meta[k]]); }
@@ -146,6 +147,50 @@ function undoAutoTransfer(tx){
   tx.cat = tx.saida!=null ? categorize(tx.desc) : 'outros';
   if(tx.meta) delete tx.meta.transferToBank;
 }
+// Confirma uma sugestão automática. A transação permanece para conferência,
+// mas deixa de ser "possível" e continua fora de entradas/saídas.
+function approvePossibleTransfer(tx){
+  if(!tx.autoTransfer) return;
+  if(tx.cat!=='transferencia') tx.prevCat = tx.cat;
+  tx.autoTransfer = false;
+  tx.transferApproved = true;
+  tx.cardSettlement = false;
+  tx.cat = 'transferencia';
+  tx.internal = true;
+}
+// A classificação "transferência interna" é independente da categoria.
+// Assim, a categoria Transferência pode representar um pagamento entre pessoas
+// (e contar normalmente como gasto), enquanto este marcador exclui apenas as
+// movimentações entre contas próprias dos totais.
+function setInternalTransfer(tx, enabled){
+  if(!tx || tx.transferLinked || tx.cardSettlement) return;
+  tx.internal = !!enabled;
+  if(enabled){
+    if(tx.autoTransfer){
+      tx.autoTransfer = false;
+      tx.transferApproved = true;
+    }
+  } else {
+    tx.transferApproved = false;
+  }
+}
+// Classificação revisável para o débito consolidado de uma fatura. O valor fica
+// guardado no histórico, mas internal=true o exclui de todos os totais e gráficos.
+function setCardStatement(tx, enabled){
+  if(enabled){
+    if(!tx.cardSettlement && tx.cat!=='cartao') tx.prevCat = tx.cat;
+    tx.cardSettlement = true;
+    tx.autoTransfer = false;
+    tx.transferApproved = false;
+    tx.cat = 'cartao';
+    tx.internal = true;
+  } else {
+    tx.cardSettlement = false;
+    tx.internal = false;
+    tx.cat = tx.prevCat || (tx.saida ? categorize(tx.desc) : 'outros');
+    delete tx.prevCat;
+  }
+}
 document.getElementById('bulkLinkTransferBtn')?.addEventListener('click', ()=>{
   const targets = transactions.filter(t=>selectedTxIds.has(t.id));
   if(targets.length!==2){ alert(window.i18n.t('actions.selectTwoTransfers')); return; }
@@ -231,4 +276,3 @@ document.getElementById('catForm').addEventListener('submit', e=>{
   catDialog.close(); document.getElementById('cName').value=''; document.getElementById('cKeys').value=''; document.getElementById('cEditId').value='';
   renderCategoryChips(); renderTable(); updateCharts(); persistState();
 });
-

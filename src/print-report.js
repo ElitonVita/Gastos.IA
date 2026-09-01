@@ -118,7 +118,7 @@ function buildPrintReport(){
             ${rows.map(t=>{
               const c=catById(t.cat);
               return `<tr style="border-bottom:1px solid #f4f4f5;">
-                <td style="padding:4px 6px;font-size:10px;font-family:monospace;white-space:nowrap;">${(t.realDate||t.date).toLocaleDateString(localeTag())}</td>
+                <td style="padding:4px 6px;font-size:10px;font-family:monospace;white-space:nowrap;">${fmtTransactionDate(t.realDate||t.date)}</td>
                 <td style="padding:4px 6px;font-size:10px;">${escapeHtml(t.desc.slice(0,50))}</td>
                 <td style="padding:4px 6px;font-size:10px;white-space:nowrap;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${c.color};margin-right:4px;"></span>${escapeHtml(catDisplayName(c))}</td>
                 <td style="padding:4px 6px;font-size:10px;text-align:right;font-family:monospace;color:#dc2626;font-weight:600;">${t.saida?fmtEUR(t.saida):''}</td>
@@ -140,4 +140,3 @@ document.getElementById('btnPrint')?.addEventListener('click', ()=>{
   buildPrintReport();
   setTimeout(()=>window.print(), 50);
 });
-
