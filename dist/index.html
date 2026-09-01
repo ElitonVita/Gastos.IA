@@ -332,7 +332,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
             <th class="text-right px-3 py-3 text-red-500 w-[110px] cursor-pointer select-none hover:opacity-80" data-sort="saida" data-i18n-title="table.sort.expense" title="Ordenar por valor de saída"><span data-i18n="table.columns.expense">Saída</span> <span class="sortArrow" data-key="saida"></span></th>
             <th class="text-right px-3 py-3 text-emerald-600 w-[110px] cursor-pointer select-none hover:opacity-80" data-sort="entrada" data-i18n-title="table.sort.income" title="Ordenar por valor de entrada"><span data-i18n="table.columns.income">Entrada</span> <span class="sortArrow" data-key="entrada"></span></th>
             <th class="text-left px-3 py-3 w-[170px] cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="cat" data-i18n-title="table.sort.category" title="Ordenar por categoria"><span data-i18n="table.columns.category">Categoria</span> <span class="sortArrow" data-key="cat"></span></th>
-            <th class="text-right px-4 py-3 w-[136px]" data-i18n="table.columns.actions">Ações</th>
+            <th class="text-right px-4 py-3 w-[88px]" data-i18n="table.columns.actions">Ações</th>
           </tr>
         </thead>
         <tbody id="txBody" class="divide-y divide-zinc-100 dark:divide-zinc-800"></tbody>
@@ -792,6 +792,7 @@ window.GASTOS_LOCALES = {
       "possibleTransfer": "possível transferência",
       "internalTransfer": "interna",
       "internalTransferTitle": "Movimentação interna — não contabilizada",
+      "manualEntryTitle": "Entrada manual",
       "summary": "movimentos",
       "realExpenses": "Gastos reais",
       "income": "Entradas",
@@ -820,6 +821,12 @@ window.GASTOS_LOCALES = {
       "note": "Nota",
       "details": "Detalhes",
       "delete": "Excluir transação",
+      "moreActions": "Mais ações",
+      "approveTransfer": "Aprovar como transferência interna",
+      "markInternalTransfer": "Marcar como transferência interna",
+      "unmarkInternalTransfer": "Desmarcar transferência interna",
+      "markCardStatement": "Marcar como Card statement",
+      "unmarkCardStatement": "Desmarcar Card statement",
       "confirmDelete": "Excluir esta transação?\n\n{desc}\n{date} · {value}",
       "bulkActions": "Ações em massa",
       "bulkCount": "{count} selecionadas",
@@ -1168,7 +1175,8 @@ window.GASTOS_LOCALES = {
         "savedToFolderAlert": "✅ gastos-data.json salvo na pasta \"{name}\"",
         "savedToLocalAlert": "✅ Salvo no navegador (localStorage). Clique em \"Escolher pasta\" para gravar direto no computador.",
         "fixedBilCardMigration": "🔧 {n} compra(s) do cartão BIL, importadas antes da correção, foram recategorizadas e voltaram a contar como Gasto.",
-        "fixedTransfersMigration": "🔧 {n} transação(ões) identificadas como transferência entre suas contas (pelo banco do beneficiário) — não contam mais como Gasto/Entrada."
+        "fixedTransfersMigration": "🔧 {n} transação(ões) identificadas como transferência entre suas contas (pelo banco do beneficiário) — não contam mais como Gasto/Entrada.",
+        "fixedDuplicatesMigration": "🔧 {n} duplicação(ões) removida(s) por conteúdo idêntico; arquivos de origem foram preservados nos detalhes."
       },
       "ai": {
         "title": "Categorização automática com IA local",
@@ -1315,7 +1323,7 @@ window.GASTOS_LOCALES = {
       "compras": "Compras",
       "educacao": "Educação",
       "outros": "Outros",
-      "transferencia": "Transferência interna",
+      "transferencia": "Transferência",
       "cartao": "Pagamento de Cartão",
       "propagatedLog": "Propagado: {n} transações com descrição \"{desc}\" → {category}"
     },
@@ -1517,6 +1525,7 @@ window.GASTOS_LOCALES = {
       "possibleTransfer": "possible transfer",
       "internalTransfer": "internal",
       "internalTransferTitle": "Internal movement — not counted",
+      "manualEntryTitle": "Manual entry",
       "summary": "transactions",
       "realExpenses": "Real expenses",
       "income": "Income",
@@ -1545,6 +1554,12 @@ window.GASTOS_LOCALES = {
       "note": "Note",
       "details": "Details",
       "delete": "Delete transaction",
+      "moreActions": "More actions",
+      "approveTransfer": "Approve as internal transfer",
+      "markInternalTransfer": "Mark as internal transfer",
+      "unmarkInternalTransfer": "Unmark internal transfer",
+      "markCardStatement": "Mark as Card statement",
+      "unmarkCardStatement": "Unmark Card statement",
       "confirmDelete": "Delete this transaction?\n\n{desc}\n{date} · {value}",
       "bulkActions": "Bulk actions",
       "bulkCount": "{count} selected",
@@ -1893,7 +1908,8 @@ window.GASTOS_LOCALES = {
         "savedToFolderAlert": "✅ gastos-data.json saved to folder \"{name}\"",
         "savedToLocalAlert": "✅ Saved in browser (localStorage). Click \"Choose folder\" to save directly to your computer.",
         "fixedBilCardMigration": "🔧 {n} BIL card purchase(s), imported before the fix, were recategorized and now count as an Expense again.",
-        "fixedTransfersMigration": "🔧 {n} transaction(s) identified as a transfer between your accounts (by beneficiary bank) — no longer counted as Expense/Income."
+        "fixedTransfersMigration": "🔧 {n} transaction(s) identified as a transfer between your accounts (by beneficiary bank) — no longer counted as Expense/Income.",
+        "fixedDuplicatesMigration": "🔧 {n} duplicate transaction(s) removed by identical content; source files were preserved in Details."
       },
       "ai": {
         "title": "Auto-categorization with local AI",
@@ -2040,7 +2056,7 @@ window.GASTOS_LOCALES = {
       "compras": "Shopping",
       "educacao": "Education",
       "outros": "Other",
-      "transferencia": "Internal transfer",
+      "transferencia": "Transfer",
       "cartao": "Card Payment",
       "propagatedLog": "Propagated: {n} transactions with description \"{desc}\" → {category}"
     },
@@ -2378,7 +2394,7 @@ const DEFAULT_CATEGORIES = [
     'escola','faculdade','curso','mensalidade','livro','udemy','alura','educação','educacao',
     'école','université','ecole','universite','schule','universität','universitat','scuola','università','universita'
   ] },
-  { id:'transferencia', name:'Transferência interna', color:'#a3a3fb', icon:'ri-exchange-fill', keys:['to eur flexible cash funds','to pocket','from eur flexible cash funds','from flexible cash funds','pocket withdrawal','transfer between accounts'] },
+  { id:'transferencia', name:'Transferência', color:'#a3a3fb', icon:'ri-exchange-fill', keys:['transferência','transferencia','bank transfer','virement','überweisung','bonifico'] },
   { id:'cartao', name:'Pagamento de Cartão', color:'#f59e0b', icon:'ri-bank-card-fill', keys:[] },
   { id:'outros', name:'Outros', color:'#71717a', icon:'ri-shapes-fill', keys:[] },
 ];
@@ -2411,6 +2427,13 @@ let cashflowMode = 'cumulative';
 const localeTag = () => window.i18n.getCurrentLang() === 'en' ? 'en-US' : 'pt-BR';
 const fmtEUR = v => Number(v==null||isNaN(v)?0:v).toLocaleString(localeTag(),{style:'currency',currency:'EUR'});
 const fmtBRL = fmtEUR; // compat alias
+// Datas de transações seguem sempre o padrão bancário europeu pedido pela interface,
+// independentemente do idioma selecionado (evita MM/DD/YYYY quando a UI está em inglês).
+const fmtTransactionDate = value => {
+  const d = value instanceof Date ? value : new Date(value);
+  if(isNaN(d)) return '';
+  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+};
 const parseDate = s => {
   if(!s) return null;
   // try dd/mm/yyyy, yyyy-mm-dd, dd-mm-yyyy
@@ -2582,7 +2605,6 @@ function applySameDescription(changedTx, silent){
     if(t===changedTx) continue;
     if(normalizeDescKey(t.desc)===key && !t.internal && t.cat!==changedTx.cat){
       t.cat = changedTx.cat;
-      if(changedTx.cat==='transferencia') t.internal = true; // propaga também o "não contar nos totais"
       n++;
     }
   }
@@ -2610,11 +2632,44 @@ function normalizeDescKey(d){
   k=k.replace(/\s+/g,' ').trim();
   return k;
 }
+// Identidade de conteúdo para deduplicação. O arquivo de origem não participa:
+// extratos sobrepostos ou renomeados devem apontar para a mesma transação.
+function transactionContentSignature(t){
+  const rawDate=t.realDate||t.date;
+  const date = rawDate instanceof Date ? rawDate : new Date(rawDate);
+  const dateKey = !isNaN(date)
+    ? `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`
+    : String(t.dateStr||rawDate||'').trim();
+  const outCents = t.saida==null ? '' : Math.round(Number(t.saida)*100);
+  const inCents = t.entrada==null ? '' : Math.round(Number(t.entrada)*100);
+  return `${dateKey}|${normalizeDescKey(t.desc)}|${outCents}|${inCents}`;
+}
+// Referências bancárias fortes evitam colapsar duas cobranças realmente distintas
+// que por acaso tenham mesma data, descrição e valor. Ausência de referência não
+// impede o match: extratos diferentes podem trazer níveis de detalhe diferentes.
+function hasConflictingTransactionIdentity(a, b){
+  const am=a.meta||{}, bm=b.meta||{};
+  for(const key of ['ourRef','endToEnd']){
+    const av=String(am[key]||'').trim().toLowerCase();
+    const bv=String(bm[key]||'').trim().toLowerCase();
+    if(av && bv && av!==bv) return true;
+  }
+  return false;
+}
 // Ao reimportar o mesmo extrato (ou um extrato equivalente), a transação já existe (mesma data+descrição+valor) —
 // em vez de descartar tudo, completa na existente qualquer detalhe que ela ainda não tinha (tipo de conta, local,
 // referências bancárias, saldo etc.), sem duplicar a linha nem sobrescrever o que o usuário já editou.
 function mergeMissingDetails(existing, incoming){
   let changed = false;
+  // Preserva a proveniência completa sem transformar o nome do arquivo em identidade.
+  const sources = [...new Set([
+    ...(existing.sourceFiles||[]), existing.source,
+    ...(incoming.sourceFiles||[]), incoming.source,
+  ].filter(Boolean))];
+  if(sources.length>1 && JSON.stringify(existing.sourceFiles||[])!==JSON.stringify(sources)){
+    existing.sourceFiles = sources;
+    changed = true;
+  }
   if(!existing.bank && incoming.bank){ existing.bank = incoming.bank; changed = true; }
   if(incoming.meta){
     if(!existing.meta) existing.meta = {};
@@ -2631,6 +2686,36 @@ function mergeMissingDetails(existing, incoming){
   if(existing.balanco==null && incoming.balanco!=null){ existing.balanco = incoming.balanco; changed = true; }
   return changed;
 }
+function deduplicateImportedTransactions(existingTransactions, incomingTransactions){
+  const bySignature = new Map();
+  for(const tx of existingTransactions){
+    const signature=transactionContentSignature(tx);
+    if(!bySignature.has(signature)) bySignature.set(signature, []);
+    bySignature.get(signature).push(tx);
+  }
+  const unique = [];
+  let duplicateCount = 0;
+  let enrichedCount = 0;
+  for(const tx of incomingTransactions){
+    const signature = transactionContentSignature(tx);
+    const bucket = bySignature.get(signature)||[];
+    const existing = bucket.find(candidate=>!hasConflictingTransactionIdentity(candidate, tx));
+    if(existing){
+      duplicateCount++;
+      if(mergeMissingDetails(existing, tx)) enrichedCount++;
+      continue;
+    }
+    bucket.push(tx);
+    bySignature.set(signature, bucket);
+    unique.push(tx);
+  }
+  return {unique, duplicateCount, enrichedCount};
+}
+function collapseDuplicateTransactions(list){
+  const result = deduplicateImportedTransactions([], list);
+  if(result.duplicateCount>0) list.splice(0, list.length, ...result.unique);
+  return result;
+}
 // Movimentações internas (Revolut pockets, Flexible Cash Funds etc.) — não são gastos nem receitas
 function isInternalTransfer(desc){
   const d=(desc||'').toLowerCase().trim();
@@ -2638,7 +2723,6 @@ function isInternalTransfer(desc){
   // Apenas padrões com keywords internas contam
   return /(^to (eur|usd|gbp|chf) )|(^to pocket)|(^from (eur|usd|gbp|chf) )|(flexible cash funds)|(^pocket (withdrawal|deposit))/i.test(d);
 }
-
 </script>
 <script>
 // ---------- Number parsing (handles both 1.234,56 € and 1,234.56 and 1 234,56) ----------
@@ -2991,7 +3075,7 @@ function extractBILCardStatement(structuredPages, sourceName, statementDate){
     const meta = {};
     if(town) meta.town = town;
     if(dateProcessedStr && dateProcessedStr!==txDateStr) meta.dateProcessed = dateProcessedStr;
-    if(statementDate) meta.paymentDate = statementDate.toLocaleDateString(localeTag());
+    if(statementDate) meta.paymentDate = fmtTransactionDate(statementDate);
     results.push({
       id: `${sourceName}-bilcard-${results.length}-${Math.random().toString(36).slice(2,6)}`,
       // data usada em relatórios/orçamentos mensais = data em que o cartão foi pago (se conhecida); a tabela mostra a data real via realDate
@@ -3018,13 +3102,27 @@ function extractBILCardStatement(structuredPages, sourceName, statementDate){
 //  - Entrada (+): usa o campo "By order of:" (quem enviou o dinheiro)
 //  - Saída (-):   usa o campo "Beneficiary:" (para quem foi o dinheiro)
 function extractBILStatement(structuredPages, sourceName){
-  if(!structuredPages || structuredPages.length < 3) return [];
+  if(!structuredPages || structuredPages.length===0) return [];
   const lines = structuredPages.map(pg=>pg.text);
-  // linha de cabeçalho: "DD/MM/YYYY <tipo> DD/MM/YYYY <valor> +|-"
-  const headerRe = /^(\d{2}\/\d{2}\/\d{4})\s+(.*)\s(\d{2}\/\d{2}\/\d{4})\s+(-?[\d.,]+)\s*([+\-])\s*$/;
-  const idxs=[];
-  for(let i=0;i<lines.length;i++){ if(headerRe.test(lines[i])) idxs.push(i); }
-  if(idxs.length < 2) return []; // não é este formato
+  // Cabeçalho BIL: "DD/MM/YYYY <tipo> DD/MM/YYYY <valor> +|-".
+  // Alguns PDFs colocam fragmentos da mesma linha em baselines ligeiramente
+  // diferentes. Por isso, além da linha normal, tentamos a combinação das duas
+  // linhas seguintes. O texto entre as datas continua preservado em meta.type
+  // (por exemplo, "Charge"): é o tipo bancário da transação, não uma descrição,
+  // categoria ou indicação de recorrência.
+  const headerRe = /^(\d{2}\/\d{2}\/\d{4})\s+(.+?)\s+(\d{2}\/\d{2}\/\d{4})\s+(-?[\d.,]+)\s*([+\-])\s*$/;
+  const headers=[];
+  for(let i=0;i<lines.length;i++){
+    for(let span=1;span<=3 && i+span<=lines.length;span++){
+      const candidate = lines.slice(i,i+span).join(' ').replace(/\s+/g,' ').trim();
+      const match = candidate.match(headerRe);
+      if(match){
+        headers.push({start:i, match});
+        break;
+      }
+    }
+  }
+  if(headers.length===0) return [];
 
   const stopLabelRe = /^(Remittance Info|By order of|Beneficiary|At:|Paying bank|End-to-end|Mandate reference|Creditor transaction|Payment initiation|Our Reference)/i;
   const codeLikeRe = /^[A-Z]{2,6}\d/; // referências tipo NCOR2607..., NSCT2607...
@@ -3059,11 +3157,10 @@ function extractBILStatement(structuredPages, sourceName){
   };
 
   const results=[];
-  for(let k=0;k<idxs.length;k++){
-    const start = idxs[k];
-    const end = (k+1<idxs.length) ? idxs[k+1] : lines.length;
-    const header = lines[start].match(headerRe);
-    if(!header) continue;
+  for(let k=0;k<headers.length;k++){
+    const start = headers[k].start;
+    const end = (k+1<headers.length) ? headers[k+1].start : lines.length;
+    const header = headers[k].match;
     const dateStr = header[1];
     const [dd,mm,yyyy] = dateStr.split('/');
     const date = new Date(+yyyy, +mm-1, +dd);
@@ -3348,12 +3445,11 @@ function extractTransactionsFromText(fullText, sourceName, structuredPages=null)
   // dedup
   const seen=new Set(); const dedup=[];
   for(const r of results){
-    const k=`${r.date.toISOString().slice(0,10)}|${r.desc.slice(0,30).toLowerCase()}|${r.saida}|${r.entrada}`;
+    const k=transactionContentSignature(r);
     if(seen.has(k)) continue; seen.add(k); dedup.push(r);
   }
   return tagBank(dedup, bankType);
 }
-
 </script>
 <script>
 // ---------- Rendering ----------
@@ -3536,7 +3632,125 @@ function renderBulkBar(){
   const bankSel=document.getElementById('bulkBankSelect');
   if(bankSel) bankSel.innerHTML = `<option value="">${window.i18n.t('actions.bulkBank')}</option>` + bankTypes.map(b=>`<option value="${b.id}">${escapeHtml(bankDisplayName(b))}</option>`).join('');
 }
+
+let transactionActionsPopover = null;
+let transactionActionsTrigger = null;
+function closeTransactionActionsMenu(restoreFocus=false){
+  if(transactionActionsPopover) transactionActionsPopover.remove();
+  transactionActionsPopover = null;
+  if(transactionActionsTrigger){
+    transactionActionsTrigger.setAttribute('aria-expanded', 'false');
+    if(restoreFocus && document.body.contains(transactionActionsTrigger)) transactionActionsTrigger.focus();
+  }
+  transactionActionsTrigger = null;
+}
+function refreshAfterTransactionAction(){
+  renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
+}
+function transactionMenuItem(action, icon, label, tone=''){
+  const toneClass = tone==='danger'
+    ? 'text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40'
+    : 'text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700/80';
+  return `<button type="button" role="menuitem" data-tx-action="${action}" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-sm font-medium ${toneClass} transition active:scale-[0.98]"><i class="${icon} w-4 text-center text-base" aria-hidden="true"></i><span>${escapeHtml(label)}</span></button>`;
+}
+function openTransactionActionsMenu(trigger, tx, focusFirstItem=false){
+  if(transactionActionsTrigger===trigger){ closeTransactionActionsMenu(true); return; }
+  closeTransactionActionsMenu();
+  const items=[];
+  if(tx.autoTransfer) items.push(transactionMenuItem('approve-transfer', 'ri-arrow-left-right-line', window.i18n.t('actions.approveTransfer')));
+  if(!tx.transferLinked && !tx.cardSettlement && !tx.autoTransfer){
+    items.push(transactionMenuItem('internal-transfer', 'ri-exchange-line', window.i18n.t(tx.internal?'actions.unmarkInternalTransfer':'actions.markInternalTransfer')));
+  }
+  if(!tx.transferLinked){
+    items.push(transactionMenuItem('card-statement', 'ri-bank-card-line', window.i18n.t(tx.cardSettlement?'actions.unmarkCardStatement':'actions.markCardStatement')));
+  }
+  if((tx.saida||tx.entrada)) items.push(transactionMenuItem('swap', 'ri-swap-line', window.i18n.t('actions.swap')));
+  items.push(transactionMenuItem('note', 'ri-sticky-note-line', window.i18n.t('actions.note')));
+  items.push('<div class="my-1 border-t border-zinc-200 dark:border-zinc-700"></div>');
+  items.push(transactionMenuItem('delete', 'ri-delete-bin-line', window.i18n.t('actions.delete'), 'danger'));
+
+  const popover=document.createElement('div');
+  popover.className='fixed z-[80] w-64 rounded-2xl border border-zinc-200/90 dark:border-zinc-700 bg-white/95 dark:bg-zinc-800/95 p-1.5 shadow-2xl shadow-zinc-950/15 backdrop-blur-xl';
+  // A geometria não pode depender da primeira compilação das classes dinâmicas
+  // pelo Tailwind CDN. Sem estes valores iniciais, o primeiro offsetWidth pode
+  // refletir um bloco sem `fixed`/`w-64` e prender o menu em left: 8px.
+  Object.assign(popover.style, {
+    position:'fixed',
+    width:'16rem',
+    boxSizing:'border-box',
+    zIndex:'80',
+    visibility:'hidden',
+  });
+  popover.setAttribute('role','menu');
+  popover.setAttribute('aria-label',window.i18n.t('actions.moreActions'));
+  popover.innerHTML=items.join('');
+  document.body.appendChild(popover);
+
+  const positionPopover=()=>{
+    const rect=trigger.getBoundingClientRect();
+    const menuRect=popover.getBoundingClientRect();
+    const margin=8;
+    const width=menuRect.width||256;
+    const height=menuRect.height;
+    const left=Math.max(margin, Math.min(window.innerWidth-width-margin, rect.right-width));
+    const below=rect.bottom+6;
+    const top=below+height<=window.innerHeight-margin ? below : Math.max(margin, rect.top-height-6);
+    popover.style.left=`${left}px`;
+    popover.style.top=`${top}px`;
+  };
+  positionPopover();
+  popover.style.visibility='visible';
+  transactionActionsPopover=popover;
+  transactionActionsTrigger=trigger;
+  trigger.setAttribute('aria-expanded','true');
+  // Reconfere depois que o Tailwind CDN processar o novo nó. Como o popover já
+  // nasce com a largura correta, não há flash no canto esquerdo entre os frames.
+  requestAnimationFrame(()=>{
+    if(transactionActionsPopover===popover && document.body.contains(trigger)) positionPopover();
+  });
+
+  popover.querySelectorAll('[data-tx-action]').forEach(button=>{
+    button.addEventListener('click', ()=>{
+      const action=button.dataset.txAction;
+      closeTransactionActionsMenu();
+      if(action==='approve-transfer'){
+        approvePossibleTransfer(tx); refreshAfterTransactionAction();
+      } else if(action==='internal-transfer'){
+        setInternalTransfer(tx, !tx.internal); refreshAfterTransactionAction();
+      } else if(action==='card-statement'){
+        setCardStatement(tx, !tx.cardSettlement); refreshAfterTransactionAction();
+      } else if(action==='swap'){
+        const tmp=tx.saida; tx.saida=tx.entrada; tx.entrada=tmp;
+        tx.amount=tx.saida||0;
+        if(tx.saida && tx.cat==='outros') tx.cat=categorize(tx.desc);
+        if(!tx.saida) tx.cat='outros';
+        currentPage=1; refreshAfterTransactionAction();
+      } else if(action==='note'){
+        openNoteDialog(tx);
+      } else if(action==='delete'){
+        if(!confirm(window.i18n.t('actions.confirmDelete', {desc:tx.desc, date:fmtTransactionDate(tx.realDate||tx.date), value:fmtEUR(tx.saida||tx.entrada||0)}))) return;
+        transactions=transactions.filter(x=>x.id!==tx.id);
+        selectedTxIds.delete(tx.id);
+        refreshAfterTransactionAction();
+      }
+    });
+  });
+  // No clique com mouse, mantém o foco no botão que originou o popover. Focar um
+  // elemento recém-anexado ao fim do body pode fazer o navegador rolar a página
+  // até ele. Pelo teclado, entra no menu sem permitir alteração da rolagem.
+  if(focusFirstItem) popover.querySelector('[data-tx-action]')?.focus({preventScroll:true});
+}
+document.addEventListener('pointerdown', e=>{
+  if(transactionActionsPopover && !transactionActionsPopover.contains(e.target) && !e.target.closest('.txMoreBtn')) closeTransactionActionsMenu();
+});
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape' && transactionActionsPopover) closeTransactionActionsMenu(true);
+});
+window.addEventListener('resize', ()=>closeTransactionActionsMenu());
+window.addEventListener('scroll', ()=>closeTransactionActionsMenu(), true);
+
 function renderTable(){
+  closeTransactionActionsMenu();
   // remove da seleção ids que não existem mais (ex: após restaurar backup)
   const liveIds = new Set(transactions.map(t=>t.id));
   for(const id of Array.from(selectedTxIds)) if(!liveIds.has(id)) selectedTxIds.delete(id);
@@ -3554,7 +3768,7 @@ function renderTable(){
   if(filterType==='entrada') rows = rows.filter(t=>t.entrada!=null && t.entrada>0);
   if(filterBank==='__none__') rows = rows.filter(t=>!t.bank);
   else if(filterBank) rows = rows.filter(t=>t.bank===filterBank);
-  if(q) rows = rows.filter(t=> (t.desc+' '+t.source+' '+catDisplayName(catById(t.cat))+' '+(t.saida||'')+' '+(t.entrada||'')).toLowerCase().includes(q));
+  if(q) rows = rows.filter(t=> (t.desc+' '+t.source+' '+(t.sourceFiles||[]).join(' ')+' '+catDisplayName(catById(t.cat))+' '+(t.saida||'')+' '+(t.entrada||'')).toLowerCase().includes(q));
   // ordenação clicável pelos títulos das colunas (data, descrição, saída, entrada, categoria) — tableSort guarda a escolha atual
   const sortComparators = {
     date: (a,b)=> (a.realDate||a.date) - (b.realDate||b.date), // data real do gasto, não a data de pagamento da fatura
@@ -3583,12 +3797,12 @@ function renderTable(){
   const pageRows = rows.slice(start, start+PAGE_SIZE);
   body.innerHTML = pageRows.map(t=>{
     const c=catById(t.cat);
-    const d=(t.realDate||t.date).toLocaleDateString(localeTag()); // mostra a data real do gasto (mesmo quando t.date é a data de pagamento da fatura)
+    const d=fmtTransactionDate(t.realDate||t.date); // mostra a data real do gasto (mesmo quando t.date é a data de pagamento da fatura)
     const saidaStr = t.saida!=null ? fmtEUR(t.saida) : '<span class="text-zinc-300">—</span>';
     const entradaStr = t.entrada!=null ? fmtEUR(t.entrada) : '<span class="text-zinc-300">—</span>';
     const hasValue = (t.saida!=null && t.saida>0) || (t.entrada!=null && t.entrada>0);
-    // mostra o seletor de categoria pra saída e entrada — inclusive já marcadas como "Transferência interna" manualmente,
-    // pra dar pra reverter direto aqui. Só fica de fora quem tem fluxo próprio: fatura consolidada e par já vinculado.
+    // Categoria e classificação interna são independentes: selecionar "Transferência"
+    // não altera se a transação entra ou não nos totais.
     const needCat = hasValue && !t.cardSettlement && !t.transferLinked;
     // "Cartão BIL"/tipo de conta já aparece discreto embaixo da descrição (bankBadge) — aqui só sinaliza o que é
     // relevante além disso: a fatura consolidada não contabilizada, uma transferência entre contas, ou uma transferência interna comum.
@@ -3600,10 +3814,13 @@ function renderTable(){
           ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 border border-dashed border-cyan-300 dark:border-cyan-800 text-[10px] font-bold align-middle" title="${window.i18n.t('table.possibleTransferTitleText', {bank: escapeHtml(bankLabel(t.meta&&t.meta.transferToBank))})}"><i class="ri-arrow-left-right-line"></i> ${window.i18n.t('table.possibleTransfer')}</span>`
           : (t.internal ? ` <span class="inline-flex items-center px-1.5 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-300 text-[10px] font-bold align-middle" title="${window.i18n.t('table.internalTransferTitle')}">⇄ ${window.i18n.t('table.internalTransfer')}</span>` : '')));
     const bankBadge = t.bank ? `<div class="text-[11px] text-zinc-400 dark:text-zinc-500 flex items-center gap-1 mt-0.5"><i class="${bankIcon(t.bank)}"></i> ${escapeHtml(bankLabel(t.bank))}</div>` : '';
+    const manualMark = t.source==='manual'
+      ? `<span class="inline-flex w-4 h-4 mr-1.5 rounded-full items-center justify-center align-[-1px] bg-violet-100 dark:bg-violet-950 text-violet-700 dark:text-violet-300 text-[9px] font-extrabold lowercase" title="${window.i18n.t('table.manualEntryTitle')}" aria-label="${window.i18n.t('table.manualEntryTitle')}">m</span>`
+      : '';
     return `<tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition ${t.internal?'opacity-70':''} ${selectedTxIds.has(t.id)?'bg-violet-50 dark:bg-violet-950/30':''}">
       <td class="px-3 py-2.5 text-center"><input type="checkbox" class="rowSelect rounded border-zinc-300 dark:border-zinc-600 text-violet-600 focus:ring-violet-500/40" data-select="${t.id}" ${selectedTxIds.has(t.id)?'checked':''}></td>
       <td class="px-4 py-2.5 font-mono text-xs whitespace-nowrap">${d}</td>
-      <td class="px-3 py-2.5"><div class="font-medium text-[13px] leading-tight line-clamp-2" title="${escapeHtml(t.desc)}">${escapeHtml(t.desc)}${intBadge}</div>${t.note?`<div class="text-[11px] text-amber-600 dark:text-amber-400 italic mt-0.5 flex items-center gap-1"><i class="ri-sticky-note-line"></i>${escapeHtml(t.note)}</div>`:''}${bankBadge}</td>
+      <td class="px-3 py-2.5"><div class="font-medium text-[13px] leading-tight line-clamp-2" title="${escapeHtml(t.desc)}">${manualMark}${escapeHtml(t.desc)}${intBadge}</div>${t.note?`<div class="text-[11px] text-amber-600 dark:text-amber-400 italic mt-0.5 flex items-center gap-1"><i class="ri-sticky-note-line"></i>${escapeHtml(t.note)}</div>`:''}${bankBadge}</td>
       <td class="px-3 py-2.5 text-right font-bold font-mono text-[13px] whitespace-nowrap ${t.saida?'text-red-600 dark:text-red-400':''}">${saidaStr}</td>
       <td class="px-3 py-2.5 text-right font-bold font-mono text-[13px] whitespace-nowrap ${t.entrada?'text-emerald-600 dark:text-emerald-400':''}">${entradaStr}</td>
       <td class="px-3 py-2.5">
@@ -3613,14 +3830,18 @@ function renderTable(){
       </td>
       <td class="px-4 py-2.5">
         <div class="flex items-center justify-end gap-1">
-          <button title="${window.i18n.t('actions.swap')}" data-swap="${t.id}" class="swapBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700" style="display:${(t.saida||t.entrada)?'flex':'none'}"><i class="ri-swap-line"></i></button>
-          <button title="${window.i18n.t('actions.note')}" data-note="${t.id}" class="noteBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700 ${t.note?'text-amber-500 border-amber-300':''}"><i class="ri-sticky-note-line"></i></button>
-          <button title="${window.i18n.t('actions.details')}" data-details="${t.id}" class="detailsBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700"><i class="ri-information-line"></i></button>
-          <button title="${window.i18n.t('actions.delete')}" data-del="${t.id}" class="delBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] text-zinc-400 hover:bg-red-50 hover:text-red-600 hover:border-red-200 dark:hover:bg-red-950/40 dark:hover:text-red-400 dark:hover:border-red-900 transition"><i class="ri-delete-bin-line"></i></button>
+          <button title="${window.i18n.t('actions.details')}" aria-label="${window.i18n.t('actions.details')}" data-details="${t.id}" class="detailsBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700"><i class="ri-information-line"></i></button>
+          <button title="${window.i18n.t('actions.moreActions')}" aria-label="${window.i18n.t('actions.moreActions')}" aria-haspopup="menu" aria-expanded="false" data-more="${t.id}" class="txMoreBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[13px] text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition active:scale-95"><i class="ri-more-2-fill"></i></button>
         </div>
       </td>
     </tr>`;
   }).join('');
+  body.querySelectorAll('.txMoreBtn').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const tx=transactions.find(x=>x.id===e.currentTarget.dataset.more); if(!tx) return;
+      openTransactionActionsMenu(e.currentTarget, tx, e.detail===0);
+    });
+  });
   body.querySelectorAll('.detailsBtn').forEach(b=>{
     b.addEventListener('click', e=>{
       const id=e.currentTarget.dataset.details;
@@ -3628,48 +3849,11 @@ function renderTable(){
       openDetailsDialog(tx);
     });
   });
-  body.querySelectorAll('.noteBtn').forEach(b=>{
-    b.addEventListener('click', e=>{
-      const id=e.currentTarget.dataset.note;
-      const tx=transactions.find(x=>x.id===id); if(!tx) return;
-      openNoteDialog(tx);
-    });
-  });
-  body.querySelectorAll('.swapBtn').forEach(b=>{
-    b.addEventListener('click', e=>{
-      const id=e.currentTarget.dataset.swap; const tx=transactions.find(x=>x.id===id); if(!tx) return;
-      // swap saida/entrada
-      const tmp=tx.saida; tx.saida=tx.entrada; tx.entrada=tmp;
-      tx.amount = tx.saida||0;
-      // fix cat: if now entrada (no saida) set to outros, if now saida restore categorization
-      if(tx.saida && tx.cat==='outros') tx.cat=categorize(tx.desc);
-      if(!tx.saida) tx.cat='outros';
-      currentPage=1; renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
-    });
-  });
-  body.querySelectorAll('.delBtn').forEach(b=>{
-    b.addEventListener('click', e=>{
-      const id=e.currentTarget.dataset.del; const tx=transactions.find(x=>x.id===id); if(!tx) return;
-      if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString(localeTag()), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
-      transactions = transactions.filter(x=>x.id!==id);
-      selectedTxIds.delete(id);
-      renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
-    });
-  });
   body.querySelectorAll('.catSelect').forEach(s=>{
     s.addEventListener('change', e=>{
       const id=e.target.dataset.id; const v=e.target.value;
       const tx=transactions.find(x=>x.id===id); if(!tx) return;
       tx.cat=v;
-      if(v==='transferencia'){
-        // marca manualmente como transferência interna (saída OU entrada) — some dos totais em todo o app,
-        // do jeito que a auto-detecção de "possível transferência" já faz, sem precisar casar as duas pontas.
-        tx.internal = true;
-      } else if(tx.internal){
-        // usuário tirou manualmente de "Transferência interna" (ou corrigiu uma detecção automática errada) — volta a contar normalmente
-        tx.internal = false;
-        if(tx.autoTransfer){ tx.autoTransfer = false; if(tx.meta) delete tx.meta.transferToBank; }
-      }
       renderTable(); renderCategoryChips(); updateKPIs(); updateCharts(); persistState();
       applySameDescription(tx);
     });
@@ -3691,7 +3875,7 @@ function renderTable(){
   const realSaidas = rows.filter(r=>r.saida && !r.internal);
   const saidaSum = realSaidas.reduce((s,r)=>s+r.saida,0);
   const entradaSum = rows.filter(r=>r.entrada && !r.internal).reduce((s,r)=>s+r.entrada,0);
-  const transfSum = rows.filter(r=>r.internal && r.saida).reduce((s,r)=>s+r.saida,0);
+  const transfSum = rows.filter(r=>r.internal && !r.cardSettlement && r.saida).reduce((s,r)=>s+r.saida,0);
   // com uma categoria filtrada, mostra também a média mensal (gasto/entrada dividido pelos meses com movimento
   // nessa categoria) — dá o "quanto por mês em média" que o total sozinho não mostra
   let avgLabel = '';
@@ -3740,7 +3924,7 @@ function updateKPIs(){
     if(el && subEl){
       el.textContent = fmtEUR(bal.total);
       subEl.textContent = (openingBalance && openingBalance.value!=null)
-        ? window.i18n.t('kpis.balanceSubWithOpening', {value: fmtEUR(bal.base), date: openingBalance.date.toLocaleDateString(localeTag())})
+        ? window.i18n.t('kpis.balanceSubWithOpening', {value: fmtEUR(bal.base), date: fmtTransactionDate(openingBalance.date)})
         : window.i18n.t('kpis.balanceSubDefault');
     }
   }
@@ -3750,9 +3934,10 @@ function updateKPIs(){
   document.getElementById('kpiTotal').textContent = fmtEUR(total);
   const saidasCount = scoped.filter(t=>t.saida && !t.internal).length;
   const entradasCount = scoped.filter(t=>t.entrada && !t.internal).length;
-  const transfCount = scoped.filter(t=>t.internal).length;
+  const transfCount = scoped.filter(t=>t.internal && !t.cardSettlement).length;
   const transfClause = transfCount ? window.i18n.t('kpis.countTransfersClause', {n: transfCount}) : '';
-  document.getElementById('kpiCount').textContent = window.i18n.t('kpis.countBreakdown', {expenses: saidasCount, income: entradasCount, transfers: transfClause, files: new Set(transactions.map(t=>t.source)).size});
+  const sourceFileCount = new Set(transactions.flatMap(t=>(t.sourceFiles&&t.sourceFiles.length?t.sourceFiles:[t.source]).filter(Boolean))).size;
+  document.getElementById('kpiCount').textContent = window.i18n.t('kpis.countBreakdown', {expenses: saidasCount, income: entradasCount, transfers: transfClause, files: sourceFileCount});
   document.getElementById('kpiAvg').textContent = fmtEUR(avg);
   // top category
   const byCat={}; scoped.forEach(t=>{ if(t.saida && !t.internal) byCat[t.cat]=(byCat[t.cat]||0)+t.saida; });
@@ -4006,7 +4191,7 @@ function detectAnomalies(txP){
         if(z>=3 && d.total>m*2){
           const dayTxs = spend.filter(t=>dayKey(t.date)===dayKey(d.date));
           anomalies.push({ type:'spike-day', severity:'medium', txs:dayTxs, date:d.date, aid:anomalyId('spike-day',[],d.date),
-            text: window.i18n.t('anomalies.messages.spikeDay', {date: d.date.toLocaleDateString(localeTag()), total: fmtEUR(d.total), count: d.count, avg: fmtEUR(m)}) });
+            text: window.i18n.t('anomalies.messages.spikeDay', {date: fmtTransactionDate(d.date), total: fmtEUR(d.total), count: d.count, avg: fmtEUR(m)}) });
         }
       });
     }
@@ -4034,7 +4219,7 @@ function renderAnomalies(txP){
     return `<div class="p-3 rounded-xl border ${high?'border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30':'border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/30'}">
       <div class="flex items-start justify-between gap-3">
         <div class="min-w-0">
-          <p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="${icons[a.type]||'ri-error-warning-fill'}"></i> ${a.date.toLocaleDateString(localeTag())}</p>
+          <p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="${icons[a.type]||'ri-error-warning-fill'}"></i> ${fmtTransactionDate(a.date)}</p>
           <p class="text-[11px] ${high?'text-red-700/80 dark:text-red-400/70':'text-amber-700/80 dark:text-amber-400/70'} mt-1 leading-relaxed">${escapeHtml(a.text)}</p>
         </div>
         <button type="button" class="anomalyResolveBtn shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-bold ${high?'bg-red-600 hover:bg-red-700':'bg-amber-600 hover:bg-amber-700'} text-white whitespace-nowrap" data-aid="${escapeHtml(a.aid)}">${window.i18n.t('anomalies.messages.resolveButton')}</button>
@@ -4058,7 +4243,7 @@ function openAnomalyDialog(aid){
 function renderAnomalyDialogBody(a){
   const high=a.severity==='high';
   document.getElementById('anomalyDialogSummary').innerHTML =
-    `<p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="ri-${high?'alarm-warning-fill':'error-warning-fill'}"></i> ${a.date.toLocaleDateString(localeTag())}</p>
+    `<p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="ri-${high?'alarm-warning-fill':'error-warning-fill'}"></i> ${fmtTransactionDate(a.date)}</p>
      <p class="text-[12px] text-zinc-600 dark:text-zinc-300 mt-1 leading-relaxed">${escapeHtml(a.text)}</p>`;
   // "Sempre aceitar" só faz sentido quando a anomalia gira em torno de UMA descrição (duplicidade, outlier de
   // estabelecimento/global) — pico de gasto num dia não tem uma descrição única pra generalizar.
@@ -4078,7 +4263,7 @@ function renderAnomalyDialogBody(a){
         <span class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-white" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>
         <span class="flex-1 min-w-0">
           <span class="block text-[13px] font-semibold truncate">${escapeHtml(t.desc)}</span>
-          <span class="text-[11px] text-zinc-500">${(t.realDate||t.date).toLocaleDateString(localeTag())} · ${escapeHtml(catDisplayName(c))}${t.bank?` · ${escapeHtml(bankLabel(t.bank))}`:''}${t.note?` · ${escapeHtml(t.note)}`:''}</span>
+          <span class="text-[11px] text-zinc-500">${fmtTransactionDate(t.realDate||t.date)} · ${escapeHtml(catDisplayName(c))}${t.bank?` · ${escapeHtml(bankLabel(t.bank))}`:''}${t.note?` · ${escapeHtml(t.note)}`:''}</span>
         </span>
         <span class="font-bold font-mono text-[13px] shrink-0 text-red-600 dark:text-red-400">${fmtEUR(t.saida||t.entrada||0)}</span>
         <button type="button" class="anomalyTxDelBtn shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30" data-id="${t.id}" title="${window.i18n.t('actions.delete')}"><i class="ri-delete-bin-line"></i></button>
@@ -4088,7 +4273,7 @@ function renderAnomalyDialogBody(a){
       b.addEventListener('click', e=>{
         const id=e.currentTarget.dataset.id;
         const tx=transactions.find(x=>x.id===id); if(!tx) return;
-        if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString(localeTag()), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
+        if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: fmtTransactionDate(tx.realDate||tx.date), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
         transactions = transactions.filter(x=>x.id!==id);
         selectedTxIds.delete(id);
         renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
@@ -4565,7 +4750,7 @@ function updateCharts(){
           pointBackgroundColor: cumData.map(v=>v>=0?'#10b981':'#ef4444')
         }];
         document.getElementById('cashflowHint').textContent = (openingBalance && openingBalance.value!=null)
-          ? window.i18n.t('charts.cashflow.hintWithOpening', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString(localeTag())})
+          ? window.i18n.t('charts.cashflow.hintWithOpening', {value: fmtEUR(openingBalance.value), date: fmtTransactionDate(openingBalance.date)})
           : window.i18n.t('charts.cashflow.hintCumulative');
         if(subEl) subEl.textContent = window.i18n.t('charts.cashflow.subtitle');
       }
@@ -4666,7 +4851,6 @@ function updateCharts(){
   if(pi){ pi.textContent=fmtEUR(txP.filter(t=>t.entrada&&!t.internal).reduce((s,t)=>s+(t.entrada||0),0)); }
 }
 window._toggleCat=(id)=>{ activeCatFilter = activeCatFilter===id? null : id; renderCategoryChips(); renderTable(); updateCharts(); };
-
 </script>
 <script>
 // ---------- File handling ----------
@@ -4731,12 +4915,17 @@ async function handleFiles(files){
           let lineText='';
           let prevEnd=null;
           for(const it of g.items){
-            let gap=' ';
+            let gap='';
             if(prevEnd!==null){
               const gapPx = it.x - prevEnd;
+              // Alguns PDFs da BIL expõem cada glifo como um item separado.
+              // Fragmentos que se tocam (ou quase) fazem parte da mesma palavra/
+              // número; inserir espaços aqui transformaria "7.780,46" em
+              // "7 . 7 8 0 , 4 6" e impediria o parser de encontrar valores.
+              // Gaps visíveis ainda separam palavras, e gaps largos preservam
+              // a separação entre colunas.
               if(gapPx > 28) gap='  '; // wide gap = empty column separator
-              else if(gapPx > 12) gap=' ';
-              else gap=' ';
+              else if(gapPx > 2) gap=' ';
             }
             lineText += (lineText? gap : '') + it.str;
             prevEnd = it.x + it.w;
@@ -4791,21 +4980,19 @@ async function handleFiles(files){
     }
     return;
   }
-  // --- dedup: não duplica transações idênticas (data+descrição+saída+entrada) já presentes ---
+  // --- dedup: não duplica transações idênticas (data+descrição+direção+valor), mesmo entre arquivos diferentes ---
   // mas, se o mesmo extrato trouxer detalhes que a transação já salva ainda não tinha
   // (tipo de conta, local, referências bancárias, saldo...), completa a existente em vez de descartar tudo.
   // usa a data real da transação (não a data de pagamento da fatura do cartão) para não confundir compras diferentes do mesmo mês
-  const sigOf = t => { const rd=t.realDate||t.date; return `${rd instanceof Date ? rd.toISOString().slice(0,10) : String(t.dateStr||rd)}|${normalizeDescKey(t.desc)}|${t.saida??''}|${t.entrada??''}`; };
-  const existingBySig = new Map();
-  for(const t of transactions){ existingBySig.set(sigOf(t), t); }
+  // Remove também duplicações antigas já salvas antes desta correção.
+  const repairedExisting = collapseDuplicateTransactions(transactions);
+  if(repairedExisting.duplicateCount>0){
+    ollamaLog?.(t('settings.data.fixedDuplicatesMigration', {n: repairedExisting.duplicateCount}));
+  }
   const beforeDedup = allNew.length;
-  let enrichedCount = 0;
-  allNew = allNew.filter(t => {
-    const existing = existingBySig.get(sigOf(t));
-    if(!existing) return true; // é novidade de verdade, mantém para importar
-    if(mergeMissingDetails(existing, t)) enrichedCount++;
-    return false; // já existe — não duplica a linha
-  });
+  const dedupResult = deduplicateImportedTransactions(transactions, allNew);
+  allNew = dedupResult.unique;
+  const enrichedCount = dedupResult.enrichedCount + repairedExisting.enrichedCount;
   const dupCount = beforeDedup - allNew.length;
   if(dupCount > 0){
     const row=fileList.children[pdfs.length-1];
@@ -4969,7 +5156,7 @@ document.getElementById('btnDemo').addEventListener('click', ()=>{
     desc: d.desc,
     saida: d.saida, entrada: d.entrada, balanco: d.balanco,
     amount: (d.saida||0),
-    internal: d.cat==='transferencia',
+    internal: !!d.internal,
     cat: d.cat,
     source: 'dados-de-exemplo.pdf'
   }));
@@ -4989,7 +5176,7 @@ document.getElementById('btnExport').addEventListener('click', ()=>{
     t.entrada!=null? t.entrada.toFixed(2).replace('.',','):'',
     t.balanco!=null? t.balanco.toFixed(2).replace('.',','):'',
     catDisplayName(catById(t.cat)),
-    t.source
+    (t.sourceFiles&&t.sourceFiles.length ? t.sourceFiles.join('; ') : t.source)
   ].join(';'));
   const csv=[header.join(';'),...rows].join('\n');
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
@@ -5021,7 +5208,9 @@ document.getElementById('manualForm').addEventListener('submit', e=>{
   const desc=document.getElementById('mDesc').value.trim()||t('transactions.defaultDescription');
   const typeEl=document.getElementById('mType'); const isEntrada = typeEl && typeEl.value==='entrada';
   const cat=document.getElementById('mCat').value || (isEntrada ? 'outros' : categorize(desc));
-  const internal = cat==='transferencia'; // marcado manualmente como Transferência interna — some dos totais
+  // Categoria e classificação interna são independentes. Uma transferência
+  // entre pessoas é um gasto normal até o usuário marcá-la explicitamente como interna.
+  const internal = false;
   if(!amount||isNaN(amount)){ alert(t('modals.manualEntry.invalidValue')); return; }
   if(isEntrada) transactions.push({ id:'manual-'+Date.now(), date, desc, saida:null, entrada:Math.abs(amount), balanco:null, amount:0, cat, internal, source:'manual' });
   else transactions.push({ id:'manual-'+Date.now(), date, desc, saida:Math.abs(amount), entrada:null, balanco:null, amount:Math.abs(amount), cat, internal, source:'manual' });
@@ -5036,7 +5225,7 @@ let noteTarget=null;
 function openNoteDialog(tx){
   noteTarget=tx;
   document.getElementById('noteTxDesc').textContent=tx.desc;
-  document.getElementById('noteTxMeta').textContent=`${(tx.realDate||tx.date).toLocaleDateString(localeTag())} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}${tx.source?' · '+tx.source:''}`;
+  document.getElementById('noteTxMeta').textContent=`${fmtTransactionDate(tx.realDate||tx.date)} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}${tx.source?' · '+tx.source:''}`;
   document.getElementById('noteText').value=tx.note||'';
   document.getElementById('btnNoteDelete').classList.toggle('hidden', !tx.note);
   noteDialog.showModal();
@@ -5069,14 +5258,14 @@ function openDetailsDialog(tx){
   detailsTarget=tx;
   document.getElementById('detailsTxDesc').textContent=tx.desc;
   const displayDate = tx.realDate||tx.date;
-  document.getElementById('detailsTxMeta').textContent=`${displayDate.toLocaleDateString(localeTag())} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}`;
+  document.getElementById('detailsTxMeta').textContent=`${fmtTransactionDate(displayDate)} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}`;
   const bSel=document.getElementById('detailsBankSelect');
   bSel.innerHTML = `<option value="">${window.i18n.t('modals.details.notIdentified')}</option>` + bankTypes.map(b=>`<option value="${b.id}" ${b.id===tx.bank?'selected':''}>${escapeHtml(bankDisplayName(b))}</option>`).join('');
   const transferBox=document.getElementById('detailsTransferBox');
   const pair = tx.transferGroupId ? transactions.find(t=>t.transferGroupId===tx.transferGroupId && t!==tx) : null;
   transferBox.classList.toggle('hidden', !pair);
   if(pair){
-    document.getElementById('detailsTransferPair').textContent = window.i18n.t('modals.details.transferPair', {desc: pair.desc, date: (pair.realDate||pair.date).toLocaleDateString(localeTag()), value: fmtEUR(pair.saida||pair.entrada||0), bank: pair.bank?' · '+bankLabel(pair.bank):''});
+    document.getElementById('detailsTransferPair').textContent = window.i18n.t('modals.details.transferPair', {desc: pair.desc, date: fmtTransactionDate(pair.realDate||pair.date), value: fmtEUR(pair.saida||pair.entrada||0), bank: pair.bank?' · '+bankLabel(pair.bank):''});
   }
   const autoBox=document.getElementById('detailsAutoTransferBox');
   const showAuto = !!tx.autoTransfer && !pair;
@@ -5085,8 +5274,9 @@ function openDetailsDialog(tx){
     const toBank = tx.meta && tx.meta.transferToBank ? bankLabel(tx.meta.transferToBank) : '';
     document.getElementById('detailsAutoTransferInfo').textContent = toBank ? window.i18n.t('modals.details.autoTransferInfo', {bank: toBank}) : '';
   }
-  const rows=[[window.i18n.t('modals.details.sourceFile'), tx.source||'—']];
-  if(tx.realDate && +tx.realDate!==+tx.date) rows.push([window.i18n.t('modals.details.consideredDateLabel'), tx.date.toLocaleDateString(localeTag())]);
+  const sourceLabel = (tx.sourceFiles&&tx.sourceFiles.length ? tx.sourceFiles : [tx.source]).filter(Boolean).join(', ') || '—';
+  const rows=[[window.i18n.t('modals.details.sourceFile'), sourceLabel]];
+  if(tx.realDate && +tx.realDate!==+tx.date) rows.push([window.i18n.t('modals.details.consideredDateLabel'), fmtTransactionDate(tx.date)]);
   const meta=tx.meta||{};
   const labels = getMetaLabels();
   for(const k of Object.keys(labels)){ if(meta[k]) rows.push([labels[k], meta[k]]); }
@@ -5180,6 +5370,50 @@ function undoAutoTransfer(tx){
   tx.cat = tx.saida!=null ? categorize(tx.desc) : 'outros';
   if(tx.meta) delete tx.meta.transferToBank;
 }
+// Confirma uma sugestão automática. A transação permanece para conferência,
+// mas deixa de ser "possível" e continua fora de entradas/saídas.
+function approvePossibleTransfer(tx){
+  if(!tx.autoTransfer) return;
+  if(tx.cat!=='transferencia') tx.prevCat = tx.cat;
+  tx.autoTransfer = false;
+  tx.transferApproved = true;
+  tx.cardSettlement = false;
+  tx.cat = 'transferencia';
+  tx.internal = true;
+}
+// A classificação "transferência interna" é independente da categoria.
+// Assim, a categoria Transferência pode representar um pagamento entre pessoas
+// (e contar normalmente como gasto), enquanto este marcador exclui apenas as
+// movimentações entre contas próprias dos totais.
+function setInternalTransfer(tx, enabled){
+  if(!tx || tx.transferLinked || tx.cardSettlement) return;
+  tx.internal = !!enabled;
+  if(enabled){
+    if(tx.autoTransfer){
+      tx.autoTransfer = false;
+      tx.transferApproved = true;
+    }
+  } else {
+    tx.transferApproved = false;
+  }
+}
+// Classificação revisável para o débito consolidado de uma fatura. O valor fica
+// guardado no histórico, mas internal=true o exclui de todos os totais e gráficos.
+function setCardStatement(tx, enabled){
+  if(enabled){
+    if(!tx.cardSettlement && tx.cat!=='cartao') tx.prevCat = tx.cat;
+    tx.cardSettlement = true;
+    tx.autoTransfer = false;
+    tx.transferApproved = false;
+    tx.cat = 'cartao';
+    tx.internal = true;
+  } else {
+    tx.cardSettlement = false;
+    tx.internal = false;
+    tx.cat = tx.prevCat || (tx.saida ? categorize(tx.desc) : 'outros');
+    delete tx.prevCat;
+  }
+}
 document.getElementById('bulkLinkTransferBtn')?.addEventListener('click', ()=>{
   const targets = transactions.filter(t=>selectedTxIds.has(t.id));
   if(targets.length!==2){ alert(window.i18n.t('actions.selectTwoTransfers')); return; }
@@ -5265,7 +5499,6 @@ document.getElementById('catForm').addEventListener('submit', e=>{
   catDialog.close(); document.getElementById('cName').value=''; document.getElementById('cKeys').value=''; document.getElementById('cEditId').value='';
   renderCategoryChips(); renderTable(); updateCharts(); persistState();
 });
-
 </script>
 <script>
 // ---------- Ollama IA Local (Gemma4) ----------
@@ -5491,7 +5724,7 @@ function updateOpeningBalanceStatus(){
   const statusEl=document.getElementById('obStatus'), dateEl=document.getElementById('obDate'), valEl=document.getElementById('obValue');
   if(!statusEl) return;
   if(openingBalance && openingBalance.value!=null){
-    statusEl.textContent = t('openingBalance.statusSet', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString(localeTag())});
+    statusEl.textContent = t('openingBalance.statusSet', {value: fmtEUR(openingBalance.value), date: fmtTransactionDate(openingBalance.date)});
     if(dateEl) dateEl.value = dayKey(openingBalance.date);
     if(valEl) valEl.value = openingBalance.value;
   } else {
@@ -5534,8 +5767,8 @@ function buildState(){
       saida: t.saida, entrada: t.entrada, balanco: t.balanco,
       note: t.note,
       cat: t.cat, internal: !!t.internal, cardPayment: !!t.cardPayment, cardSettlement: !!t.cardSettlement,
-      transferGroupId: t.transferGroupId||null, transferLinked: !!t.transferLinked, autoTransfer: !!t.autoTransfer, prevCat: t.prevCat||null,
-      bank: t.bank||null, meta: t.meta||null, source: t.source
+      transferGroupId: t.transferGroupId||null, transferLinked: !!t.transferLinked, autoTransfer: !!t.autoTransfer, transferApproved: !!t.transferApproved, prevCat: t.prevCat||null,
+      bank: t.bank||null, meta: t.meta||null, source: t.source, sourceFiles: t.sourceFiles||null
     }))
   };
 }
@@ -5641,14 +5874,16 @@ function applyState(j){
     realDate: t.realDate ? new Date(t.realDate+'T12:00:00') : null,
     desc: t.desc, saida:t.saida, entrada:t.entrada, balanco:t.balanco, note:t.note,
     amount: t.saida||0, internal: !!t.internal, cardPayment: !!t.cardPayment, cardSettlement: !!t.cardSettlement,
-    transferGroupId: t.transferGroupId||null, transferLinked: !!t.transferLinked, autoTransfer: !!t.autoTransfer, prevCat: t.prevCat||null,
-    bank: t.bank||null, meta: t.meta||null, cat:t.cat, source:t.source||'importado'
+    transferGroupId: t.transferGroupId||null, transferLinked: !!t.transferLinked, autoTransfer: !!t.autoTransfer, transferApproved: !!t.transferApproved, prevCat: t.prevCat||null,
+    bank: t.bank||null, meta: t.meta||null, cat:t.cat, source:t.source||'importado', sourceFiles:Array.isArray(t.sourceFiles)?t.sourceFiles:null
   }));
+  const fixedDuplicates = collapseDuplicateTransactions(transactions).duplicateCount;
   currentPage=1;
   selectedTxIds.clear();
   const fixedLegacy = repairLegacyCardTransactions();
   const fixedTransfers = repairCrossAccountTransfers();
   const msgs = [];
+  if(fixedDuplicates>0) msgs.push(t('settings.data.fixedDuplicatesMigration', {n: fixedDuplicates}));
   if(fixedLegacy>0) msgs.push(t('settings.data.fixedBilCardMigration', {n: fixedLegacy}));
   if(fixedTransfers>0) msgs.push(t('settings.data.fixedTransfersMigration', {n: fixedTransfers}));
   if(msgs.length){ msgs.forEach(m=>ollamaLog(m)); persistState(); }
@@ -5729,7 +5964,6 @@ document.getElementById('btnTheme')?.addEventListener('click', ()=>{
   localStorage.setItem('gastosai_theme', isDark ? 'dark' : 'light');
   updateCharts(); // repaint chart.js canvases with theme-appropriate grid/label colors
 });
-
 </script>
 <script>
 // ---------- Relatório para impressão (A4, formato executivo) ----------
@@ -5852,7 +6086,7 @@ function buildPrintReport(){
             ${rows.map(t=>{
               const c=catById(t.cat);
               return `<tr style="border-bottom:1px solid #f4f4f5;">
-                <td style="padding:4px 6px;font-size:10px;font-family:monospace;white-space:nowrap;">${(t.realDate||t.date).toLocaleDateString(localeTag())}</td>
+                <td style="padding:4px 6px;font-size:10px;font-family:monospace;white-space:nowrap;">${fmtTransactionDate(t.realDate||t.date)}</td>
                 <td style="padding:4px 6px;font-size:10px;">${escapeHtml(t.desc.slice(0,50))}</td>
                 <td style="padding:4px 6px;font-size:10px;white-space:nowrap;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${c.color};margin-right:4px;"></span>${escapeHtml(catDisplayName(c))}</td>
                 <td style="padding:4px 6px;font-size:10px;text-align:right;font-family:monospace;color:#dc2626;font-weight:600;">${t.saida?fmtEUR(t.saida):''}</td>
@@ -5874,7 +6108,6 @@ document.getElementById('btnPrint')?.addEventListener('click', ()=>{
   buildPrintReport();
   setTimeout(()=>window.print(), 50);
 });
-
 </script>
 <script>
 window.i18n.initI18n();

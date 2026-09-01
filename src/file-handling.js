@@ -60,12 +60,17 @@ async function handleFiles(files){
           let lineText='';
           let prevEnd=null;
           for(const it of g.items){
-            let gap=' ';
+            let gap='';
             if(prevEnd!==null){
               const gapPx = it.x - prevEnd;
+              // Alguns PDFs da BIL expõem cada glifo como um item separado.
+              // Fragmentos que se tocam (ou quase) fazem parte da mesma palavra/
+              // número; inserir espaços aqui transformaria "7.780,46" em
+              // "7 . 7 8 0 , 4 6" e impediria o parser de encontrar valores.
+              // Gaps visíveis ainda separam palavras, e gaps largos preservam
+              // a separação entre colunas.
               if(gapPx > 28) gap='  '; // wide gap = empty column separator
-              else if(gapPx > 12) gap=' ';
-              else gap=' ';
+              else if(gapPx > 2) gap=' ';
             }
             lineText += (lineText? gap : '') + it.str;
             prevEnd = it.x + it.w;
@@ -120,21 +125,19 @@ async function handleFiles(files){
     }
     return;
   }
-  // --- dedup: não duplica transações idênticas (data+descrição+saída+entrada) já presentes ---
+  // --- dedup: não duplica transações idênticas (data+descrição+direção+valor), mesmo entre arquivos diferentes ---
   // mas, se o mesmo extrato trouxer detalhes que a transação já salva ainda não tinha
   // (tipo de conta, local, referências bancárias, saldo...), completa a existente em vez de descartar tudo.
   // usa a data real da transação (não a data de pagamento da fatura do cartão) para não confundir compras diferentes do mesmo mês
-  const sigOf = t => { const rd=t.realDate||t.date; return `${rd instanceof Date ? rd.toISOString().slice(0,10) : String(t.dateStr||rd)}|${normalizeDescKey(t.desc)}|${t.saida??''}|${t.entrada??''}`; };
-  const existingBySig = new Map();
-  for(const t of transactions){ existingBySig.set(sigOf(t), t); }
+  // Remove também duplicações antigas já salvas antes desta correção.
+  const repairedExisting = collapseDuplicateTransactions(transactions);
+  if(repairedExisting.duplicateCount>0){
+    ollamaLog?.(t('settings.data.fixedDuplicatesMigration', {n: repairedExisting.duplicateCount}));
+  }
   const beforeDedup = allNew.length;
-  let enrichedCount = 0;
-  allNew = allNew.filter(t => {
-    const existing = existingBySig.get(sigOf(t));
-    if(!existing) return true; // é novidade de verdade, mantém para importar
-    if(mergeMissingDetails(existing, t)) enrichedCount++;
-    return false; // já existe — não duplica a linha
-  });
+  const dedupResult = deduplicateImportedTransactions(transactions, allNew);
+  allNew = dedupResult.unique;
+  const enrichedCount = dedupResult.enrichedCount + repairedExisting.enrichedCount;
   const dupCount = beforeDedup - allNew.length;
   if(dupCount > 0){
     const row=fileList.children[pdfs.length-1];
@@ -298,7 +301,7 @@ document.getElementById('btnDemo').addEventListener('click', ()=>{
     desc: d.desc,
     saida: d.saida, entrada: d.entrada, balanco: d.balanco,
     amount: (d.saida||0),
-    internal: d.cat==='transferencia',
+    internal: !!d.internal,
     cat: d.cat,
     source: 'dados-de-exemplo.pdf'
   }));
@@ -318,7 +321,7 @@ document.getElementById('btnExport').addEventListener('click', ()=>{
     t.entrada!=null? t.entrada.toFixed(2).replace('.',','):'',
     t.balanco!=null? t.balanco.toFixed(2).replace('.',','):'',
     catDisplayName(catById(t.cat)),
-    t.source
+    (t.sourceFiles&&t.sourceFiles.length ? t.sourceFiles.join('; ') : t.source)
   ].join(';'));
   const csv=[header.join(';'),...rows].join('\n');
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
@@ -350,7 +353,9 @@ document.getElementById('manualForm').addEventListener('submit', e=>{
   const desc=document.getElementById('mDesc').value.trim()||t('transactions.defaultDescription');
   const typeEl=document.getElementById('mType'); const isEntrada = typeEl && typeEl.value==='entrada';
   const cat=document.getElementById('mCat').value || (isEntrada ? 'outros' : categorize(desc));
-  const internal = cat==='transferencia'; // marcado manualmente como Transferência interna — some dos totais
+  // Categoria e classificação interna são independentes. Uma transferência
+  // entre pessoas é um gasto normal até o usuário marcá-la explicitamente como interna.
+  const internal = false;
   if(!amount||isNaN(amount)){ alert(t('modals.manualEntry.invalidValue')); return; }
   if(isEntrada) transactions.push({ id:'manual-'+Date.now(), date, desc, saida:null, entrada:Math.abs(amount), balanco:null, amount:0, cat, internal, source:'manual' });
   else transactions.push({ id:'manual-'+Date.now(), date, desc, saida:Math.abs(amount), entrada:null, balanco:null, amount:Math.abs(amount), cat, internal, source:'manual' });

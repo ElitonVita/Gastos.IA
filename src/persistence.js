@@ -70,7 +70,7 @@ function updateOpeningBalanceStatus(){
   const statusEl=document.getElementById('obStatus'), dateEl=document.getElementById('obDate'), valEl=document.getElementById('obValue');
   if(!statusEl) return;
   if(openingBalance && openingBalance.value!=null){
-    statusEl.textContent = t('openingBalance.statusSet', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString(localeTag())});
+    statusEl.textContent = t('openingBalance.statusSet', {value: fmtEUR(openingBalance.value), date: fmtTransactionDate(openingBalance.date)});
     if(dateEl) dateEl.value = dayKey(openingBalance.date);
     if(valEl) valEl.value = openingBalance.value;
   } else {
@@ -113,8 +113,8 @@ function buildState(){
       saida: t.saida, entrada: t.entrada, balanco: t.balanco,
       note: t.note,
       cat: t.cat, internal: !!t.internal, cardPayment: !!t.cardPayment, cardSettlement: !!t.cardSettlement,
-      transferGroupId: t.transferGroupId||null, transferLinked: !!t.transferLinked, autoTransfer: !!t.autoTransfer, prevCat: t.prevCat||null,
-      bank: t.bank||null, meta: t.meta||null, source: t.source
+      transferGroupId: t.transferGroupId||null, transferLinked: !!t.transferLinked, autoTransfer: !!t.autoTransfer, transferApproved: !!t.transferApproved, prevCat: t.prevCat||null,
+      bank: t.bank||null, meta: t.meta||null, source: t.source, sourceFiles: t.sourceFiles||null
     }))
   };
 }
@@ -220,14 +220,16 @@ function applyState(j){
     realDate: t.realDate ? new Date(t.realDate+'T12:00:00') : null,
     desc: t.desc, saida:t.saida, entrada:t.entrada, balanco:t.balanco, note:t.note,
     amount: t.saida||0, internal: !!t.internal, cardPayment: !!t.cardPayment, cardSettlement: !!t.cardSettlement,
-    transferGroupId: t.transferGroupId||null, transferLinked: !!t.transferLinked, autoTransfer: !!t.autoTransfer, prevCat: t.prevCat||null,
-    bank: t.bank||null, meta: t.meta||null, cat:t.cat, source:t.source||'importado'
+    transferGroupId: t.transferGroupId||null, transferLinked: !!t.transferLinked, autoTransfer: !!t.autoTransfer, transferApproved: !!t.transferApproved, prevCat: t.prevCat||null,
+    bank: t.bank||null, meta: t.meta||null, cat:t.cat, source:t.source||'importado', sourceFiles:Array.isArray(t.sourceFiles)?t.sourceFiles:null
   }));
+  const fixedDuplicates = collapseDuplicateTransactions(transactions).duplicateCount;
   currentPage=1;
   selectedTxIds.clear();
   const fixedLegacy = repairLegacyCardTransactions();
   const fixedTransfers = repairCrossAccountTransfers();
   const msgs = [];
+  if(fixedDuplicates>0) msgs.push(t('settings.data.fixedDuplicatesMigration', {n: fixedDuplicates}));
   if(fixedLegacy>0) msgs.push(t('settings.data.fixedBilCardMigration', {n: fixedLegacy}));
   if(fixedTransfers>0) msgs.push(t('settings.data.fixedTransfersMigration', {n: fixedTransfers}));
   if(msgs.length){ msgs.forEach(m=>ollamaLog(m)); persistState(); }
@@ -308,4 +310,3 @@ document.getElementById('btnTheme')?.addEventListener('click', ()=>{
   localStorage.setItem('gastosai_theme', isDark ? 'dark' : 'light');
   updateCharts(); // repaint chart.js canvases with theme-appropriate grid/label colors
 });
-

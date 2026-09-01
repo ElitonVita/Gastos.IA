@@ -178,7 +178,125 @@ function renderBulkBar(){
   const bankSel=document.getElementById('bulkBankSelect');
   if(bankSel) bankSel.innerHTML = `<option value="">${window.i18n.t('actions.bulkBank')}</option>` + bankTypes.map(b=>`<option value="${b.id}">${escapeHtml(bankDisplayName(b))}</option>`).join('');
 }
+
+let transactionActionsPopover = null;
+let transactionActionsTrigger = null;
+function closeTransactionActionsMenu(restoreFocus=false){
+  if(transactionActionsPopover) transactionActionsPopover.remove();
+  transactionActionsPopover = null;
+  if(transactionActionsTrigger){
+    transactionActionsTrigger.setAttribute('aria-expanded', 'false');
+    if(restoreFocus && document.body.contains(transactionActionsTrigger)) transactionActionsTrigger.focus();
+  }
+  transactionActionsTrigger = null;
+}
+function refreshAfterTransactionAction(){
+  renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
+}
+function transactionMenuItem(action, icon, label, tone=''){
+  const toneClass = tone==='danger'
+    ? 'text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40'
+    : 'text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700/80';
+  return `<button type="button" role="menuitem" data-tx-action="${action}" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-sm font-medium ${toneClass} transition active:scale-[0.98]"><i class="${icon} w-4 text-center text-base" aria-hidden="true"></i><span>${escapeHtml(label)}</span></button>`;
+}
+function openTransactionActionsMenu(trigger, tx, focusFirstItem=false){
+  if(transactionActionsTrigger===trigger){ closeTransactionActionsMenu(true); return; }
+  closeTransactionActionsMenu();
+  const items=[];
+  if(tx.autoTransfer) items.push(transactionMenuItem('approve-transfer', 'ri-arrow-left-right-line', window.i18n.t('actions.approveTransfer')));
+  if(!tx.transferLinked && !tx.cardSettlement && !tx.autoTransfer){
+    items.push(transactionMenuItem('internal-transfer', 'ri-exchange-line', window.i18n.t(tx.internal?'actions.unmarkInternalTransfer':'actions.markInternalTransfer')));
+  }
+  if(!tx.transferLinked){
+    items.push(transactionMenuItem('card-statement', 'ri-bank-card-line', window.i18n.t(tx.cardSettlement?'actions.unmarkCardStatement':'actions.markCardStatement')));
+  }
+  if((tx.saida||tx.entrada)) items.push(transactionMenuItem('swap', 'ri-swap-line', window.i18n.t('actions.swap')));
+  items.push(transactionMenuItem('note', 'ri-sticky-note-line', window.i18n.t('actions.note')));
+  items.push('<div class="my-1 border-t border-zinc-200 dark:border-zinc-700"></div>');
+  items.push(transactionMenuItem('delete', 'ri-delete-bin-line', window.i18n.t('actions.delete'), 'danger'));
+
+  const popover=document.createElement('div');
+  popover.className='fixed z-[80] w-64 rounded-2xl border border-zinc-200/90 dark:border-zinc-700 bg-white/95 dark:bg-zinc-800/95 p-1.5 shadow-2xl shadow-zinc-950/15 backdrop-blur-xl';
+  // A geometria não pode depender da primeira compilação das classes dinâmicas
+  // pelo Tailwind CDN. Sem estes valores iniciais, o primeiro offsetWidth pode
+  // refletir um bloco sem `fixed`/`w-64` e prender o menu em left: 8px.
+  Object.assign(popover.style, {
+    position:'fixed',
+    width:'16rem',
+    boxSizing:'border-box',
+    zIndex:'80',
+    visibility:'hidden',
+  });
+  popover.setAttribute('role','menu');
+  popover.setAttribute('aria-label',window.i18n.t('actions.moreActions'));
+  popover.innerHTML=items.join('');
+  document.body.appendChild(popover);
+
+  const positionPopover=()=>{
+    const rect=trigger.getBoundingClientRect();
+    const menuRect=popover.getBoundingClientRect();
+    const margin=8;
+    const width=menuRect.width||256;
+    const height=menuRect.height;
+    const left=Math.max(margin, Math.min(window.innerWidth-width-margin, rect.right-width));
+    const below=rect.bottom+6;
+    const top=below+height<=window.innerHeight-margin ? below : Math.max(margin, rect.top-height-6);
+    popover.style.left=`${left}px`;
+    popover.style.top=`${top}px`;
+  };
+  positionPopover();
+  popover.style.visibility='visible';
+  transactionActionsPopover=popover;
+  transactionActionsTrigger=trigger;
+  trigger.setAttribute('aria-expanded','true');
+  // Reconfere depois que o Tailwind CDN processar o novo nó. Como o popover já
+  // nasce com a largura correta, não há flash no canto esquerdo entre os frames.
+  requestAnimationFrame(()=>{
+    if(transactionActionsPopover===popover && document.body.contains(trigger)) positionPopover();
+  });
+
+  popover.querySelectorAll('[data-tx-action]').forEach(button=>{
+    button.addEventListener('click', ()=>{
+      const action=button.dataset.txAction;
+      closeTransactionActionsMenu();
+      if(action==='approve-transfer'){
+        approvePossibleTransfer(tx); refreshAfterTransactionAction();
+      } else if(action==='internal-transfer'){
+        setInternalTransfer(tx, !tx.internal); refreshAfterTransactionAction();
+      } else if(action==='card-statement'){
+        setCardStatement(tx, !tx.cardSettlement); refreshAfterTransactionAction();
+      } else if(action==='swap'){
+        const tmp=tx.saida; tx.saida=tx.entrada; tx.entrada=tmp;
+        tx.amount=tx.saida||0;
+        if(tx.saida && tx.cat==='outros') tx.cat=categorize(tx.desc);
+        if(!tx.saida) tx.cat='outros';
+        currentPage=1; refreshAfterTransactionAction();
+      } else if(action==='note'){
+        openNoteDialog(tx);
+      } else if(action==='delete'){
+        if(!confirm(window.i18n.t('actions.confirmDelete', {desc:tx.desc, date:fmtTransactionDate(tx.realDate||tx.date), value:fmtEUR(tx.saida||tx.entrada||0)}))) return;
+        transactions=transactions.filter(x=>x.id!==tx.id);
+        selectedTxIds.delete(tx.id);
+        refreshAfterTransactionAction();
+      }
+    });
+  });
+  // No clique com mouse, mantém o foco no botão que originou o popover. Focar um
+  // elemento recém-anexado ao fim do body pode fazer o navegador rolar a página
+  // até ele. Pelo teclado, entra no menu sem permitir alteração da rolagem.
+  if(focusFirstItem) popover.querySelector('[data-tx-action]')?.focus({preventScroll:true});
+}
+document.addEventListener('pointerdown', e=>{
+  if(transactionActionsPopover && !transactionActionsPopover.contains(e.target) && !e.target.closest('.txMoreBtn')) closeTransactionActionsMenu();
+});
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape' && transactionActionsPopover) closeTransactionActionsMenu(true);
+});
+window.addEventListener('resize', ()=>closeTransactionActionsMenu());
+window.addEventListener('scroll', ()=>closeTransactionActionsMenu(), true);
+
 function renderTable(){
+  closeTransactionActionsMenu();
   // remove da seleção ids que não existem mais (ex: após restaurar backup)
   const liveIds = new Set(transactions.map(t=>t.id));
   for(const id of Array.from(selectedTxIds)) if(!liveIds.has(id)) selectedTxIds.delete(id);
@@ -196,7 +314,7 @@ function renderTable(){
   if(filterType==='entrada') rows = rows.filter(t=>t.entrada!=null && t.entrada>0);
   if(filterBank==='__none__') rows = rows.filter(t=>!t.bank);
   else if(filterBank) rows = rows.filter(t=>t.bank===filterBank);
-  if(q) rows = rows.filter(t=> (t.desc+' '+t.source+' '+catDisplayName(catById(t.cat))+' '+(t.saida||'')+' '+(t.entrada||'')).toLowerCase().includes(q));
+  if(q) rows = rows.filter(t=> (t.desc+' '+t.source+' '+(t.sourceFiles||[]).join(' ')+' '+catDisplayName(catById(t.cat))+' '+(t.saida||'')+' '+(t.entrada||'')).toLowerCase().includes(q));
   // ordenação clicável pelos títulos das colunas (data, descrição, saída, entrada, categoria) — tableSort guarda a escolha atual
   const sortComparators = {
     date: (a,b)=> (a.realDate||a.date) - (b.realDate||b.date), // data real do gasto, não a data de pagamento da fatura
@@ -225,12 +343,12 @@ function renderTable(){
   const pageRows = rows.slice(start, start+PAGE_SIZE);
   body.innerHTML = pageRows.map(t=>{
     const c=catById(t.cat);
-    const d=(t.realDate||t.date).toLocaleDateString(localeTag()); // mostra a data real do gasto (mesmo quando t.date é a data de pagamento da fatura)
+    const d=fmtTransactionDate(t.realDate||t.date); // mostra a data real do gasto (mesmo quando t.date é a data de pagamento da fatura)
     const saidaStr = t.saida!=null ? fmtEUR(t.saida) : '<span class="text-zinc-300">—</span>';
     const entradaStr = t.entrada!=null ? fmtEUR(t.entrada) : '<span class="text-zinc-300">—</span>';
     const hasValue = (t.saida!=null && t.saida>0) || (t.entrada!=null && t.entrada>0);
-    // mostra o seletor de categoria pra saída e entrada — inclusive já marcadas como "Transferência interna" manualmente,
-    // pra dar pra reverter direto aqui. Só fica de fora quem tem fluxo próprio: fatura consolidada e par já vinculado.
+    // Categoria e classificação interna são independentes: selecionar "Transferência"
+    // não altera se a transação entra ou não nos totais.
     const needCat = hasValue && !t.cardSettlement && !t.transferLinked;
     // "Cartão BIL"/tipo de conta já aparece discreto embaixo da descrição (bankBadge) — aqui só sinaliza o que é
     // relevante além disso: a fatura consolidada não contabilizada, uma transferência entre contas, ou uma transferência interna comum.
@@ -242,10 +360,13 @@ function renderTable(){
           ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 border border-dashed border-cyan-300 dark:border-cyan-800 text-[10px] font-bold align-middle" title="${window.i18n.t('table.possibleTransferTitleText', {bank: escapeHtml(bankLabel(t.meta&&t.meta.transferToBank))})}"><i class="ri-arrow-left-right-line"></i> ${window.i18n.t('table.possibleTransfer')}</span>`
           : (t.internal ? ` <span class="inline-flex items-center px-1.5 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-300 text-[10px] font-bold align-middle" title="${window.i18n.t('table.internalTransferTitle')}">⇄ ${window.i18n.t('table.internalTransfer')}</span>` : '')));
     const bankBadge = t.bank ? `<div class="text-[11px] text-zinc-400 dark:text-zinc-500 flex items-center gap-1 mt-0.5"><i class="${bankIcon(t.bank)}"></i> ${escapeHtml(bankLabel(t.bank))}</div>` : '';
+    const manualMark = t.source==='manual'
+      ? `<span class="inline-flex w-4 h-4 mr-1.5 rounded-full items-center justify-center align-[-1px] bg-violet-100 dark:bg-violet-950 text-violet-700 dark:text-violet-300 text-[9px] font-extrabold lowercase" title="${window.i18n.t('table.manualEntryTitle')}" aria-label="${window.i18n.t('table.manualEntryTitle')}">m</span>`
+      : '';
     return `<tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition ${t.internal?'opacity-70':''} ${selectedTxIds.has(t.id)?'bg-violet-50 dark:bg-violet-950/30':''}">
       <td class="px-3 py-2.5 text-center"><input type="checkbox" class="rowSelect rounded border-zinc-300 dark:border-zinc-600 text-violet-600 focus:ring-violet-500/40" data-select="${t.id}" ${selectedTxIds.has(t.id)?'checked':''}></td>
       <td class="px-4 py-2.5 font-mono text-xs whitespace-nowrap">${d}</td>
-      <td class="px-3 py-2.5"><div class="font-medium text-[13px] leading-tight line-clamp-2" title="${escapeHtml(t.desc)}">${escapeHtml(t.desc)}${intBadge}</div>${t.note?`<div class="text-[11px] text-amber-600 dark:text-amber-400 italic mt-0.5 flex items-center gap-1"><i class="ri-sticky-note-line"></i>${escapeHtml(t.note)}</div>`:''}${bankBadge}</td>
+      <td class="px-3 py-2.5"><div class="font-medium text-[13px] leading-tight line-clamp-2" title="${escapeHtml(t.desc)}">${manualMark}${escapeHtml(t.desc)}${intBadge}</div>${t.note?`<div class="text-[11px] text-amber-600 dark:text-amber-400 italic mt-0.5 flex items-center gap-1"><i class="ri-sticky-note-line"></i>${escapeHtml(t.note)}</div>`:''}${bankBadge}</td>
       <td class="px-3 py-2.5 text-right font-bold font-mono text-[13px] whitespace-nowrap ${t.saida?'text-red-600 dark:text-red-400':''}">${saidaStr}</td>
       <td class="px-3 py-2.5 text-right font-bold font-mono text-[13px] whitespace-nowrap ${t.entrada?'text-emerald-600 dark:text-emerald-400':''}">${entradaStr}</td>
       <td class="px-3 py-2.5">
@@ -255,14 +376,18 @@ function renderTable(){
       </td>
       <td class="px-4 py-2.5">
         <div class="flex items-center justify-end gap-1">
-          <button title="${window.i18n.t('actions.swap')}" data-swap="${t.id}" class="swapBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700" style="display:${(t.saida||t.entrada)?'flex':'none'}"><i class="ri-swap-line"></i></button>
-          <button title="${window.i18n.t('actions.note')}" data-note="${t.id}" class="noteBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700 ${t.note?'text-amber-500 border-amber-300':''}"><i class="ri-sticky-note-line"></i></button>
-          <button title="${window.i18n.t('actions.details')}" data-details="${t.id}" class="detailsBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700"><i class="ri-information-line"></i></button>
-          <button title="${window.i18n.t('actions.delete')}" data-del="${t.id}" class="delBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] text-zinc-400 hover:bg-red-50 hover:text-red-600 hover:border-red-200 dark:hover:bg-red-950/40 dark:hover:text-red-400 dark:hover:border-red-900 transition"><i class="ri-delete-bin-line"></i></button>
+          <button title="${window.i18n.t('actions.details')}" aria-label="${window.i18n.t('actions.details')}" data-details="${t.id}" class="detailsBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700"><i class="ri-information-line"></i></button>
+          <button title="${window.i18n.t('actions.moreActions')}" aria-label="${window.i18n.t('actions.moreActions')}" aria-haspopup="menu" aria-expanded="false" data-more="${t.id}" class="txMoreBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[13px] text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition active:scale-95"><i class="ri-more-2-fill"></i></button>
         </div>
       </td>
     </tr>`;
   }).join('');
+  body.querySelectorAll('.txMoreBtn').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const tx=transactions.find(x=>x.id===e.currentTarget.dataset.more); if(!tx) return;
+      openTransactionActionsMenu(e.currentTarget, tx, e.detail===0);
+    });
+  });
   body.querySelectorAll('.detailsBtn').forEach(b=>{
     b.addEventListener('click', e=>{
       const id=e.currentTarget.dataset.details;
@@ -270,48 +395,11 @@ function renderTable(){
       openDetailsDialog(tx);
     });
   });
-  body.querySelectorAll('.noteBtn').forEach(b=>{
-    b.addEventListener('click', e=>{
-      const id=e.currentTarget.dataset.note;
-      const tx=transactions.find(x=>x.id===id); if(!tx) return;
-      openNoteDialog(tx);
-    });
-  });
-  body.querySelectorAll('.swapBtn').forEach(b=>{
-    b.addEventListener('click', e=>{
-      const id=e.currentTarget.dataset.swap; const tx=transactions.find(x=>x.id===id); if(!tx) return;
-      // swap saida/entrada
-      const tmp=tx.saida; tx.saida=tx.entrada; tx.entrada=tmp;
-      tx.amount = tx.saida||0;
-      // fix cat: if now entrada (no saida) set to outros, if now saida restore categorization
-      if(tx.saida && tx.cat==='outros') tx.cat=categorize(tx.desc);
-      if(!tx.saida) tx.cat='outros';
-      currentPage=1; renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
-    });
-  });
-  body.querySelectorAll('.delBtn').forEach(b=>{
-    b.addEventListener('click', e=>{
-      const id=e.currentTarget.dataset.del; const tx=transactions.find(x=>x.id===id); if(!tx) return;
-      if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString(localeTag()), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
-      transactions = transactions.filter(x=>x.id!==id);
-      selectedTxIds.delete(id);
-      renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
-    });
-  });
   body.querySelectorAll('.catSelect').forEach(s=>{
     s.addEventListener('change', e=>{
       const id=e.target.dataset.id; const v=e.target.value;
       const tx=transactions.find(x=>x.id===id); if(!tx) return;
       tx.cat=v;
-      if(v==='transferencia'){
-        // marca manualmente como transferência interna (saída OU entrada) — some dos totais em todo o app,
-        // do jeito que a auto-detecção de "possível transferência" já faz, sem precisar casar as duas pontas.
-        tx.internal = true;
-      } else if(tx.internal){
-        // usuário tirou manualmente de "Transferência interna" (ou corrigiu uma detecção automática errada) — volta a contar normalmente
-        tx.internal = false;
-        if(tx.autoTransfer){ tx.autoTransfer = false; if(tx.meta) delete tx.meta.transferToBank; }
-      }
       renderTable(); renderCategoryChips(); updateKPIs(); updateCharts(); persistState();
       applySameDescription(tx);
     });
@@ -333,7 +421,7 @@ function renderTable(){
   const realSaidas = rows.filter(r=>r.saida && !r.internal);
   const saidaSum = realSaidas.reduce((s,r)=>s+r.saida,0);
   const entradaSum = rows.filter(r=>r.entrada && !r.internal).reduce((s,r)=>s+r.entrada,0);
-  const transfSum = rows.filter(r=>r.internal && r.saida).reduce((s,r)=>s+r.saida,0);
+  const transfSum = rows.filter(r=>r.internal && !r.cardSettlement && r.saida).reduce((s,r)=>s+r.saida,0);
   // com uma categoria filtrada, mostra também a média mensal (gasto/entrada dividido pelos meses com movimento
   // nessa categoria) — dá o "quanto por mês em média" que o total sozinho não mostra
   let avgLabel = '';
@@ -382,7 +470,7 @@ function updateKPIs(){
     if(el && subEl){
       el.textContent = fmtEUR(bal.total);
       subEl.textContent = (openingBalance && openingBalance.value!=null)
-        ? window.i18n.t('kpis.balanceSubWithOpening', {value: fmtEUR(bal.base), date: openingBalance.date.toLocaleDateString(localeTag())})
+        ? window.i18n.t('kpis.balanceSubWithOpening', {value: fmtEUR(bal.base), date: fmtTransactionDate(openingBalance.date)})
         : window.i18n.t('kpis.balanceSubDefault');
     }
   }
@@ -392,9 +480,10 @@ function updateKPIs(){
   document.getElementById('kpiTotal').textContent = fmtEUR(total);
   const saidasCount = scoped.filter(t=>t.saida && !t.internal).length;
   const entradasCount = scoped.filter(t=>t.entrada && !t.internal).length;
-  const transfCount = scoped.filter(t=>t.internal).length;
+  const transfCount = scoped.filter(t=>t.internal && !t.cardSettlement).length;
   const transfClause = transfCount ? window.i18n.t('kpis.countTransfersClause', {n: transfCount}) : '';
-  document.getElementById('kpiCount').textContent = window.i18n.t('kpis.countBreakdown', {expenses: saidasCount, income: entradasCount, transfers: transfClause, files: new Set(transactions.map(t=>t.source)).size});
+  const sourceFileCount = new Set(transactions.flatMap(t=>(t.sourceFiles&&t.sourceFiles.length?t.sourceFiles:[t.source]).filter(Boolean))).size;
+  document.getElementById('kpiCount').textContent = window.i18n.t('kpis.countBreakdown', {expenses: saidasCount, income: entradasCount, transfers: transfClause, files: sourceFileCount});
   document.getElementById('kpiAvg').textContent = fmtEUR(avg);
   // top category
   const byCat={}; scoped.forEach(t=>{ if(t.saida && !t.internal) byCat[t.cat]=(byCat[t.cat]||0)+t.saida; });
@@ -648,7 +737,7 @@ function detectAnomalies(txP){
         if(z>=3 && d.total>m*2){
           const dayTxs = spend.filter(t=>dayKey(t.date)===dayKey(d.date));
           anomalies.push({ type:'spike-day', severity:'medium', txs:dayTxs, date:d.date, aid:anomalyId('spike-day',[],d.date),
-            text: window.i18n.t('anomalies.messages.spikeDay', {date: d.date.toLocaleDateString(localeTag()), total: fmtEUR(d.total), count: d.count, avg: fmtEUR(m)}) });
+            text: window.i18n.t('anomalies.messages.spikeDay', {date: fmtTransactionDate(d.date), total: fmtEUR(d.total), count: d.count, avg: fmtEUR(m)}) });
         }
       });
     }
@@ -676,7 +765,7 @@ function renderAnomalies(txP){
     return `<div class="p-3 rounded-xl border ${high?'border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30':'border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/30'}">
       <div class="flex items-start justify-between gap-3">
         <div class="min-w-0">
-          <p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="${icons[a.type]||'ri-error-warning-fill'}"></i> ${a.date.toLocaleDateString(localeTag())}</p>
+          <p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="${icons[a.type]||'ri-error-warning-fill'}"></i> ${fmtTransactionDate(a.date)}</p>
           <p class="text-[11px] ${high?'text-red-700/80 dark:text-red-400/70':'text-amber-700/80 dark:text-amber-400/70'} mt-1 leading-relaxed">${escapeHtml(a.text)}</p>
         </div>
         <button type="button" class="anomalyResolveBtn shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-bold ${high?'bg-red-600 hover:bg-red-700':'bg-amber-600 hover:bg-amber-700'} text-white whitespace-nowrap" data-aid="${escapeHtml(a.aid)}">${window.i18n.t('anomalies.messages.resolveButton')}</button>
@@ -700,7 +789,7 @@ function openAnomalyDialog(aid){
 function renderAnomalyDialogBody(a){
   const high=a.severity==='high';
   document.getElementById('anomalyDialogSummary').innerHTML =
-    `<p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="ri-${high?'alarm-warning-fill':'error-warning-fill'}"></i> ${a.date.toLocaleDateString(localeTag())}</p>
+    `<p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="ri-${high?'alarm-warning-fill':'error-warning-fill'}"></i> ${fmtTransactionDate(a.date)}</p>
      <p class="text-[12px] text-zinc-600 dark:text-zinc-300 mt-1 leading-relaxed">${escapeHtml(a.text)}</p>`;
   // "Sempre aceitar" só faz sentido quando a anomalia gira em torno de UMA descrição (duplicidade, outlier de
   // estabelecimento/global) — pico de gasto num dia não tem uma descrição única pra generalizar.
@@ -720,7 +809,7 @@ function renderAnomalyDialogBody(a){
         <span class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-white" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>
         <span class="flex-1 min-w-0">
           <span class="block text-[13px] font-semibold truncate">${escapeHtml(t.desc)}</span>
-          <span class="text-[11px] text-zinc-500">${(t.realDate||t.date).toLocaleDateString(localeTag())} · ${escapeHtml(catDisplayName(c))}${t.bank?` · ${escapeHtml(bankLabel(t.bank))}`:''}${t.note?` · ${escapeHtml(t.note)}`:''}</span>
+          <span class="text-[11px] text-zinc-500">${fmtTransactionDate(t.realDate||t.date)} · ${escapeHtml(catDisplayName(c))}${t.bank?` · ${escapeHtml(bankLabel(t.bank))}`:''}${t.note?` · ${escapeHtml(t.note)}`:''}</span>
         </span>
         <span class="font-bold font-mono text-[13px] shrink-0 text-red-600 dark:text-red-400">${fmtEUR(t.saida||t.entrada||0)}</span>
         <button type="button" class="anomalyTxDelBtn shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30" data-id="${t.id}" title="${window.i18n.t('actions.delete')}"><i class="ri-delete-bin-line"></i></button>
@@ -730,7 +819,7 @@ function renderAnomalyDialogBody(a){
       b.addEventListener('click', e=>{
         const id=e.currentTarget.dataset.id;
         const tx=transactions.find(x=>x.id===id); if(!tx) return;
-        if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString(localeTag()), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
+        if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: fmtTransactionDate(tx.realDate||tx.date), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
         transactions = transactions.filter(x=>x.id!==id);
         selectedTxIds.delete(id);
         renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
@@ -1207,7 +1296,7 @@ function updateCharts(){
           pointBackgroundColor: cumData.map(v=>v>=0?'#10b981':'#ef4444')
         }];
         document.getElementById('cashflowHint').textContent = (openingBalance && openingBalance.value!=null)
-          ? window.i18n.t('charts.cashflow.hintWithOpening', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString(localeTag())})
+          ? window.i18n.t('charts.cashflow.hintWithOpening', {value: fmtEUR(openingBalance.value), date: fmtTransactionDate(openingBalance.date)})
           : window.i18n.t('charts.cashflow.hintCumulative');
         if(subEl) subEl.textContent = window.i18n.t('charts.cashflow.subtitle');
       }
@@ -1308,4 +1397,3 @@ function updateCharts(){
   if(pi){ pi.textContent=fmtEUR(txP.filter(t=>t.entrada&&!t.internal).reduce((s,t)=>s+(t.entrada||0),0)); }
 }
 window._toggleCat=(id)=>{ activeCatFilter = activeCatFilter===id? null : id; renderCategoryChips(); renderTable(); updateCharts(); };
-
