@@ -561,14 +561,14 @@ function showView(v){
 <dialog id="detailsDialog" class="backdrop:bg-black/40 bg-white dark:bg-zinc-900 rounded-2xl p-0 shadow-2xl w-[min(480px,92vw)] border border-zinc-200 dark:border-zinc-800">
   <div class="p-6 space-y-4">
     <div class="flex items-center justify-between">
-      <h3 class="font-extrabold text-lg flex items-center gap-2"><i class="ri-information-line text-violet-600"></i> <span data-i18n="modals.details.title">Detalhes da transação</span></h3>
+      <h3 class="font-extrabold text-lg flex items-center gap-2 text-zinc-900 dark:text-zinc-100"><i class="ri-information-line text-violet-600"></i> <span data-i18n="modals.details.title">Detalhes da transação</span></h3>
       <button type="button" id="btnDetailsClose" class="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"><i class="ri-close-line text-xl"></i></button>
     </div>
     <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 text-sm">
-      <span id="detailsTxDesc" class="font-semibold block"></span>
+      <span id="detailsTxDesc" class="font-semibold block text-zinc-900 dark:text-zinc-100"></span>
       <span id="detailsTxMeta" class="text-xs text-zinc-500 font-mono"></span>
     </div>
-    <label class="text-sm font-semibold block"><span data-i18n="modals.details.bankType">Tipo de conta</span>
+    <label class="text-sm font-semibold block text-zinc-900 dark:text-zinc-100"><span data-i18n="modals.details.bankType">Tipo de conta</span>
       <select id="detailsBankSelect" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></select>
     </label>
     <div id="detailsTransferBox" class="hidden p-3 rounded-xl border border-cyan-200 dark:border-cyan-900 bg-cyan-50 dark:bg-cyan-950/30">
@@ -583,7 +583,7 @@ function showView(v){
       <button type="button" id="btnRejectAutoTransfer" class="mt-2 text-[11px] font-bold text-cyan-700 dark:text-cyan-300 hover:underline" data-i18n="modals.details.rejectShort">Não é transferência — restaurar categoria</button>
     </div>
     <div>
-      <span class="text-sm font-semibold block mb-1" data-i18n="modals.details.extractedData">Dados extraídos do extrato</span>
+      <span class="text-sm font-semibold block mb-1 text-zinc-900 dark:text-zinc-100" data-i18n="modals.details.extractedData">Dados extraídos do extrato</span>
       <div id="detailsExtra" class="text-sm"></div>
     </div>
   </div>
@@ -5093,7 +5093,7 @@ function openDetailsDialog(tx){
   document.getElementById('detailsExtra').innerHTML = rows.map(([label,val])=>`
     <div class="flex items-start justify-between gap-3 py-1.5 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
       <span class="text-zinc-500 shrink-0">${escapeHtml(label)}</span>
-      <span class="font-medium text-right break-all">${escapeHtml(String(val))}</span>
+      <span class="font-medium text-right break-all text-zinc-900 dark:text-zinc-100">${escapeHtml(String(val))}</span>
     </div>`).join('');
   detailsDialog.showModal();
 }
