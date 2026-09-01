@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gastos.AI — Dashboard de Despesas em PDF</title>
+<title data-i18n="app.pageTitle">Gastos.AI — Dashboard de Despesas em PDF</title>
 <script>
 // Apply theme before first paint to avoid a light/dark flash
 (function(){
@@ -41,16 +41,17 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white text-[18px] shadow-lg shadow-violet-600/20"><i class="ri-pie-chart-2-fill"></i></div>
       <div>
-        <h1 class="font-extrabold leading-none text-[16px] tracking-tight">Gastos<span class="text-violet-600">.AI</span></h1>
-        <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium tracking-wide uppercase">PDF → Dashboard inteligente</p>
+        <h1 data-i18n="app.title" data-i18n-html="true" class="font-extrabold leading-none text-[16px] tracking-tight">Gastos<span class="text-violet-600">.AI</span></h1>
+        <p data-i18n="app.subtitle" class="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium tracking-wide uppercase">PDF → Dashboard inteligente</p>
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <button id="btnPrint" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition"><i class="ri-printer-line"></i> <span class="hidden sm:inline">Imprimir relatório</span></button>
-      <button id="btnExport" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition"><i class="ri-download-2-line"></i> Exportar CSV</button>
-      <button id="btnClear" title="Limpar tudo" aria-label="Limpar todas as transações" class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition text-zinc-500"><i class="ri-delete-bin-line"></i></button>
-      <button id="btnTheme" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro" class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition text-zinc-500"><i class="ri-moon-line dark:hidden"></i><i class="ri-sun-line hidden dark:inline"></i></button>
-      <button onclick="showView('settings')" title="Importar / Configurações" class="inline-flex items-center gap-2 px-3.5 h-9 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-bold hover:opacity-90 transition"><i class="ri-settings-3-line"></i><span class="hidden sm:inline">Configurações</span></button>
+      <div id="languageSelector" class="flex items-center gap-1 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800"></div>
+      <button id="btnPrint" data-i18n-title="header.print" title="Imprimir relatório" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition"><i class="ri-printer-line"></i> <span data-i18n="header.print" class="hidden sm:inline">Imprimir relatório</span></button>
+      <button id="btnExport" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition"><i class="ri-download-2-line"></i> <span data-i18n="common.export">Exportar CSV</span></button>
+      <button id="btnClear" data-i18n-title="settings.general.clearAll" title="Limpar tudo" aria-label="Limpar todas as transações" class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition text-zinc-500"><i class="ri-delete-bin-line"></i></button>
+      <button id="btnTheme" data-i18n-title="header.theme" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro" class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition text-zinc-500"><i class="ri-moon-line dark:hidden"></i><i class="ri-sun-line hidden dark:inline"></i></button>
+      <button onclick="showView('settings')" data-i18n-title="settings.title" title="Importar / Configurações" class="inline-flex items-center gap-2 px-3.5 h-9 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-bold hover:opacity-90 transition"><i class="ri-settings-3-line"></i><span data-i18n="settings.title" class="hidden sm:inline">Configurações</span></button>
     </div>
   </div>
 </header>
@@ -58,18 +59,18 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 <!-- Period bar — sticky, controls charts + table -->
 <div class="sticky top-[64px] z-30 bg-white/85 dark:bg-zinc-900/85 backdrop-blur-xl border-b border-zinc-200 dark:border-zinc-800">
   <div class="max-w-[1360px] mx-auto px-4 md:px-6 py-2.5 flex flex-wrap items-center gap-3">
-    <span class="text-[11px] font-bold tracking-widest uppercase text-zinc-500"><i class="ri-calendar-line"></i> Período</span>
+    <span class="text-[11px] font-bold tracking-widest uppercase text-zinc-500"><i class="ri-calendar-line"></i> <span data-i18n="dashboard.periodLabel">Período</span></span>
     <div class="flex items-center gap-1 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800" id="periodChips">
-      <button data-period="" class="periodChip px-3 py-1.5 rounded-lg text-xs font-bold">Tudo</button>
+      <button data-period="" class="periodChip px-3 py-1.5 rounded-lg text-xs font-bold" data-i18n="filters.periodChips.all">Tudo</button>
     </div>
     <select id="filterPeriodTop" class="px-2.5 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
-      <option value="">Todo o período</option>
+      <option value="" data-i18n="filters.allPeriods">Todo o período</option>
     </select>
     <div class="ml-auto flex items-center gap-3 text-xs">
-      <span class="text-zinc-500">Gastos no período:</span>
+      <span class="text-zinc-500"><span data-i18n="dashboard.periodExpenses">Gastos no período:</span></span>
       <span id="periodTotal" class="font-bold text-red-600 dark:text-red-400 font-mono">€ 0,00</span>
       <span class="text-zinc-500 hidden sm:inline">·</span>
-      <span class="text-zinc-500 hidden sm:inline">Entradas:</span>
+      <span class="text-zinc-500 hidden sm:inline"><span data-i18n="dashboard.periodIncome">Entradas:</span></span>
       <span id="periodIn" class="font-bold text-emerald-600 dark:text-emerald-400 font-mono hidden sm:inline">€ 0,00</span>
     </div>
   </div>
@@ -79,40 +80,40 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 
     <!-- ============ 01 · VISÃO GERAL ============ -->
     <div class="flex items-center gap-3 pt-1">
-      <span class="text-[11px] font-bold tracking-widest uppercase text-violet-600 dark:text-violet-400 whitespace-nowrap">01 · Visão geral</span>
+      <span class="text-[11px] font-bold tracking-widest uppercase text-violet-600 dark:text-violet-400 whitespace-nowrap" data-i18n="dashboard.sectionOverview">01 · Visão geral</span>
       <span class="h-px flex-1 bg-zinc-200 dark:bg-zinc-800"></span>
     </div>
 
     <!-- KPI row -->
     <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
       <div class="bg-white dark:bg-zinc-900 rounded-2xl border-2 border-emerald-200 dark:border-emerald-900 p-4 shadow-sm">
-        <p class="text-[11px] font-bold tracking-widest uppercase text-emerald-600 dark:text-emerald-400 flex items-center gap-1"><i class="ri-wallet-3-fill"></i> Saldo atual</p>
+        <p class="text-[11px] font-bold tracking-widest uppercase text-emerald-600 dark:text-emerald-400 flex items-center gap-1"><i class="ri-wallet-3-fill"></i> <span data-i18n="kpis.balance">Saldo atual</span></p>
         <p id="kpiBalance" class="font-extrabold text-2xl tracking-tight mt-1">—</p>
-        <p id="kpiBalanceSub" class="text-xs text-zinc-500 mt-1 leading-snug">Entradas − saídas de todo o histórico.</p>
+        <p id="kpiBalanceSub" class="text-xs text-zinc-500 mt-1 leading-snug" data-i18n="kpis.balanceSubDefault">Entradas − saídas de todo o histórico.</p>
       </div>
       <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 shadow-sm">
-        <p class="text-[11px] font-bold tracking-widest uppercase text-zinc-500">Total gasto</p>
+        <p class="text-[11px] font-bold tracking-widest uppercase text-zinc-500" data-i18n="kpis.totalExpenses">Total gasto</p>
         <p id="kpiTotal" class="font-extrabold text-2xl tracking-tight mt-1">€ 0,00</p>
-        <p id="kpiCount" class="text-xs text-zinc-500 mt-1">0 transações</p>
+        <p id="kpiCount" class="text-xs text-zinc-500 mt-1" data-i18n="kpis.transactionsLabel">0 transações</p>
       </div>
       <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 shadow-sm">
-        <p class="text-[11px] font-bold tracking-widest uppercase text-zinc-500">Maior categoria</p>
+        <p class="text-[11px] font-bold tracking-widest uppercase text-zinc-500" data-i18n="kpis.topCategory">Maior categoria</p>
         <p id="kpiTopCat" class="font-bold text-sm mt-1 truncate">—</p>
         <p id="kpiTopCatVal" class="text-xs text-zinc-500 mt-1">—</p>
       </div>
       <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 shadow-sm">
-        <p class="text-[11px] font-bold tracking-widest uppercase text-zinc-500">Ticket médio</p>
+        <p class="text-[11px] font-bold tracking-widest uppercase text-zinc-500" data-i18n="kpis.avgTicket">Ticket médio</p>
         <p id="kpiAvg" class="font-extrabold text-xl tracking-tight mt-1">€ 0,00</p>
-        <p class="text-xs text-zinc-500 mt-1">por transação</p>
+        <p class="text-xs text-zinc-500 mt-1" data-i18n="kpis.perTransaction">por transação</p>
       </div>
       <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 shadow-sm">
-        <p class="text-[11px] font-bold tracking-widest uppercase text-zinc-500">Taxa de poupança</p>
+        <p class="text-[11px] font-bold tracking-widest uppercase text-zinc-500" data-i18n="kpis.savingsRate">Taxa de poupança</p>
         <p id="kpiSavings" class="font-extrabold text-2xl tracking-tight mt-1">—</p>
-        <p id="kpiSavingsSub" class="text-xs text-zinc-500 mt-1">sem entradas no período</p>
+        <p id="kpiSavingsSub" class="text-xs text-zinc-500 mt-1" data-i18n="kpis.noIncome">sem entradas no período</p>
       </div>
       <div class="col-span-2 lg:col-span-1 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-2xl p-4 text-white shadow-lg shadow-violet-600/20">
-        <p class="text-[11px] font-bold tracking-widest uppercase text-violet-100">O que mais pesa?</p>
-        <p id="kpiInsight" class="font-bold text-sm mt-1 leading-snug">Adicione PDFs para ver insights.</p>
+        <p class="text-[11px] font-bold tracking-widest uppercase text-violet-100" data-i18n="kpis.insightTitle">O que mais pesa?</p>
+        <p id="kpiInsight" class="font-bold text-sm mt-1 leading-snug" data-i18n="kpis.insightDefault">Adicione PDFs para ver insights.</p>
         <p id="kpiInsightSub" class="text-xs text-violet-100 mt-1"></p>
       </div>
     </div>
@@ -120,14 +121,14 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
     <!-- Fluxo de caixa: mensal vs acumulado -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-1">
-        <h3 class="font-bold text-sm">Fluxo de caixa <span class="font-normal text-zinc-500" id="cashflowHint">· saldo acumulado ao longo do tempo</span></h3>
+        <h3 class="font-bold text-sm"><span data-i18n="charts.cashflow.title">Fluxo de caixa</span> <span class="font-normal text-zinc-500" id="cashflowHint" data-i18n="charts.cashflow.hintCumulative">· saldo acumulado ao longo do tempo</span></h3>
         <div class="flex items-center gap-1 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800">
-          <button data-cashflowmode="cumulative" class="cashflowModeBtn px-3 py-1 rounded-lg text-xs font-bold bg-white dark:bg-zinc-700 shadow-sm">Acumulado</button>
-          <button data-cashflowmode="monthly" class="cashflowModeBtn px-3 py-1 rounded-lg text-xs font-bold text-zinc-500">Mensal</button>
-          <button data-cashflowmode="forecast" class="cashflowModeBtn px-3 py-1 rounded-lg text-xs font-bold text-zinc-500"><i class="ri-line-chart-line"></i> Previsão</button>
+          <button data-cashflowmode="cumulative" class="cashflowModeBtn px-3 py-1 rounded-lg text-xs font-bold bg-white dark:bg-zinc-700 shadow-sm" data-i18n="charts.cashflowMode.cumulative">Acumulado</button>
+          <button data-cashflowmode="monthly" class="cashflowModeBtn px-3 py-1 rounded-lg text-xs font-bold text-zinc-500" data-i18n="charts.cashflowMode.monthly">Mensal</button>
+          <button data-cashflowmode="forecast" class="cashflowModeBtn px-3 py-1 rounded-lg text-xs font-bold text-zinc-500" data-i18n="charts.cashflowMode.forecast"><i class="ri-line-chart-line"></i> Previsão</button>
         </div>
       </div>
-      <p class="text-xs text-zinc-500 mb-3" id="cashflowSub">Entradas − saídas reais, sem transferências internas. Verde = sobrando, vermelho = consumindo reserva.</p>
+      <p class="text-xs text-zinc-500 mb-3" id="cashflowSub" data-i18n="charts.cashflow.subtitle">Entradas − saídas reais, sem transferências internas. Verde = sobrando, vermelho = consumindo reserva.</p>
       <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_260px] gap-5 items-start">
         <div class="relative h-[260px]"><canvas id="cashflowChart"></canvas></div>
         <div id="cashflowTips" class="space-y-2 lg:h-[260px] lg:overflow-y-auto lg:pr-1"></div>
@@ -136,18 +137,18 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 
     <!-- ============ 02 · PARA ONDE VAI ============ -->
     <div class="flex items-center gap-3 pt-2">
-      <span class="text-[11px] font-bold tracking-widest uppercase text-violet-600 dark:text-violet-400 whitespace-nowrap">02 · Para onde vai</span>
+      <span class="text-[11px] font-bold tracking-widest uppercase text-violet-600 dark:text-violet-400 whitespace-nowrap" data-i18n="dashboard.sectionWhereItGoes">02 · Para onde vai</span>
       <span class="h-px flex-1 bg-zinc-200 dark:bg-zinc-800"></span>
     </div>
 
     <!-- Chart principal: onde vai o dinheiro (full width) -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-        <h3 class="font-bold text-sm">Onde seu dinheiro vai <span class="font-normal text-zinc-500" id="catModeHint">· por categoria</span></h3>
+        <h3 class="font-bold text-sm"><span data-i18n="charts.category.title">Onde seu dinheiro vai</span> <span class="font-normal text-zinc-500" id="catModeHint" data-i18n="charts.category.hintByCategory">· por categoria</span></h3>
         <div class="flex items-center gap-1 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800">
-          <button data-chartmode="doughnut" class="chartModeBtn px-3 py-1 rounded-lg text-xs font-bold text-zinc-500">Donut</button>
-          <button data-chartmode="bar" class="chartModeBtn px-3 py-1 rounded-lg text-xs font-bold bg-white dark:bg-zinc-700 shadow-sm">Barras</button>
-          <button data-chartmode="waterfall" class="chartModeBtn px-3 py-1 rounded-lg text-xs font-bold text-zinc-500">Cascata</button>
+          <button data-chartmode="doughnut" class="chartModeBtn px-3 py-1 rounded-lg text-xs font-bold text-zinc-500" data-i18n="charts.mode.donut">Donut</button>
+          <button data-chartmode="bar" class="chartModeBtn px-3 py-1 rounded-lg text-xs font-bold bg-white dark:bg-zinc-700 shadow-sm" data-i18n="charts.mode.bar">Barras</button>
+          <button data-chartmode="waterfall" class="chartModeBtn px-3 py-1 rounded-lg text-xs font-bold text-zinc-500" data-i18n="charts.mode.waterfall">Cascata</button>
         </div>
       </div>
       <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,340px)] gap-6 items-start">
@@ -159,46 +160,46 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
     <!-- Row 2: evolução mensal + top estabelecimentos -->
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
       <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
-        <h3 class="font-bold text-sm mb-4">Evolução mensal</h3>
+        <h3 class="font-bold text-sm mb-4" data-i18n="charts.monthChart.title">Evolução mensal</h3>
         <div class="relative h-[280px]"><canvas id="monthChart"></canvas></div>
-        <div class="mt-3 flex items-center gap-2 text-[11px] text-zinc-500"><span class="w-2 h-2 rounded-full bg-violet-600 inline-block"></span> Total mensal · <span id="monthRange" class="font-mono"></span></div>
+        <div class="mt-3 flex items-center gap-2 text-[11px] text-zinc-500"><span class="w-2 h-2 rounded-full bg-violet-600 inline-block"></span> <span data-i18n="charts.monthChart.legendLabel">Total mensal ·</span> <span id="monthRange" class="font-mono"></span></div>
       </div>
       <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
-        <h3 class="font-bold text-sm mb-1">Top estabelecimentos / descrições</h3>
-        <p class="text-xs text-zinc-500 mb-4">Quem mais levou seu dinheiro no período</p>
+        <h3 class="font-bold text-sm mb-1" data-i18n="charts.merchantChart.title">Top estabelecimentos / descrições</h3>
+        <p class="text-xs text-zinc-500 mb-4" data-i18n="charts.merchantChart.subtitle">Quem mais levou seu dinheiro no período</p>
         <div class="relative h-[280px]"><canvas id="merchantChart"></canvas></div>
       </div>
     </div>
 
     <!-- ============ 03 · PADRÕES NO TEMPO ============ -->
     <div class="flex items-center gap-3 pt-2">
-      <span class="text-[11px] font-bold tracking-widest uppercase text-violet-600 dark:text-violet-400 whitespace-nowrap">03 · Padrões no tempo</span>
+      <span class="text-[11px] font-bold tracking-widest uppercase text-violet-600 dark:text-violet-400 whitespace-nowrap" data-i18n="dashboard.sectionPatterns">03 · Padrões no tempo</span>
       <span class="h-px flex-1 bg-zinc-200 dark:bg-zinc-800"></span>
     </div>
 
     <!-- histograma full width-ish -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="font-bold text-sm">Distribuição de valores</h3>
-        <span class="text-[11px] px-2 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 font-medium">Histograma</span>
+        <h3 class="font-bold text-sm" data-i18n="charts.histogram.title">Distribuição de valores</h3>
+        <span class="text-[11px] px-2 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 font-medium" data-i18n="charts.histogram.badge">Histograma</span>
       </div>
       <div class="relative h-[260px]"><canvas id="histChart"></canvas></div>
-      <p class="text-[11px] text-zinc-500 mt-3">Picos indicam faixa de gasto mais comum. Use para identificar micro-gastos recorrentes.</p>
+      <p class="text-[11px] text-zinc-500 mt-3" data-i18n="charts.histogram.hint">Picos indicam faixa de gasto mais comum. Use para identificar micro-gastos recorrentes.</p>
     </div>
 
     <!-- Row: tendência + recorrentes -->
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
       <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
         <div class="flex items-center justify-between mb-1">
-          <h3 class="font-bold text-sm">Tendência de gastos</h3>
+          <h3 class="font-bold text-sm" data-i18n="charts.trend.title">Tendência de gastos</h3>
           <span id="trendBadge" class="text-[11px] font-bold px-2 py-1 rounded-full"></span>
         </div>
-        <p class="text-xs text-zinc-500 mb-3">Média móvel (3 meses) vs gasto mensal</p>
+        <p class="text-xs text-zinc-500 mb-3" data-i18n="charts.trend.subtitle">Média móvel (3 meses) vs gasto mensal</p>
         <div class="relative h-[240px]"><canvas id="trendChart"></canvas></div>
       </div>
       <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
-        <h3 class="font-bold text-sm mb-1">Gastos recorrentes detectados</h3>
-        <p class="text-xs text-zinc-500 mb-3">Mesma descrição em vários meses — assinaturas e fixos</p>
+        <h3 class="font-bold text-sm mb-1" data-i18n="charts.recurring.title">Gastos recorrentes detectados</h3>
+        <p class="text-xs text-zinc-500 mb-3" data-i18n="charts.recurring.subtitle">Mesma descrição em vários meses — assinaturas e fixos</p>
         <div id="recurringList" class="space-y-2 max-h-[240px] overflow-auto pr-1"></div>
       </div>
     </div>
@@ -206,26 +207,26 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
     <!-- Gastos estranhos / anomalias -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
       <div class="flex items-center justify-between mb-1">
-        <h3 class="font-bold text-sm flex items-center gap-1.5"><i class="ri-alarm-warning-line text-amber-500"></i> Gastos estranhos detectados</h3>
+        <h3 class="font-bold text-sm flex items-center gap-1.5"><i class="ri-alarm-warning-line text-amber-500"></i> <span data-i18n="anomalies.title">Gastos estranhos detectados</span></h3>
         <span id="anomalyCount" class="text-[11px] px-2 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 font-medium"></span>
       </div>
-      <p class="text-xs text-zinc-500 mb-3">Cobranças repetidas, valores fora do padrão e picos de gasto — vale conferir</p>
+      <p class="text-xs text-zinc-500 mb-3" data-i18n="anomalies.subtitle">Cobranças repetidas, valores fora do padrão e picos de gasto — vale conferir</p>
       <div id="anomalyList" class="space-y-2 max-h-[320px] overflow-auto pr-1"></div>
     </div>
 
     <!-- Row: dia da semana + heatmap do mês -->
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
       <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
-        <h3 class="font-bold text-sm mb-1">Por dia da semana</h3>
-        <p class="text-xs text-zinc-500 mb-3">Onde seus gastos se concentram</p>
+        <h3 class="font-bold text-sm mb-1" data-i18n="charts.legends.dayOfWeek">Por dia da semana</h3>
+        <p class="text-xs text-zinc-500 mb-3" data-i18n="charts.dow.subtitle">Onde seus gastos se concentram</p>
         <div class="relative h-[240px]"><canvas id="dowChart"></canvas></div>
       </div>
       <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
         <div class="flex items-center justify-between mb-1">
-          <h3 class="font-bold text-sm">Calendário de gastos</h3>
+          <h3 class="font-bold text-sm" data-i18n="charts.calendar.title">Calendário de gastos</h3>
           <span id="heatmapMonthLabel" class="text-[11px] px-2 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 font-medium"></span>
         </div>
-        <p class="text-xs text-zinc-500 mb-3">Cor mais forte = dia com mais gasto — pico de salário, fim de semana, etc.</p>
+        <p class="text-xs text-zinc-500 mb-3" data-i18n="charts.calendar.subtitle">Cor mais forte = dia com mais gasto — pico de salário, fim de semana, etc.</p>
         <div class="flex flex-col sm:flex-row gap-4 items-start">
           <div id="calHeatmap" class="shrink-0 mx-auto sm:mx-0"></div>
           <div id="calHeatmapHighlights" class="flex-1 min-w-0 w-full space-y-1.5 sm:max-h-[240px] sm:overflow-y-auto sm:pr-1"></div>
@@ -236,100 +237,100 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
     <!-- Comparativo mês a mês por categoria -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-        <h3 class="font-bold text-sm">Comparativo por categoria <span class="font-normal text-zinc-500" id="compareModeHint">· barras lado a lado por mês</span></h3>
+        <h3 class="font-bold text-sm"><span data-i18n="charts.compare.title">Comparativo por categoria</span> <span class="font-normal text-zinc-500" id="compareModeHint" data-i18n="charts.compare.hintBars">· barras lado a lado por mês</span></h3>
         <div class="flex items-center gap-2">
           <span class="text-[11px] px-2 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 font-medium" id="compareRange"></span>
           <div class="flex items-center gap-1 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800">
-            <button data-comparemode="bars" class="compareModeBtn px-3 py-1 rounded-lg text-xs font-bold bg-white dark:bg-zinc-700 shadow-sm"><i class="ri-bar-chart-grouped-line"></i> Barras</button>
-            <button data-comparemode="lines" class="compareModeBtn px-3 py-1 rounded-lg text-xs font-bold text-zinc-500"><i class="ri-line-chart-line"></i> Linhas</button>
-            <button data-comparemode="budget" class="compareModeBtn px-3 py-1 rounded-lg text-xs font-bold text-zinc-500"><i class="ri-flag-line"></i> Orçamento</button>
+            <button data-comparemode="bars" class="compareModeBtn px-3 py-1 rounded-lg text-xs font-bold bg-white dark:bg-zinc-700 shadow-sm" data-i18n="charts.compare.tabBars"><i class="ri-bar-chart-grouped-line"></i> Barras</button>
+            <button data-comparemode="lines" class="compareModeBtn px-3 py-1 rounded-lg text-xs font-bold text-zinc-500" data-i18n="charts.compare.tabLines"><i class="ri-line-chart-line"></i> Linhas</button>
+            <button data-comparemode="budget" class="compareModeBtn px-3 py-1 rounded-lg text-xs font-bold text-zinc-500" data-i18n="charts.compare.tabBudget"><i class="ri-flag-line"></i> Orçamento</button>
           </div>
         </div>
       </div>
       <div id="compareChartWrap" class="relative h-[300px]"><canvas id="compareChart"></canvas></div>
       <div id="budgetScopeToggle" class="hidden mb-4">
         <div class="flex items-center gap-1 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800 w-fit">
-          <button data-budgetscope="month" class="budgetScopeBtn px-3 py-1 rounded-lg text-xs font-bold bg-white dark:bg-zinc-700 shadow-sm">Este mês</button>
-          <button data-budgetscope="cumulative" class="budgetScopeBtn px-3 py-1 rounded-lg text-xs font-bold text-zinc-500" title="Soma o orçamento e o gasto real de todos os meses do período — evita que um mês fora da curva (férias, etc.) pareça um estouro isolado">Acumulado</button>
+          <button data-budgetscope="month" class="budgetScopeBtn px-3 py-1 rounded-lg text-xs font-bold bg-white dark:bg-zinc-700 shadow-sm" data-i18n="charts.budgetScope.month">Este mês</button>
+          <button data-budgetscope="cumulative" class="budgetScopeBtn px-3 py-1 rounded-lg text-xs font-bold text-zinc-500" data-i18n="charts.budgetScope.cumulative" data-i18n-title="charts.compare.cumulativeTitle" title="Soma o orçamento e o gasto real de todos os meses do período — evita que um mês fora da curva (férias, etc.) pareça um estouro isolado">Acumulado</button>
         </div>
       </div>
       <div id="budgetProgressList" class="hidden space-y-4"></div>
       <div id="compareLegend" class="flex flex-wrap gap-x-4 gap-y-1.5 mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-800"></div>
-      <p id="compareBudgetEmpty" class="hidden text-[11px] text-zinc-500 mt-3">Nenhuma categoria tem orçamento definido ainda. Defina metas em <b>Configurações → Orçamentos mensais</b>.</p>
+      <p id="compareBudgetEmpty" class="hidden text-[11px] text-zinc-500 mt-3" data-i18n="charts.compare.noBudgetDefined" data-i18n-html="true">Nenhuma categoria tem orçamento definido ainda. Defina metas em <b>Configurações → Orçamentos mensais</b>.</p>
     </div>
 
     <!-- Transactions — full width bottom -->
   <div class="rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-700 p-4 flex flex-wrap gap-3 items-center justify-between bg-white/50 dark:bg-zinc-900/50">
-    <p class="text-xs text-zinc-600 dark:text-zinc-400"><span class="font-bold">Como funciona:</span> Importe extratos em <b>Configurações → Importar PDFs</b> → os gráficos usam só <b>Saídas</b> → corrija categorias na tabela. Tudo salvo automaticamente.</p>
-    <button id="btnAddManual" class="px-3.5 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold hover:opacity-90 transition shrink-0"><i class="ri-add-line"></i> Adicionar transação manual</button>
+    <p class="text-xs text-zinc-600 dark:text-zinc-400" data-i18n="table.howItWorks" data-i18n-html="true"><span class="font-bold">Como funciona:</span> Importe extratos em <b>Configurações → Importar PDFs</b> → os gráficos usam só <b>Saídas</b> → corrija categorias na tabela. Tudo salvo automaticamente.</p>
+    <button id="btnAddManual" class="px-3.5 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold hover:opacity-90 transition shrink-0"><i class="ri-add-line"></i> <span data-i18n="modals.manualEntry.title">Adicionar transação manual</span></button>
   </div>
 
   <!-- Transactions — full width bottom -->
   <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
     <div class="p-4 border-b border-zinc-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
-      <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-list-check text-violet-600"></i> Transações <span class="font-normal text-zinc-500">· extrato completo</span> <span id="txCount" class="ml-1 px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-xs font-mono">0</span></h3>
+      <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-list-check text-violet-600"></i> <span data-i18n="table.title">Transações</span> <span class="font-normal text-zinc-500" data-i18n="table.subtitle">· extrato completo</span> <span id="txCount" class="ml-1 px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-xs font-mono">0</span></h3>
       <div class="flex items-center gap-2">
         <div class="relative">
           <i class="ri-search-line absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 text-sm"></i>
-          <input id="searchTx" placeholder="Buscar descrição..." class="pl-8 pr-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm w-[220px] text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400">
+          <input id="searchTx" data-i18n-placeholder="filters.searchPlaceholder" placeholder="Buscar descrição..." class="pl-8 pr-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm w-[220px] text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400">
         </div>
         <select id="filterCat" class="px-2.5 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
-          <option value="">Todas categorias</option>
+          <option value="" data-i18n-option="filters.allCategories">Todas categorias</option>
         </select>
         <select id="filterType" class="px-2.5 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
-          <option value="">Saída + Entrada</option>
-          <option value="saida" selected>Só Saídas</option>
-          <option value="entrada">Só Entradas</option>
+          <option value="" data-i18n-option="filters.typeAll">Saída + Entrada</option>
+          <option value="saida" selected data-i18n-option="filters.typeExpense">Só Saídas</option>
+          <option value="entrada" data-i18n-option="filters.typeIncome">Só Entradas</option>
         </select>
         <select id="filterBank" class="px-2.5 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
-          <option value="">Todas contas</option>
+          <option value="" data-i18n-option="filters.bankAll">Todas contas</option>
         </select>
 
       </div>
     </div>
     <!-- Barra de ações em massa — aparece quando há transações selecionadas -->
     <div id="bulkBar" class="hidden px-4 py-2.5 border-b border-violet-200 dark:border-violet-900 bg-violet-50 dark:bg-violet-950/40 flex flex-wrap items-center gap-2 text-xs">
-      <span class="font-bold text-violet-700 dark:text-violet-300"><span id="bulkCount">0</span> selecionada(s)</span>
+      <span class="font-bold text-violet-700 dark:text-violet-300"><span id="bulkCount">0</span> <span data-i18n="actions.bulkCountSuffix">selecionada(s)</span></span>
       <select id="bulkCatSelect" class="px-2 py-1.5 rounded-lg border border-violet-200 dark:border-violet-800 bg-white dark:bg-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
-        <option value="">Categoria...</option>
+        <option value="" data-i18n-option="actions.bulkCategory">Categoria...</option>
       </select>
       <select id="bulkBankSelect" class="px-2 py-1.5 rounded-lg border border-violet-200 dark:border-violet-800 bg-white dark:bg-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
-        <option value="">Tipo de conta...</option>
+        <option value="" data-i18n-option="actions.bulkBank">Tipo de conta...</option>
       </select>
-      <button id="bulkSwapBtn" type="button" class="px-2.5 py-1.5 rounded-lg border border-violet-200 dark:border-violet-800 bg-white dark:bg-zinc-800 font-semibold hover:bg-violet-100 dark:hover:bg-violet-900/40 flex items-center gap-1"><i class="ri-swap-line"></i> Trocar Saída ↔ Entrada</button>
-      <button id="bulkLinkTransferBtn" type="button" title="Selecione a saída (ex: BIL) e a entrada (ex: Revolut) da mesma transferência" class="px-2.5 py-1.5 rounded-lg border border-cyan-200 dark:border-cyan-800 bg-white dark:bg-zinc-800 text-cyan-700 dark:text-cyan-300 font-semibold hover:bg-cyan-50 dark:hover:bg-cyan-950/40 flex items-center gap-1"><i class="ri-link"></i> Transferência entre contas</button>
-      <button id="bulkNoteBtn" type="button" class="px-2.5 py-1.5 rounded-lg border border-violet-200 dark:border-violet-800 bg-white dark:bg-zinc-800 font-semibold hover:bg-violet-100 dark:hover:bg-violet-900/40 flex items-center gap-1"><i class="ri-sticky-note-line"></i> Nota</button>
-      <button id="bulkDeleteBtn" type="button" class="px-2.5 py-1.5 rounded-lg border border-red-200 dark:border-red-900 bg-white dark:bg-zinc-800 text-red-600 dark:text-red-400 font-semibold hover:bg-red-50 dark:hover:bg-red-950/40 flex items-center gap-1"><i class="ri-delete-bin-line"></i> Excluir</button>
-      <button id="bulkClearBtn" type="button" class="ml-auto px-2.5 py-1.5 rounded-lg text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 font-semibold flex items-center gap-1"><i class="ri-close-line"></i> Limpar seleção</button>
+      <button id="bulkSwapBtn" type="button" class="px-2.5 py-1.5 rounded-lg border border-violet-200 dark:border-violet-800 bg-white dark:bg-zinc-800 font-semibold hover:bg-violet-100 dark:hover:bg-violet-900/40 flex items-center gap-1"><i class="ri-swap-line"></i> <span data-i18n="actions.swap">Trocar Saída ↔ Entrada</span></button>
+      <button id="bulkLinkTransferBtn" type="button" data-i18n-title="actions.linkTransferHint" title="Selecione a saída (ex: BIL) e a entrada (ex: Revolut) da mesma transferência" class="px-2.5 py-1.5 rounded-lg border border-cyan-200 dark:border-cyan-800 bg-white dark:bg-zinc-800 text-cyan-700 dark:text-cyan-300 font-semibold hover:bg-cyan-50 dark:hover:bg-cyan-950/40 flex items-center gap-1"><i class="ri-link"></i> <span data-i18n="actions.linkTransferBetweenAccounts">Transferência entre contas</span></button>
+      <button id="bulkNoteBtn" type="button" class="px-2.5 py-1.5 rounded-lg border border-violet-200 dark:border-violet-800 bg-white dark:bg-zinc-800 font-semibold hover:bg-violet-100 dark:hover:bg-violet-900/40 flex items-center gap-1"><i class="ri-sticky-note-line"></i> <span data-i18n="actions.note">Nota</span></button>
+      <button id="bulkDeleteBtn" type="button" class="px-2.5 py-1.5 rounded-lg border border-red-200 dark:border-red-900 bg-white dark:bg-zinc-800 text-red-600 dark:text-red-400 font-semibold hover:bg-red-50 dark:hover:bg-red-950/40 flex items-center gap-1"><i class="ri-delete-bin-line"></i> <span data-i18n="common.delete">Excluir</span></button>
+      <button id="bulkClearBtn" type="button" class="ml-auto px-2.5 py-1.5 rounded-lg text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 font-semibold flex items-center gap-1"><i class="ri-close-line"></i> <span data-i18n="actions.bulkClear">Limpar seleção</span></button>
     </div>
     <div class="overflow-auto">
       <table class="w-full text-sm">
         <thead class="sticky top-0 bg-zinc-50 dark:bg-zinc-800/80 backdrop-blur text-[11px] font-bold tracking-widest uppercase text-zinc-500">
           <tr>
-            <th class="text-center px-3 py-3 w-[36px]"><input type="checkbox" id="selectAllTx" title="Selecionar tudo nesta página" class="rounded border-zinc-300 dark:border-zinc-600 text-violet-600 focus:ring-violet-500/40"></th>
-            <th class="text-left px-4 py-3 w-[92px] cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="date" title="Ordenar por data">Data <span class="sortArrow" data-key="date"></span></th>
-            <th class="text-left px-3 py-3 cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="desc" title="Ordenar por descrição">Descrição <span class="sortArrow" data-key="desc"></span></th>
-            <th class="text-right px-3 py-3 text-red-500 w-[110px] cursor-pointer select-none hover:opacity-80" data-sort="saida" title="Ordenar por valor de saída">Saída <span class="sortArrow" data-key="saida"></span></th>
-            <th class="text-right px-3 py-3 text-emerald-600 w-[110px] cursor-pointer select-none hover:opacity-80" data-sort="entrada" title="Ordenar por valor de entrada">Entrada <span class="sortArrow" data-key="entrada"></span></th>
-            <th class="text-left px-3 py-3 w-[170px] cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="cat" title="Ordenar por categoria">Categoria <span class="sortArrow" data-key="cat"></span></th>
-            <th class="text-right px-4 py-3 w-[136px]">Ações</th>
+            <th class="text-center px-3 py-3 w-[36px]"><input type="checkbox" id="selectAllTx" data-i18n-title="table.selectAllTitle" title="Selecionar tudo nesta página" class="rounded border-zinc-300 dark:border-zinc-600 text-violet-600 focus:ring-violet-500/40"></th>
+            <th class="text-left px-4 py-3 w-[92px] cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="date" data-i18n-title="table.sort.date" title="Ordenar por data"><span data-i18n="table.columns.date">Data</span> <span class="sortArrow" data-key="date"></span></th>
+            <th class="text-left px-3 py-3 cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="desc" data-i18n-title="table.sort.description" title="Ordenar por descrição"><span data-i18n="table.columns.description">Descrição</span> <span class="sortArrow" data-key="desc"></span></th>
+            <th class="text-right px-3 py-3 text-red-500 w-[110px] cursor-pointer select-none hover:opacity-80" data-sort="saida" data-i18n-title="table.sort.expense" title="Ordenar por valor de saída"><span data-i18n="table.columns.expense">Saída</span> <span class="sortArrow" data-key="saida"></span></th>
+            <th class="text-right px-3 py-3 text-emerald-600 w-[110px] cursor-pointer select-none hover:opacity-80" data-sort="entrada" data-i18n-title="table.sort.income" title="Ordenar por valor de entrada"><span data-i18n="table.columns.income">Entrada</span> <span class="sortArrow" data-key="entrada"></span></th>
+            <th class="text-left px-3 py-3 w-[170px] cursor-pointer select-none hover:text-zinc-800 dark:hover:text-zinc-200" data-sort="cat" data-i18n-title="table.sort.category" title="Ordenar por categoria"><span data-i18n="table.columns.category">Categoria</span> <span class="sortArrow" data-key="cat"></span></th>
+            <th class="text-right px-4 py-3 w-[136px]" data-i18n="table.columns.actions">Ações</th>
           </tr>
         </thead>
         <tbody id="txBody" class="divide-y divide-zinc-100 dark:divide-zinc-800"></tbody>
       </table>
       <div id="emptyTx" class="py-16 text-center">
         <div class="w-12 h-12 rounded-2xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mx-auto text-zinc-400 text-xl mb-3"><i class="ri-receipt-line"></i></div>
-        <p class="text-sm font-semibold text-zinc-600 dark:text-zinc-300">Nenhuma despesa ainda</p>
-        <p class="text-xs text-zinc-500 mt-1 max-w-[420px] mx-auto">Adicione PDFs de extrato bancário (com colunas Data, Descrição, Saída, Entrada, Saldo) em <b>Configurações</b>, ou use dados de exemplo para explorar.</p>
-        <button onclick="showView('settings')" class="mt-3 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold hover:opacity-90 transition"><i class="ri-settings-3-line"></i> Ir para Configurações</button>
+        <p class="text-sm font-semibold text-zinc-600 dark:text-zinc-300" data-i18n="table.emptyTitle">Nenhuma despesa ainda</p>
+        <p class="text-xs text-zinc-500 mt-1 max-w-[420px] mx-auto" data-i18n="table.emptyDetail" data-i18n-html="true">Adicione PDFs de extrato bancário (com colunas Data, Descrição, Saída, Entrada, Saldo) em <b>Configurações</b>, ou use dados de exemplo para explorar.</p>
+        <button onclick="showView('settings')" class="mt-3 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold hover:opacity-90 transition"><i class="ri-settings-3-line"></i> <span data-i18n="table.goToSettings">Ir para Configurações</span></button>
       </div>
     </div>
     <div id="txFooter" class="px-4 py-3 border-t border-zinc-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-2 text-xs text-zinc-500 hidden">
       <span id="txSummary"></span>
       <div class="flex items-center gap-2">
-        <button id="prevPage" class="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-semibold disabled:opacity-40">← Anterior</button>
+        <button id="prevPage" class="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-semibold disabled:opacity-40">← <span data-i18n="table.prevPage">Anterior</span></button>
         <span id="pageInfo" class="font-mono"></span>
-        <button id="nextPage" class="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-semibold disabled:opacity-40">Próxima →</button>
+        <button id="nextPage" class="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-semibold disabled:opacity-40"><span data-i18n="table.nextPage">Próxima</span> →</button>
       </div>
     </div>
   </div>
@@ -339,8 +340,8 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 <!-- ===================== SETTINGS VIEW ===================== -->
 <div id="viewSettings" class="hidden max-w-[1360px] mx-auto px-4 md:px-6 py-6 space-y-6">
   <div class="flex items-center justify-between">
-    <h2 class="text-xl font-extrabold tracking-tight flex items-center gap-2"><i class="ri-settings-3-line text-violet-600"></i> Configurações</h2>
-    <button onclick="showView('main')" class="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-bold">← Voltar ao dashboard</button>
+    <h2 class="text-xl font-extrabold tracking-tight flex items-center gap-2"><i class="ri-settings-3-line text-violet-600"></i> <span data-i18n="settings.title">Configurações</span></h2>
+    <button onclick="showView('main')" data-i18n="settings.backToDashboard" class="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-bold">← Voltar ao dashboard</button>
   </div>
   <!-- Row 1: IA Local (+ Tipos de conta logo abaixo, no espaço que sobra) | Importar PDFs -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
@@ -349,56 +350,56 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
     <div id="ollamaCard" class="bg-gradient-to-br from-zinc-900 to-zinc-800 dark:from-zinc-900 dark:to-black rounded-[20px] border border-zinc-800 p-5 shadow-sm text-white relative overflow-hidden">
       <div class="absolute -top-12 -right-12 w-32 h-32 bg-violet-600/20 rounded-full blur-2xl"></div>
       <div class="flex items-center justify-between mb-3 relative">
-        <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-sparkling-2-fill text-violet-400"></i> IA Local <span class="font-normal text-zinc-400">· Ollama</span></h3>
-        <span id="ollamaStatus" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-[11px] font-bold"><span class="w-1.5 h-1.5 rounded-full bg-zinc-500" id="ollamaDot"></span><span id="ollamaStatusText">a verificar...</span></span>
+        <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-sparkling-2-fill text-violet-400"></i> <span data-i18n="settings.ai.title">IA Local</span> <span class="font-normal text-zinc-400">· Ollama</span></h3>
+        <span id="ollamaStatus" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-[11px] font-bold"><span class="w-1.5 h-1.5 rounded-full bg-zinc-500" id="ollamaDot"></span><span id="ollamaStatusText" data-i18n="settings.ai.statusChecking">a verificar...</span></span>
       </div>
       <div class="grid grid-cols-2 gap-2 mb-3 relative">
-        <label class="text-[11px] font-semibold text-zinc-400">URL Ollama <input id="ollamaUrl" value="http://localhost:11434" class="mt-1 w-full px-2.5 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-xs font-mono text-white placeholder-zinc-500 focus:outline-none focus:border-violet-500"></label>
-        <label class="text-[11px] font-semibold text-zinc-400">Modelo <input id="ollamaModel" value="gemma4:latest" class="mt-1 w-full px-2.5 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-xs font-mono text-white placeholder-zinc-500 focus:outline-none focus:border-violet-500"></label>
+        <label class="text-[11px] font-semibold text-zinc-400"><span data-i18n="settings.ai.url">URL Ollama</span> <input id="ollamaUrl" value="http://localhost:11434" class="mt-1 w-full px-2.5 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-xs font-mono text-white placeholder-zinc-500 focus:outline-none focus:border-violet-500"></label>
+        <label class="text-[11px] font-semibold text-zinc-400"><span data-i18n="settings.ai.model">Modelo</span> <input id="ollamaModel" value="gemma4:latest" class="mt-1 w-full px-2.5 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-xs font-mono text-white placeholder-zinc-500 focus:outline-none focus:border-violet-500"></label>
       </div>
       <div class="flex gap-2 relative">
-        <button id="btnOllamaCategorize" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-bold transition disabled:opacity-40 disabled:cursor-not-allowed"><i class="ri-magic-line"></i> Categorizar com IA local</button>
-        <button id="btnOllamaTest" class="px-3 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-xs font-bold transition" title="Testar conexão">Testar</button>
-        <button id="btnSaveJson" class="px-3 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-xs font-bold transition" title="Salvar gastos-data.json agora"><i class="ri-save-line"></i></button>
+        <button id="btnOllamaCategorize" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-bold transition disabled:opacity-40 disabled:cursor-not-allowed"><i class="ri-magic-line"></i> <span data-i18n="settings.ai.categorizeNow">Categorizar com IA local</span></button>
+        <button id="btnOllamaTest" data-i18n="settings.ai.testButton" data-i18n-title="settings.ai.testConnection" class="px-3 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-xs font-bold transition" title="Testar conexão">Testar</button>
+        <button id="btnSaveJson" data-i18n-title="settings.ai.saveJsonNowTitle" class="px-3 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-xs font-bold transition" title="Salvar gastos-data.json agora"><i class="ri-save-line"></i></button>
       </div>
       <label class="flex items-center gap-2 mt-3 cursor-pointer relative">
         <input type="checkbox" id="ollamaAuto" class="rounded border-zinc-600 bg-zinc-800 text-violet-600 focus:ring-violet-600">
-        <span class="text-xs font-medium text-zinc-300">Auto-categorizar ao importar PDF</span>
+        <span class="text-xs font-medium text-zinc-300" data-i18n="settings.ai.autoCategorize">Auto-categorizar ao importar PDF</span>
       </label>
       <div id="ollamaLog" class="mt-3 hidden p-2.5 rounded-xl bg-black/40 border border-zinc-700 text-[11px] font-mono leading-relaxed max-h-[160px] overflow-auto whitespace-pre-wrap"></div>
-      <p class="text-[11px] text-zinc-500 mt-2 relative">100% offline · <span class="text-zinc-400">gemma4:latest</span> já detectado (9.6 GB) · Nada sai da sua rede.</p>
+      <p class="text-[11px] text-zinc-500 mt-2 relative" data-i18n="settings.ai.footerNote" data-i18n-html="true">100% offline · <span class="text-zinc-400">gemma4:latest</span> já detectado (9.6 GB) · Nada sai da sua rede.</p>
     </div>
 
     <!-- Tipos de conta -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
       <div class="flex items-center justify-between mb-3">
-        <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-bank-line text-violet-600"></i> Tipos de conta</h3>
-        <button id="btnAddBankType" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900">+ Novo</button>
+        <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-bank-line text-violet-600"></i> <span data-i18n="settings.banks.title">Tipos de conta</span></h3>
+        <button id="btnAddBankType" data-i18n="settings.banks.addShort" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900">+ Novo</button>
       </div>
       <div id="bankTypeChips" class="flex flex-wrap gap-2"></div>
-      <p class="text-[11px] text-zinc-500 mt-3">Detectado automaticamente ao importar PDFs (BIL, Cartão BIL, Revolut). Crie outros tipos se usar mais contas — aparece discretamente abaixo da descrição na tabela de transações, e pode ser ajustado por transação ou em massa.</p>
+      <p class="text-[11px] text-zinc-500 mt-3" data-i18n="settings.banks.hint">Detectado automaticamente ao importar PDFs (BIL, Cartão BIL, Revolut). Crie outros tipos se usar mais contas — aparece discretamente abaixo da descrição na tabela de transações, e pode ser ajustado por transação ou em massa.</p>
     </div>
     </div>
 
     <!-- Importar PDFs -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
       <div class="flex items-center justify-between mb-3">
-        <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-folder-3-line text-violet-600"></i> Importar PDFs</h3>
-        <span class="text-[11px] font-medium px-2 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500">Arraste ou selecione</span>
+        <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-folder-3-line text-violet-600"></i> <span data-i18n="settings.importPdfs.title">Importar PDFs</span></h3>
+        <span class="text-[11px] font-medium px-2 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500" data-i18n="settings.importPdfs.badge">Arraste ou selecione</span>
       </div>
       <div id="dropZone" class="group relative rounded-2xl border-2 border-dashed border-zinc-200 dark:border-zinc-700 bg-zinc-50/60 dark:bg-zinc-800/40 p-6 text-center cursor-pointer hover:border-violet-300 dark:hover:border-violet-700 transition">
         <input id="fileInput" type="file" accept=".pdf" multiple class="hidden">
         <input id="folderInput" type="file" accept=".pdf" webkitdirectory class="hidden">
         <div class="w-12 h-12 rounded-2xl bg-violet-600 text-white flex items-center justify-center mx-auto text-xl shadow-lg shadow-violet-600/20 mb-3"><i class="ri-upload-cloud-2-line"></i></div>
-        <p class="font-bold text-sm">Solte seus PDFs aqui</p>
-        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Extratos · Data · Descrição · Saída · Entrada · Saldo</p>
+        <p data-i18n="dropZone.title" class="font-bold text-sm">Solte seus PDFs aqui</p>
+        <p data-i18n="dropZone.subtitle" class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Extratos · Data · Descrição · Saída · Entrada · Saldo</p>
         <div class="flex items-center justify-center gap-2 mt-4">
-          <button id="btnPickFiles" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700 transition">Selecionar PDFs</button>
-          <button id="btnPickFolder" class="px-4 py-2 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition">Selecionar pasta</button>
+          <button id="btnPickFiles" data-i18n="dropZone.btnPickFiles" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700 transition">Selecionar PDFs</button>
+          <button id="btnPickFolder" data-i18n="dropZone.btnPickFolder" class="px-4 py-2 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-700 transition">Selecionar pasta</button>
         </div>
-        <p class="text-[11px] text-zinc-400 mt-3">100% local — nada sai do seu PC · € (1.234,56 €)</p>
+        <p class="text-[11px] text-zinc-400 mt-3" data-i18n="settings.importPdfs.localNote">100% local — nada sai do seu PC · € (1.234,56 €)</p>
         <div id="progressWrap" class="hidden mt-4 text-left">
-          <div class="flex justify-between text-[11px] font-medium text-zinc-500 mb-1"><span id="progressLabel">Lendo PDFs...</span><span id="progressPct">0%</span></div>
+          <div class="flex justify-between text-[11px] font-medium text-zinc-500 mb-1"><span id="progressLabel" data-i18n="settings.importPdfs.readingProgress">Lendo PDFs...</span><span id="progressPct">0%</span></div>
           <div class="h-1.5 rounded-full bg-zinc-200 dark:bg-zinc-700 overflow-hidden"><div id="progressBar" class="h-full bg-violet-600 rounded-full transition-all" style="width:0%"></div></div>
         </div>
       </div>
@@ -406,12 +407,12 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
       <div class="mt-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 p-3 flex gap-3">
         <i class="ri-lightbulb-flash-line text-amber-600 dark:text-amber-400 text-lg shrink-0 mt-0.5"></i>
         <div class="text-xs leading-relaxed text-amber-900 dark:text-amber-200">
-          <span class="font-bold">Formato:</span> Data, Descrição, <b class="text-red-600">Saída</b>, <b class="text-emerald-600">Entrada</b>, Saldo. Só <b>Saídas</b> entram nos gráficos. Duplicatas são ignoradas automaticamente.
-          <div class="mt-1.5 pt-1.5 border-t border-amber-200 dark:border-amber-900">Testado com extratos <b>Revolut</b>. Datas numéricas (dd.mm.aaaa, comuns em bancos europeus como <b>BIL Luxembourg</b>) também são reconhecidas — se o seu extrato não importar corretamente, veja como reportar em <b>Configurações → Dados</b> ou ajuste manualmente na tabela.</div>
+          <span data-i18n="settings.importPdfs.formatHint" data-i18n-html="true"><span class="font-bold">Formato:</span> Data, Descrição, <b class="text-red-600">Saída</b>, <b class="text-emerald-600">Entrada</b>, Saldo. Só <b>Saídas</b> entram nos gráficos. Duplicatas são ignoradas automaticamente.</span>
+          <div class="mt-1.5 pt-1.5 border-t border-amber-200 dark:border-amber-900" data-i18n="settings.importPdfs.formatHintExtra" data-i18n-html="true">Testado com extratos <b>Revolut</b>. Datas numéricas (dd.mm.aaaa, comuns em bancos europeus como <b>BIL Luxembourg</b>) também são reconhecidas — se o seu extrato não importar corretamente, veja como reportar em <b>Configurações → Dados</b> ou ajuste manualmente na tabela.</div>
         </div>
       </div>
-      <p class="text-[11px] text-zinc-500 mt-2"><i class="ri-drag-move-2-line"></i> Você também pode arrastar PDFs em qualquer lugar da página do dashboard.</p>
-      <button id="btnDemo" class="mt-3 w-full inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-semibold hover:opacity-90 transition"><i class="ri-flashlight-line"></i> Ver com dados de exemplo</button>
+      <p class="text-[11px] text-zinc-500 mt-2"><i class="ri-drag-move-2-line"></i> <span data-i18n="settings.importPdfs.dragAnywhereHint">Você também pode arrastar PDFs em qualquer lugar da página do dashboard.</span></p>
+      <button id="btnDemo" class="mt-3 w-full inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-semibold hover:opacity-90 transition"><i class="ri-flashlight-line"></i> <span data-i18n="settings.general.demoData">Ver com dados de exemplo</span></button>
     </div>
   </div>
 
@@ -421,24 +422,24 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
     <!-- Category editor -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
       <div class="flex items-center justify-between mb-3">
-        <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-price-tag-3-line text-violet-600"></i> Categorias</h3>
-        <button id="btnAddCat" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900">+ Nova</button>
+        <h3 class="font-bold text-sm flex items-center gap-2"><i class="ri-price-tag-3-line text-violet-600"></i> <span data-i18n="settings.tabs.categories">Categorias</span></h3>
+        <button id="btnAddCat" data-i18n="settings.categories.addShort" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900">+ Nova</button>
       </div>
       <div id="categoryChips" class="flex flex-wrap gap-2"></div>
-      <p class="text-[11px] text-zinc-500 mt-3">Clique numa fatia do gráfico ou no chip para filtrar a tabela lá embaixo.</p>
+      <p class="text-[11px] text-zinc-500 mt-3" data-i18n="settings.categories.hint">Clique numa fatia do gráfico ou no chip para filtrar a tabela lá embaixo.</p>
     </div>
 
     <!-- Saldo inicial -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
-      <h3 class="font-bold text-sm flex items-center gap-2 mb-1"><i class="ri-scales-3-line text-violet-600"></i> Saldo inicial</h3>
-      <p class="text-[11px] text-zinc-500 mb-3">Se o extrato começa no meio do caminho (ex: janeiro/2026) e falta uma entrada anterior a ele (ex: o salário de dezembro que pagou o começo de janeiro), informe aqui o saldo que você tinha um dia antes do primeiro extrato importado. Esse valor entra tanto no <b>Saldo atual</b> (topo do painel) quanto no início do gráfico de <b>Fluxo de caixa acumulado</b>. Alternativa: em vez de preencher aqui, lance uma <b>transação manual do tipo Entrada</b> em dezembro com o total que você tinha — dá no mesmo, mas não use os dois ao mesmo tempo pra não contar em dobro.</p>
+      <h3 class="font-bold text-sm flex items-center gap-2 mb-1"><i class="ri-scales-3-line text-violet-600"></i> <span data-i18n="openingBalance.title">Saldo inicial</span></h3>
+      <p class="text-[11px] text-zinc-500 mb-3" data-i18n="openingBalance.explanation" data-i18n-html="true">Se o extrato começa no meio do caminho (ex: janeiro/2026) e falta uma entrada anterior a ele (ex: o salário de dezembro que pagou o começo de janeiro), informe aqui o saldo que você tinha um dia antes do primeiro extrato importado. Esse valor entra tanto no <b>Saldo atual</b> (topo do painel) quanto no início do gráfico de <b>Fluxo de caixa acumulado</b>. Alternativa: em vez de preencher aqui, lance uma <b>transação manual do tipo Entrada</b> em dezembro com o total que você tinha — dá no mesmo, mas não use os dois ao mesmo tempo pra não contar em dobro.</p>
       <div class="grid grid-cols-2 gap-2">
-        <label class="text-xs font-semibold block">Saldo em <input type="date" id="obDate" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
-        <label class="text-xs font-semibold block">Valor <input type="number" step="0.01" id="obValue" placeholder="Ex: 3200.00" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
+        <label class="text-xs font-semibold block"><span data-i18n="openingBalance.dateLabel">Saldo em</span> <input type="date" id="obDate" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
+        <label class="text-xs font-semibold block"><span data-i18n="openingBalance.value">Valor</span> <input type="number" step="0.01" id="obValue" placeholder="Ex: 3200.00" data-i18n-placeholder="openingBalance.valuePlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
       </div>
       <div class="flex items-center flex-wrap gap-2 mt-3">
-        <button id="btnSaveOpeningBalance" type="button" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700">Salvar</button>
-        <button id="btnClearOpeningBalance" type="button" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 text-xs font-bold">Remover</button>
+        <button id="btnSaveOpeningBalance" type="button" data-i18n="openingBalance.saveShort" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700">Salvar</button>
+        <button id="btnClearOpeningBalance" type="button" data-i18n="openingBalance.removeShort" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 text-xs font-bold">Remover</button>
         <span id="obStatus" class="text-[11px] text-zinc-500"></span>
       </div>
     </div>
@@ -446,41 +447,41 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 
     <!-- Orçamentos mensais -->
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
-      <h3 class="font-bold text-sm flex items-center gap-2 mb-1"><i class="ri-flag-line text-violet-600"></i> Orçamentos mensais</h3>
-      <p class="text-[11px] text-zinc-500 mb-3">Defina uma meta de gasto por categoria — habilita o modo "Orçamento" no comparativo do dashboard e alimenta a aba <b>Previsão</b> do Fluxo de caixa.</p>
+      <h3 class="font-bold text-sm flex items-center gap-2 mb-1"><i class="ri-flag-line text-violet-600"></i> <span data-i18n="settings.budget.cardTitle">Orçamentos mensais</span></h3>
+      <p class="text-[11px] text-zinc-500 mb-3" data-i18n="settings.budget.hint" data-i18n-html="true">Defina uma meta de gasto por categoria — habilita o modo "Orçamento" no comparativo do dashboard e alimenta a aba <b>Previsão</b> do Fluxo de caixa.</p>
       <label class="text-xs font-semibold flex items-center justify-between gap-3 mb-3 pb-3 border-b border-zinc-100 dark:border-zinc-800">
-        <span class="flex items-center gap-1.5"><i class="ri-money-euro-circle-line text-emerald-600"></i> Meta de renda mensal</span>
-        <input type="number" min="0" step="10" id="incomeTargetInput" placeholder="Ex: 3000" class="w-32 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-xs font-mono text-right text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400">
+        <span class="flex items-center gap-1.5"><i class="ri-money-euro-circle-line text-emerald-600"></i> <span data-i18n="settings.budget.incomeTargetLabel">Meta de renda mensal</span></span>
+        <input type="number" min="0" step="10" id="incomeTargetInput" placeholder="Ex: 3000" data-i18n-placeholder="settings.budget.incomeTargetPlaceholder" class="w-32 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-xs font-mono text-right text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400">
       </label>
       <div id="budgetList" class="space-y-1.5"></div>
       <div id="budgetSummaryBox" class="mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-800"></div>
-      <p class="text-[11px] text-zinc-500 mt-3">Categorias sem meta usam a média dos últimos meses na Previsão — não precisa preencher tudo.</p>
+      <p class="text-[11px] text-zinc-500 mt-3" data-i18n="settings.budget.footerHint">Categorias sem meta usam a média dos últimos meses na Previsão — não precisa preencher tudo.</p>
     </div>
   </div>
 
   <!-- Row 3: Dados -->
   <div class="grid grid-cols-1 gap-6">
     <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
-      <h3 class="font-bold text-sm flex items-center gap-2 mb-3"><i class="ri-database-2-line text-violet-600"></i> Dados</h3>
+      <h3 class="font-bold text-sm flex items-center gap-2 mb-3"><i class="ri-database-2-line text-violet-600"></i> <span data-i18n="settings.tabs.data">Dados</span></h3>
       <div id="fsStatusBox" class="flex items-center justify-between gap-3 p-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 mb-3">
         <div class="flex items-center gap-2.5 min-w-0">
           <span id="fsStatusDot" class="w-2 h-2 rounded-full shrink-0 bg-zinc-400"></span>
           <div class="min-w-0">
-            <p id="fsStatusText" class="text-xs font-bold truncate">Salvando no navegador (localStorage)</p>
-            <p id="fsStatusSub" class="text-[11px] text-zinc-500">Escolha uma pasta para gravar <code class="font-mono">gastos-data.json</code> direto no seu computador.</p>
+            <p id="fsStatusText" data-i18n="settings.data.localStorage" class="text-xs font-bold truncate">Salvando no navegador (localStorage)</p>
+            <p id="fsStatusSub" data-i18n="settings.data.localStorageSubHtml" data-i18n-html="true" class="text-[11px] text-zinc-500">Escolha uma pasta para gravar <code class="font-mono">gastos-data.json</code> direto no seu computador.</p>
           </div>
         </div>
-        <button id="btnChooseFolder" class="shrink-0 px-3 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold hover:opacity-90 transition whitespace-nowrap"><i class="ri-folder-open-line"></i> Escolher pasta</button>
+        <button id="btnChooseFolder" class="shrink-0 px-3 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold hover:opacity-90 transition whitespace-nowrap"><i class="ri-folder-open-line"></i> <span data-i18n="settings.data.chooseFolder">Escolher pasta</span></button>
       </div>
       <div class="flex flex-wrap gap-2">
-        <button id="btnSaveJsonNow" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700"><i class="ri-save-line"></i> Salvar agora</button>
-        <button id="btnExportJson" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 text-xs font-bold"><i class="ri-download-line"></i> Baixar backup JSON</button>
-        <label class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 text-xs font-bold cursor-pointer"><i class="ri-upload-line"></i> Restaurar backup<input type="file" id="fileImportJson" accept=".json" class="hidden"></label>
+        <button id="btnSaveJsonNow" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700"><i class="ri-save-line"></i> <span data-i18n="settings.data.saveNow">Salvar agora</span></button>
+        <button id="btnExportJson" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 text-xs font-bold"><i class="ri-download-line"></i> <span data-i18n="settings.data.exportJson">Baixar backup JSON</span></button>
+        <label class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 text-xs font-bold cursor-pointer"><i class="ri-upload-line"></i> <span data-i18n="settings.data.importJson">Restaurar backup</span><input type="file" id="fileImportJson" accept=".json" class="hidden"></label>
       </div>
-      <p class="text-[11px] text-zinc-500 mt-2">Funciona no Chrome e Edge. Sem pasta escolhida, tudo continua salvo automaticamente no navegador.</p>
+      <p class="text-[11px] text-zinc-500 mt-2" data-i18n="settings.data.compatNote">Funciona no Chrome e Edge. Sem pasta escolhida, tudo continua salvo automaticamente no navegador.</p>
       <div id="quotaBanner" class="hidden mt-3 p-3 rounded-xl border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30 flex items-start gap-2.5">
         <i class="ri-alarm-warning-fill text-red-600 dark:text-red-400 mt-0.5"></i>
-        <div class="text-xs leading-relaxed text-red-800 dark:text-red-300">
+        <div class="text-xs leading-relaxed text-red-800 dark:text-red-300" data-i18n="settings.data.quotaBannerHtml" data-i18n-html="true">
           <span class="font-bold">Armazenamento do navegador cheio.</span> Escolha uma pasta acima ou <button id="quotaDlBtn" class="underline font-bold">baixe backup JSON</button> e limpe dados antigos em <span class="font-mono">localStorage</span>.
         </div>
         <button onclick="this.parentElement.classList.add('hidden')" class="ml-auto text-red-400 hover:text-red-600 shrink-0"><i class="ri-close-line"></i></button>
@@ -503,16 +504,16 @@ function showView(v){
 <!-- Manual entry modal -->
 <dialog id="manualDialog" class="backdrop:bg-black/40 bg-white dark:bg-zinc-900 rounded-2xl p-0 shadow-2xl w-[min(480px,92vw)] border border-zinc-200 dark:border-zinc-800">
   <form method="dialog" class="p-6 space-y-4" id="manualForm">
-    <h3 class="font-extrabold text-lg">Adicionar transação manual</h3>
+    <h3 class="font-extrabold text-lg" data-i18n="modals.manualEntry.title">Adicionar transação manual</h3>
     <div class="grid grid-cols-2 gap-3">
-      <label class="text-sm font-semibold">Data <input type="date" id="mDate" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
-      <label class="text-sm font-semibold">Valor (€) <input type="number" step="0.01" id="mVal" placeholder="123,45" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
+      <label class="text-sm font-semibold"><span data-i18n="modals.manualEntry.date">Data</span> <input type="date" id="mDate" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
+      <label class="text-sm font-semibold"><span data-i18n="modals.manualEntry.value">Valor (€)</span> <input type="number" step="0.01" id="mVal" placeholder="123,45" data-i18n-placeholder="modals.manualEntry.valuePlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
     </div>
-    <label class="text-sm font-semibold block">Descrição <input id="mDesc" placeholder="Ex: Supermercado Pão de Açúcar" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
-    <div class="grid grid-cols-2 gap-3"><label class="text-sm font-semibold block">Tipo <select id="mType" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"><option value="saida">Saída (despesa)</option><option value="entrada">Entrada (receita)</option></select></label><label class="text-sm font-semibold block">Categoria <select id="mCat" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></select></label></div>
+    <label class="text-sm font-semibold block"><span data-i18n="modals.manualEntry.description">Descrição</span> <input id="mDesc" placeholder="Ex: Supermercado Pão de Açúcar" data-i18n-placeholder="modals.manualEntry.descriptionPlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
+    <div class="grid grid-cols-2 gap-3"><label class="text-sm font-semibold block"><span data-i18n="modals.manualEntry.type">Tipo</span> <select id="mType" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"><option value="saida" data-i18n-option="modals.manualEntry.typeExpense">Saída (despesa)</option><option value="entrada" data-i18n-option="modals.manualEntry.typeIncome">Entrada (receita)</option></select></label><label class="text-sm font-semibold block"><span data-i18n="modals.manualEntry.category">Categoria</span> <select id="mCat" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></select></label></div>
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" id="btnCancelManual" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
-      <button type="submit" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Adicionar</button>
+      <button type="button" id="btnCancelManual" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="submit" data-i18n="modals.manualEntry.submit" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Adicionar</button>
     </div>
   </form>
 </dialog>
@@ -521,18 +522,18 @@ function showView(v){
 <!-- Note modal -->
 <dialog id="noteDialog" class="backdrop:bg-black/40 bg-white dark:bg-zinc-900 rounded-2xl p-0 shadow-2xl w-[min(480px,92vw)] border border-zinc-200 dark:border-zinc-800">
   <form method="dialog" class="p-6 space-y-4" id="noteForm">
-    <h3 class="font-extrabold text-lg">Nota da transação</h3>
+    <h3 class="font-extrabold text-lg" data-i18n="modals.note.dialogTitle">Nota da transação</h3>
     <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 text-sm">
       <span id="noteTxDesc" class="font-semibold block"></span>
       <span id="noteTxMeta" class="text-xs text-zinc-500 font-mono"></span>
     </div>
-    <label class="text-sm font-semibold block">Nota
+    <label class="text-sm font-semibold block"><span data-i18n="modals.note.label">Nota</span>
       <textarea id="noteText" rows="3" placeholder="Ex: presente para a Sofia, reembolsável pela empresa..." class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 resize-y"></textarea>
     </label>
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" id="btnNoteDelete" class="px-4 py-2 rounded-xl border border-red-200 dark:border-red-900 text-red-600 dark:text-red-400 font-semibold text-sm hidden"><i class="ri-delete-bin-line"></i> Remover</button>
-      <button type="button" id="btnNoteCancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
-      <button type="submit" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Salvar nota</button>
+      <button type="button" id="btnNoteDelete" class="px-4 py-2 rounded-xl border border-red-200 dark:border-red-900 text-red-600 dark:text-red-400 font-semibold text-sm hidden"><i class="ri-delete-bin-line"></i> <span data-i18n="modals.note.deleteShort">Remover</span></button>
+      <button type="button" id="btnNoteCancel" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="submit" data-i18n="modals.note.save" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Salvar nota</button>
     </div>
   </form>
 </dialog>
@@ -541,29 +542,29 @@ function showView(v){
 <dialog id="detailsDialog" class="backdrop:bg-black/40 bg-white dark:bg-zinc-900 rounded-2xl p-0 shadow-2xl w-[min(480px,92vw)] border border-zinc-200 dark:border-zinc-800">
   <div class="p-6 space-y-4">
     <div class="flex items-center justify-between">
-      <h3 class="font-extrabold text-lg flex items-center gap-2"><i class="ri-information-line text-violet-600"></i> Detalhes da transação</h3>
+      <h3 class="font-extrabold text-lg flex items-center gap-2"><i class="ri-information-line text-violet-600"></i> <span data-i18n="modals.details.title">Detalhes da transação</span></h3>
       <button type="button" id="btnDetailsClose" class="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"><i class="ri-close-line text-xl"></i></button>
     </div>
     <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 text-sm">
       <span id="detailsTxDesc" class="font-semibold block"></span>
       <span id="detailsTxMeta" class="text-xs text-zinc-500 font-mono"></span>
     </div>
-    <label class="text-sm font-semibold block">Tipo de conta
+    <label class="text-sm font-semibold block"><span data-i18n="modals.details.bankType">Tipo de conta</span>
       <select id="detailsBankSelect" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></select>
     </label>
     <div id="detailsTransferBox" class="hidden p-3 rounded-xl border border-cyan-200 dark:border-cyan-900 bg-cyan-50 dark:bg-cyan-950/30">
-      <p class="text-[11px] font-bold text-cyan-700 dark:text-cyan-300 flex items-center gap-1 mb-1"><i class="ri-arrow-left-right-line"></i> Transferência entre contas</p>
+      <p class="text-[11px] font-bold text-cyan-700 dark:text-cyan-300 flex items-center gap-1 mb-1"><i class="ri-arrow-left-right-line"></i> <span data-i18n="modals.details.transferBetweenAccounts">Transferência entre contas</span></p>
       <p id="detailsTransferPair" class="text-xs text-zinc-600 dark:text-zinc-300"></p>
-      <button type="button" id="btnUnlinkTransfer" class="mt-2 text-[11px] font-bold text-cyan-700 dark:text-cyan-300 hover:underline">Desvincular</button>
+      <button type="button" id="btnUnlinkTransfer" class="mt-2 text-[11px] font-bold text-cyan-700 dark:text-cyan-300 hover:underline" data-i18n="modals.details.unlinkShort">Desvincular</button>
     </div>
     <div id="detailsAutoTransferBox" class="hidden p-3 rounded-xl border border-dashed border-cyan-300 dark:border-cyan-800 bg-cyan-50/60 dark:bg-cyan-950/20">
-      <p class="text-[11px] font-bold text-cyan-700 dark:text-cyan-300 flex items-center gap-1 mb-1"><i class="ri-arrow-left-right-line"></i> Possível transferência entre contas</p>
+      <p class="text-[11px] font-bold text-cyan-700 dark:text-cyan-300 flex items-center gap-1 mb-1"><i class="ri-arrow-left-right-line"></i> <span data-i18n="modals.details.possibleTransfer">Possível transferência entre contas</span></p>
       <p id="detailsAutoTransferInfo" class="text-xs text-zinc-600 dark:text-zinc-300"></p>
-      <p class="text-[11px] text-zinc-500 mt-1">Detectado pelo banco do beneficiário no extrato — não está contando como Gasto. Se estiver certo, não precisa fazer nada; se for um gasto de verdade, desfaça abaixo.</p>
-      <button type="button" id="btnRejectAutoTransfer" class="mt-2 text-[11px] font-bold text-cyan-700 dark:text-cyan-300 hover:underline">Não é transferência — restaurar categoria</button>
+      <p class="text-[11px] text-zinc-500 mt-1" data-i18n="modals.details.autoTransferHint">Detectado pelo banco do beneficiário no extrato — não está contando como Gasto. Se estiver certo, não precisa fazer nada; se for um gasto de verdade, desfaça abaixo.</p>
+      <button type="button" id="btnRejectAutoTransfer" class="mt-2 text-[11px] font-bold text-cyan-700 dark:text-cyan-300 hover:underline" data-i18n="modals.details.rejectShort">Não é transferência — restaurar categoria</button>
     </div>
     <div>
-      <span class="text-sm font-semibold block mb-1">Dados extraídos do extrato</span>
+      <span class="text-sm font-semibold block mb-1" data-i18n="modals.details.extractedData">Dados extraídos do extrato</span>
       <div id="detailsExtra" class="text-sm"></div>
     </div>
   </div>
@@ -573,19 +574,19 @@ function showView(v){
 <dialog id="anomalyDialog" class="backdrop:bg-black/40 bg-white dark:bg-zinc-900 rounded-2xl p-0 shadow-2xl w-[min(560px,92vw)] border border-zinc-200 dark:border-zinc-800">
   <div class="p-6 space-y-4">
     <div class="flex items-center justify-between">
-      <h3 class="font-extrabold text-lg flex items-center gap-2"><i class="ri-alarm-warning-line text-amber-500"></i> Resolver gasto estranho</h3>
+      <h3 class="font-extrabold text-lg flex items-center gap-2"><i class="ri-alarm-warning-line text-amber-500"></i> <span data-i18n="modals.anomaly.title">Resolver gasto estranho</span></h3>
       <button type="button" id="btnAnomalyDialogClose" class="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"><i class="ri-close-line text-xl"></i></button>
     </div>
     <div id="anomalyDialogSummary" class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60"></div>
     <div>
-      <span class="text-sm font-semibold block mb-1.5">Transações envolvidas</span>
+      <span class="text-sm font-semibold block mb-1.5" data-i18n="modals.anomaly.txListLabel">Transações envolvidas</span>
       <div id="anomalyDialogTxList" class="space-y-2 max-h-[320px] overflow-auto pr-1"></div>
     </div>
-    <p class="text-[11px] text-zinc-500">Excluir remove a transação de vez do extrato. Aceitar marca só esse alerta como revisado. <span id="anomalyAlwaysHint" class="hidden">"Sempre aceitar" ignora essa descrição pra sempre — não vira mais gasto estranho, nem em meses futuros.</span></p>
+    <p class="text-[11px] text-zinc-500"><span data-i18n="modals.anomaly.hint">Excluir remove a transação de vez do extrato. Aceitar marca só esse alerta como revisado.</span> <span id="anomalyAlwaysHint" class="hidden" data-i18n="modals.anomaly.alwaysAcceptHint">"Sempre aceitar" ignora essa descrição pra sempre — não vira mais gasto estranho, nem em meses futuros.</span></p>
     <div class="flex justify-end gap-2 pt-1 flex-wrap">
-      <button type="button" id="btnAnomalyDialogCancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Fechar</button>
-      <button type="button" id="btnAnomalyAlwaysAccept" class="hidden px-4 py-2 rounded-xl border border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 font-bold text-sm" title="Nunca mais avisar sobre essa descrição"><i class="ri-shield-check-line"></i> Sempre aceitar essa descrição</button>
-      <button type="button" id="btnAnomalyAccept" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm">Aceitar (está certo)</button>
+      <button type="button" id="btnAnomalyDialogCancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm" data-i18n="common.close">Fechar</button>
+      <button type="button" id="btnAnomalyAlwaysAccept" class="hidden px-4 py-2 rounded-xl border border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 font-bold text-sm" title="Nunca mais avisar sobre essa descrição" data-i18n-title="modals.anomaly.alwaysAcceptTitle"><i class="ri-shield-check-line"></i> <span data-i18n="anomalies.alwaysAccept">Sempre aceitar essa descrição</span></button>
+      <button type="button" id="btnAnomalyAccept" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm" data-i18n="anomalies.accept">Aceitar (está certo)</button>
     </div>
   </div>
 </dialog>
@@ -593,14 +594,14 @@ function showView(v){
 <!-- Bulk note modal -->
 <dialog id="bulkNoteDialog" class="backdrop:bg-black/40 bg-white dark:bg-zinc-900 rounded-2xl p-0 shadow-2xl w-[min(480px,92vw)] border border-zinc-200 dark:border-zinc-800">
   <form method="dialog" class="p-6 space-y-4" id="bulkNoteForm">
-    <h3 class="font-extrabold text-lg">Nota em massa</h3>
-    <p class="text-sm text-zinc-500">Aplica a mesma nota em <span id="bulkNoteCount" class="font-bold text-zinc-800 dark:text-zinc-200">0</span> transações selecionadas, substituindo a nota atual de cada uma.</p>
-    <label class="text-sm font-semibold block">Nota
-      <textarea id="bulkNoteText" rows="3" placeholder="Ex: revisão de assinatura, reembolsável..." class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 resize-y"></textarea>
+    <h3 class="font-extrabold text-lg" data-i18n="modals.bulkNote.dialogTitle">Nota em massa</h3>
+    <p id="bulkNoteDesc" class="text-sm text-zinc-500" data-i18n="modals.bulkNote.description" data-i18n-html="true">Aplica a mesma nota em <span class="font-bold text-zinc-800 dark:text-zinc-200">0</span> transações selecionadas, substituindo a nota atual de cada uma.</p>
+    <label class="text-sm font-semibold block"><span data-i18n="modals.note.label">Nota</span>
+      <textarea id="bulkNoteText" rows="3" placeholder="Ex: revisão de assinatura, reembolsável..." data-i18n-placeholder="modals.bulkNote.placeholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 resize-y"></textarea>
     </label>
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" id="btnBulkNoteCancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
-      <button type="submit" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Aplicar a todas</button>
+      <button type="button" id="btnBulkNoteCancel" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="submit" data-i18n="modals.bulkNote.saveShort" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Aplicar a todas</button>
     </div>
   </form>
 </dialog>
@@ -608,21 +609,21 @@ function showView(v){
 <!-- Category modal -->
 <dialog id="catDialog" class="backdrop:bg-black/40 bg-white dark:bg-zinc-900 rounded-2xl p-0 shadow-2xl w-[min(520px,92vw)] border border-zinc-200 dark:border-zinc-800">
   <form method="dialog" class="p-6 space-y-4" id="catForm">
-    <h3 class="font-extrabold text-lg" id="catDialogTitle">Nova categoria</h3>
+    <h3 class="font-extrabold text-lg" id="catDialogTitle" data-i18n="modals.category.titleNew">Nova categoria</h3>
     <input type="hidden" id="cEditId" value="">
     <div class="grid grid-cols-3 gap-3">
-      <label class="col-span-2 text-sm font-semibold">Nome <input id="cName" placeholder="Ex: Pets, Assinaturas" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
-      <label class="text-sm font-semibold">Cor <input id="cColor" type="color" value="#6366f1" class="mt-1 w-full h-[42px] p-1 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"></label>
+      <label class="col-span-2 text-sm font-semibold"><span data-i18n="modals.category.name">Nome</span> <input id="cName" placeholder="Ex: Pets, Assinaturas" data-i18n-placeholder="modals.category.namePlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
+      <label class="text-sm font-semibold"><span data-i18n="modals.category.color">Cor</span> <input id="cColor" type="color" value="#6366f1" class="mt-1 w-full h-[42px] p-1 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"></label>
     </div>
     <div>
-      <span class="text-sm font-semibold block mb-1.5">Ícone</span>
+      <span class="text-sm font-semibold block mb-1.5" data-i18n="modals.category.icon">Ícone</span>
       <div id="iconPicker" class="grid grid-cols-8 gap-1.5"></div>
       <input type="hidden" id="cIcon" value="ri-price-tag-3-fill">
     </div>
-    <label class="text-sm font-semibold block">Palavras-chave (separa por vírgula) <input id="cKeys" placeholder="ex: petshop, cobasi, veterinário" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"><span class="text-[11px] font-normal text-zinc-500">Usadas para classificar automaticamente. Só valem para categorização futura — não recategoriza o que já existe.</span></label>
+    <label class="text-sm font-semibold block"><span data-i18n="modals.category.keywords">Palavras-chave (separa por vírgula)</span> <input id="cKeys" placeholder="ex: petshop, cobasi, veterinário" data-i18n-placeholder="modals.category.keywordsPlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"><span class="text-[11px] font-normal text-zinc-500" data-i18n="modals.category.keywordsHelp">Usadas para classificar automaticamente. Só valem para categorização futura — não recategoriza o que já existe.</span></label>
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" id="btnCancelCat" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
-      <button type="submit" id="catSubmitBtn" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm">Criar categoria</button>
+      <button type="button" id="btnCancelCat" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="submit" id="catSubmitBtn" data-i18n="modals.category.submitNew" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm">Criar categoria</button>
     </div>
   </form>
 </dialog>
@@ -630,21 +631,23 @@ function showView(v){
 <!-- Bank type modal -->
 <dialog id="bankTypeDialog" class="backdrop:bg-black/40 bg-white dark:bg-zinc-900 rounded-2xl p-0 shadow-2xl w-[min(480px,92vw)] border border-zinc-200 dark:border-zinc-800">
   <form method="dialog" class="p-6 space-y-4" id="bankTypeForm">
-    <h3 class="font-extrabold text-lg" id="bankDialogTitle">Novo tipo de conta</h3>
+    <h3 class="font-extrabold text-lg" id="bankDialogTitle" data-i18n="modals.bankType.titleNew">Novo tipo de conta</h3>
     <input type="hidden" id="bEditId" value="">
-    <label class="text-sm font-semibold block">Nome <input id="bName" placeholder="Ex: N26, Banco do Brasil" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
+    <label class="text-sm font-semibold block"><span data-i18n="settings.banks.name">Nome</span> <input id="bName" placeholder="Ex: N26, Banco do Brasil" data-i18n-placeholder="modals.bankType.namePlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
     <div>
-      <span class="text-sm font-semibold block mb-1.5">Ícone</span>
+      <span class="text-sm font-semibold block mb-1.5" data-i18n="settings.banks.icon">Ícone</span>
       <div id="bankIconPicker" class="grid grid-cols-8 gap-1.5"></div>
       <input type="hidden" id="bIcon" value="ri-bank-line">
     </div>
     <div class="flex justify-end gap-2 pt-2">
-      <button type="button" id="btnCancelBankType" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
-      <button type="submit" id="bankSubmitBtn" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm">Criar tipo de conta</button>
+      <button type="button" id="btnCancelBankType" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
+      <button type="submit" id="bankSubmitBtn" data-i18n="modals.bankType.submitNew" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm">Criar tipo de conta</button>
     </div>
   </form>
 </dialog>
 
+<script src="src/locales.js"></script>
+<script src="src/i18n.js"></script>
 <script src="src/categories.js"></script>
 <script src="src/parsers.js"></script>
 <script src="src/render.js"></script>
@@ -653,5 +656,8 @@ function showView(v){
 <script src="src/ollama.js"></script>
 <script src="src/persistence.js"></script>
 <script src="src/print-report.js"></script>
+<script>
+window.i18n.initI18n();
+</script>
 </body>
 </html>

@@ -6,7 +6,7 @@ function renderCategoryChips(){
   const wrap=document.getElementById('categoryChips');
   const sel=document.getElementById('filterCat');
   const mSel=document.getElementById('mCat');
-  wrap.innerHTML=''; sel.innerHTML='<option value=\"\">Todas categorias</option>'; mSel.innerHTML='';
+  wrap.innerHTML=''; sel.innerHTML=`<option value="">${window.i18n.t('filters.allCategories')}</option>`; mSel.innerHTML='';
   categories.forEach(c=>{
     const active = activeCatFilter===c.id;
     const item=document.createElement('span');
@@ -16,23 +16,23 @@ function renderCategoryChips(){
     chip.className=`inline-flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded-full text-xs font-bold border transition ${active?'text-white shadow-md':'bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200'}`;
     chip.style.background = active? c.color : '';
     chip.style.borderColor = active? c.color : c.color+'40';
-    chip.innerHTML=`<span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] shrink-0" style="background:${active?'rgba(255,255,255,0.25)':c.color};color:${active?'white':'white'}"><i class="${catIcon(c)}"></i></span>${escapeHtml(c.name)} <span class="opacity-60 font-mono">${transactions.filter(t=>t.cat===c.id).length||0}</span>`;
+    chip.innerHTML=`<span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] shrink-0" style="background:${active?'rgba(255,255,255,0.25)':c.color};color:${active?'white':'white'}"><i class="${catIcon(c)}"></i></span>${escapeHtml(catDisplayName(c))} <span class="opacity-60 font-mono">${transactions.filter(t=>t.cat===c.id).length||0}</span>`;
     chip.onclick=()=>{ activeCatFilter = activeCatFilter===c.id? null : c.id; renderCategoryChips(); renderTable(); updateCharts(); };
     item.appendChild(chip);
     const editBtn=document.createElement('button');
     editBtn.type='button';
-    editBtn.title=`Editar ${escapeHtml(c.name)}`;
+    editBtn.title=window.i18n.t('common.editItemTitle', {name: escapeHtml(catDisplayName(c))});
     editBtn.className='w-7 h-7 shrink-0 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-400 hover:text-violet-600 dark:hover:text-violet-400 hover:border-violet-300 dark:hover:border-violet-700 flex items-center justify-center text-[12px] transition';
     editBtn.innerHTML='<i class="ri-pencil-fill"></i>';
     editBtn.onclick=(e)=>{ e.stopPropagation(); openCategoryDialog(c.id); };
     item.appendChild(editBtn);
     wrap.appendChild(item);
-    const o=document.createElement('option'); o.value=c.id; o.textContent=c.name;
+    const o=document.createElement('option'); o.value=c.id; o.textContent=catDisplayName(c);
     if(mSel) mSel.appendChild(o.cloneNode(true));
   });
   // filtro de categoria da tabela de transações — em ordem alfabética, separado da ordem dos chips
-  [...categories].sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')).forEach(c=>{
-    const o=document.createElement('option'); o.value=c.id; o.textContent=c.name;
+  [...categories].sort((a,b)=>catDisplayName(a).localeCompare(catDisplayName(b),'pt-BR')).forEach(c=>{
+    const o=document.createElement('option'); o.value=c.id; o.textContent=catDisplayName(c);
     sel.appendChild(o);
   });
   sel.value = activeCatFilter||'';
@@ -47,11 +47,11 @@ function renderBudgetList(){
     <label class="flex items-center gap-3 py-1">
       <span class="flex items-center gap-2 flex-1 min-w-0 text-[13px] font-semibold">
         <span class="w-6 h-6 rounded-full flex items-center justify-center text-[11px] text-white shrink-0" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>
-        <span class="truncate">${escapeHtml(c.name)}</span>
+        <span class="truncate">${escapeHtml(catDisplayName(c))}</span>
       </span>
       <span class="relative shrink-0 w-[110px]">
         <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] text-zinc-400">€</span>
-        <input type="number" min="0" step="10" data-budget="${c.id}" value="${c.budget||''}" placeholder="Sem meta" class="budgetInput w-full pl-6 pr-2 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-xs font-mono text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400">
+        <input type="number" min="0" step="10" data-budget="${c.id}" value="${c.budget||''}" placeholder="${window.i18n.t('budget.placeholder')}" class="budgetInput w-full pl-6 pr-2 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-xs font-mono text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400">
       </span>
     </label>
   `).join('');
@@ -81,27 +81,27 @@ function updateBudgetSummary(){
     const remColor = over ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400';
     el.innerHTML = `<div class="grid grid-cols-3 gap-2 text-center">
       <div>
-        <p class="text-[10px] font-bold uppercase tracking-wide text-zinc-500">Total orçado</p>
+        <p class="text-[10px] font-bold uppercase tracking-wide text-zinc-500">${window.i18n.t('budget.summary.totalBudgeted')}</p>
         <p class="font-mono font-bold text-sm mt-0.5">${fmtEUR(totalBudget)}</p>
-        <p class="text-[10px] text-zinc-500 mt-0.5">${pctUsed}% da renda</p>
+        <p class="text-[10px] text-zinc-500 mt-0.5">${window.i18n.t('budget.summary.pctOfIncomeText', {pct: pctUsed})}</p>
       </div>
       <div>
-        <p class="text-[10px] font-bold uppercase tracking-wide text-zinc-500">Meta de renda</p>
+        <p class="text-[10px] font-bold uppercase tracking-wide text-zinc-500">${window.i18n.t('budget.summary.incomeTarget')}</p>
         <p class="font-mono font-bold text-sm mt-0.5">${fmtEUR(incomeTarget)}</p>
         <p class="text-[10px] text-zinc-500 mt-0.5">100%</p>
       </div>
       <div>
-        <p class="text-[10px] font-bold uppercase tracking-wide ${remColor}">${over?'Falta':'Sobra'}</p>
+        <p class="text-[10px] font-bold uppercase tracking-wide ${remColor}">${over?window.i18n.t('budget.summary.shortfall'):window.i18n.t('budget.summary.remaining')}</p>
         <p class="font-mono font-bold text-sm mt-0.5 ${remColor}">${fmtEUR(Math.abs(remaining))}</p>
-        <p class="text-[10px] ${remColor} mt-0.5">${Math.abs(100-pctUsed)}% ${over?'além da renda':'livre'}</p>
+        <p class="text-[10px] ${remColor} mt-0.5">${window.i18n.t('budget.summary.pctFreeOrOverText', {pct: Math.abs(100-pctUsed), label: over ? window.i18n.t('budget.summary.beyondIncome') : window.i18n.t('budget.summary.free')})}</p>
       </div>
     </div>`;
   } else {
     el.innerHTML = `<div class="flex items-center justify-between text-xs">
-        <span class="font-semibold flex items-center gap-1.5"><i class="ri-calculator-line text-zinc-400"></i> Total orçado</span>
+        <span class="font-semibold flex items-center gap-1.5"><i class="ri-calculator-line text-zinc-400"></i> ${window.i18n.t('budget.summary.totalBudgeted')}</span>
         <span class="font-mono font-bold">${fmtEUR(totalBudget)}</span>
       </div>
-      <p class="text-[10px] text-zinc-500 mt-1">Defina a meta de renda mensal acima pra ver quanto sobra e a porcentagem comprometida.</p>`;
+      <p class="text-[10px] text-zinc-500 mt-1">${window.i18n.t('budget.summary.noIncomeTarget')}</p>`;
   }
 }
 document.getElementById('incomeTargetInput')?.addEventListener('change', e=>{
@@ -117,7 +117,7 @@ function refreshPeriodOptions(){
   const sels=[document.getElementById('filterPeriod'), document.getElementById('filterPeriodTop')].filter(Boolean);
   for(const sel of sels){
     const cur=periodFilter;
-    sel.innerHTML='<option value="">Todo o período</option>';
+    sel.innerHTML=`<option value="">${window.i18n.t('filters.allPeriods')}</option>`;
     for(const m of months){
       const o=document.createElement('option');
       o.value=m; o.textContent=monthLabel(m);
@@ -136,9 +136,9 @@ function refreshPeriodOptions(){
       b.onclick=()=>setPeriod(val);
       chipWrap.appendChild(b);
     };
-    mk('Tudo','');
+    mk(window.i18n.t('filters.periodChips.all'),'');
     const years=[...new Set(transactions.map(t=>t.date.getFullYear()))].sort((a,b)=>b-a);
-    for(const y of years) mk(String(y), `year:${y}`, `Ano de ${y}`);
+    for(const y of years) mk(String(y), `year:${y}`, window.i18n.t('filters.yearOf', {year: y}));
     const recentMonths=months.slice(0,3);
     for(const m of recentMonths) mk(monthLabel(m), m);
     if(periodFilter && periodFilter!=='' && !periodFilter.startsWith('year:') && !recentMonths.includes(periodFilter)) mk(monthLabel(periodFilter), periodFilter);
@@ -174,9 +174,9 @@ function renderBulkBar(){
   bar.classList.toggle('hidden', n===0);
   const countEl=document.getElementById('bulkCount'); if(countEl) countEl.textContent=n;
   const catSel=document.getElementById('bulkCatSelect');
-  if(catSel) catSel.innerHTML = '<option value="">Categoria...</option>' + categories.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+  if(catSel) catSel.innerHTML = `<option value="">${window.i18n.t('actions.bulkCategory')}</option>` + categories.map(c=>`<option value="${c.id}">${escapeHtml(catDisplayName(c))}</option>`).join('');
   const bankSel=document.getElementById('bulkBankSelect');
-  if(bankSel) bankSel.innerHTML = '<option value="">Tipo de conta...</option>' + bankTypes.map(b=>`<option value="${b.id}">${escapeHtml(b.name)}</option>`).join('');
+  if(bankSel) bankSel.innerHTML = `<option value="">${window.i18n.t('actions.bulkBank')}</option>` + bankTypes.map(b=>`<option value="${b.id}">${escapeHtml(bankDisplayName(b))}</option>`).join('');
 }
 function renderTable(){
   // remove da seleção ids que não existem mais (ex: após restaurar backup)
@@ -196,14 +196,14 @@ function renderTable(){
   if(filterType==='entrada') rows = rows.filter(t=>t.entrada!=null && t.entrada>0);
   if(filterBank==='__none__') rows = rows.filter(t=>!t.bank);
   else if(filterBank) rows = rows.filter(t=>t.bank===filterBank);
-  if(q) rows = rows.filter(t=> (t.desc+' '+t.source+' '+catById(t.cat).name+' '+(t.saida||'')+' '+(t.entrada||'')).toLowerCase().includes(q));
+  if(q) rows = rows.filter(t=> (t.desc+' '+t.source+' '+catDisplayName(catById(t.cat))+' '+(t.saida||'')+' '+(t.entrada||'')).toLowerCase().includes(q));
   // ordenação clicável pelos títulos das colunas (data, descrição, saída, entrada, categoria) — tableSort guarda a escolha atual
   const sortComparators = {
     date: (a,b)=> (a.realDate||a.date) - (b.realDate||b.date), // data real do gasto, não a data de pagamento da fatura
     desc: (a,b)=> (a.desc||'').localeCompare(b.desc||'','pt-BR'),
     saida: (a,b)=> (a.saida||0) - (b.saida||0),
     entrada: (a,b)=> (a.entrada||0) - (b.entrada||0),
-    cat: (a,b)=> catById(a.cat).name.localeCompare(catById(b.cat).name,'pt-BR'),
+    cat: (a,b)=> catDisplayName(catById(a.cat)).localeCompare(catDisplayName(catById(b.cat)),'pt-BR'),
   };
   const sortCmp = sortComparators[tableSort.key] || sortComparators.date;
   rows.sort((a,b)=> tableSort.dir==='asc' ? sortCmp(a,b) : -sortCmp(a,b));
@@ -225,7 +225,7 @@ function renderTable(){
   const pageRows = rows.slice(start, start+PAGE_SIZE);
   body.innerHTML = pageRows.map(t=>{
     const c=catById(t.cat);
-    const d=(t.realDate||t.date).toLocaleDateString('pt-BR'); // mostra a data real do gasto (mesmo quando t.date é a data de pagamento da fatura)
+    const d=(t.realDate||t.date).toLocaleDateString(localeTag()); // mostra a data real do gasto (mesmo quando t.date é a data de pagamento da fatura)
     const saidaStr = t.saida!=null ? fmtEUR(t.saida) : '<span class="text-zinc-300">—</span>';
     const entradaStr = t.entrada!=null ? fmtEUR(t.entrada) : '<span class="text-zinc-300">—</span>';
     const hasValue = (t.saida!=null && t.saida>0) || (t.entrada!=null && t.entrada>0);
@@ -235,12 +235,12 @@ function renderTable(){
     // "Cartão BIL"/tipo de conta já aparece discreto embaixo da descrição (bankBadge) — aqui só sinaliza o que é
     // relevante além disso: a fatura consolidada não contabilizada, uma transferência entre contas, ou uma transferência interna comum.
     const intBadge = t.cardSettlement
-      ? ' <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 text-[10px] font-bold align-middle" title="Débito único da fatura do cartão — não contabilizado (as compras já foram contadas individualmente)"><i class="ri-bank-card-fill"></i> Fatura do cartão</span>'
+      ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 text-[10px] font-bold align-middle" title="${window.i18n.t('table.cardSettlementTitle')}"><i class="ri-bank-card-fill"></i> ${window.i18n.t('table.cardSettlement')}</span>`
       : (t.transferLinked
-        ? ' <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 text-[10px] font-bold align-middle" title="Transferência entre suas contas — não contabilizada em Gastos/Entradas. Veja o par em Detalhes."><i class="ri-arrow-left-right-line"></i> entre contas</span>'
+        ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 text-[10px] font-bold align-middle" title="${window.i18n.t('table.transferBetweenAccountsTitle')}"><i class="ri-arrow-left-right-line"></i> ${window.i18n.t('table.transferBetweenAccounts')}</span>`
         : (t.autoTransfer
-          ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 border border-dashed border-cyan-300 dark:border-cyan-800 text-[10px] font-bold align-middle" title="Detectado automaticamente pelo banco do beneficiário — provável transferência para ${escapeHtml(bankLabel(t.meta&&t.meta.transferToBank))}. Confira em Detalhes."><i class="ri-arrow-left-right-line"></i> possível transferência</span>`
-          : (t.internal ? ' <span class="inline-flex items-center px-1.5 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-300 text-[10px] font-bold align-middle" title="Movimentação interna — não contabilizada">⇄ interna</span>' : '')));
+          ? ` <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 border border-dashed border-cyan-300 dark:border-cyan-800 text-[10px] font-bold align-middle" title="${window.i18n.t('table.possibleTransferTitleText', {bank: escapeHtml(bankLabel(t.meta&&t.meta.transferToBank))})}"><i class="ri-arrow-left-right-line"></i> ${window.i18n.t('table.possibleTransfer')}</span>`
+          : (t.internal ? ` <span class="inline-flex items-center px-1.5 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-300 text-[10px] font-bold align-middle" title="${window.i18n.t('table.internalTransferTitle')}">⇄ ${window.i18n.t('table.internalTransfer')}</span>` : '')));
     const bankBadge = t.bank ? `<div class="text-[11px] text-zinc-400 dark:text-zinc-500 flex items-center gap-1 mt-0.5"><i class="${bankIcon(t.bank)}"></i> ${escapeHtml(bankLabel(t.bank))}</div>` : '';
     return `<tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition ${t.internal?'opacity-70':''} ${selectedTxIds.has(t.id)?'bg-violet-50 dark:bg-violet-950/30':''}">
       <td class="px-3 py-2.5 text-center"><input type="checkbox" class="rowSelect rounded border-zinc-300 dark:border-zinc-600 text-violet-600 focus:ring-violet-500/40" data-select="${t.id}" ${selectedTxIds.has(t.id)?'checked':''}></td>
@@ -250,15 +250,15 @@ function renderTable(){
       <td class="px-3 py-2.5 text-right font-bold font-mono text-[13px] whitespace-nowrap ${t.entrada?'text-emerald-600 dark:text-emerald-400':''}">${entradaStr}</td>
       <td class="px-3 py-2.5">
         ${needCat ? `<select data-id="${t.id}" class="catSelect w-full text-[11px] font-bold px-2 py-1 rounded-full border text-white shadow-sm" style="background:${c.color};border-color:${c.color}">
-          ${categories.map(cc=>`<option value="${cc.id}" ${cc.id===t.cat?'selected':''} style="color:#111">${cc.name}</option>`).join('')}
+          ${categories.map(cc=>`<option value="${cc.id}" ${cc.id===t.cat?'selected':''} style="color:#111">${escapeHtml(catDisplayName(cc))}</option>`).join('')}
         </select>` : `<span class="text-[11px] text-zinc-400">—</span>`}
       </td>
       <td class="px-4 py-2.5">
         <div class="flex items-center justify-end gap-1">
-          <button title="Trocar Saída ↔ Entrada" data-swap="${t.id}" class="swapBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700" style="display:${(t.saida||t.entrada)?'flex':'none'}"><i class="ri-swap-line"></i></button>
-          <button title="Nota" data-note="${t.id}" class="noteBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700 ${t.note?'text-amber-500 border-amber-300':''}"><i class="ri-sticky-note-line"></i></button>
-          <button title="Detalhes" data-details="${t.id}" class="detailsBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700"><i class="ri-information-line"></i></button>
-          <button title="Excluir transação" data-del="${t.id}" class="delBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] text-zinc-400 hover:bg-red-50 hover:text-red-600 hover:border-red-200 dark:hover:bg-red-950/40 dark:hover:text-red-400 dark:hover:border-red-900 transition"><i class="ri-delete-bin-line"></i></button>
+          <button title="${window.i18n.t('actions.swap')}" data-swap="${t.id}" class="swapBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700" style="display:${(t.saida||t.entrada)?'flex':'none'}"><i class="ri-swap-line"></i></button>
+          <button title="${window.i18n.t('actions.note')}" data-note="${t.id}" class="noteBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700 ${t.note?'text-amber-500 border-amber-300':''}"><i class="ri-sticky-note-line"></i></button>
+          <button title="${window.i18n.t('actions.details')}" data-details="${t.id}" class="detailsBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] hover:bg-zinc-50 dark:hover:bg-zinc-700"><i class="ri-information-line"></i></button>
+          <button title="${window.i18n.t('actions.delete')}" data-del="${t.id}" class="delBtn w-6 h-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 flex items-center justify-center text-[11px] text-zinc-400 hover:bg-red-50 hover:text-red-600 hover:border-red-200 dark:hover:bg-red-950/40 dark:hover:text-red-400 dark:hover:border-red-900 transition"><i class="ri-delete-bin-line"></i></button>
         </div>
       </td>
     </tr>`;
@@ -292,7 +292,7 @@ function renderTable(){
   body.querySelectorAll('.delBtn').forEach(b=>{
     b.addEventListener('click', e=>{
       const id=e.currentTarget.dataset.del; const tx=transactions.find(x=>x.id===id); if(!tx) return;
-      if(!confirm(`Excluir esta transação?\n\n${tx.desc}\n${(tx.realDate||tx.date).toLocaleDateString('pt-BR')} · ${fmtEUR(tx.saida||tx.entrada||0)}`)) return;
+      if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString(localeTag()), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
       transactions = transactions.filter(x=>x.id!==id);
       selectedTxIds.delete(id);
       renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
@@ -343,11 +343,12 @@ function renderTable(){
       const parts = [];
       if(saidaSum>0) parts.push(`<span class="text-red-600 font-bold">${fmtEUR(saidaSum/catMonths)}</span>`);
       if(entradaSum>0) parts.push(`<span class="text-emerald-600 font-bold">${fmtEUR(entradaSum/catMonths)}</span>`);
-      avgLabel = ` · <span title="Total dividido pelos ${catMonths} ${catMonths===1?'mês':'meses'} com movimento nessa categoria">Média mensal: ${parts.join(' / ')}</span>`;
+      const monthWord = catMonths===1 ? window.i18n.t('table.monthWordSingular') : window.i18n.t('table.monthWordPlural');
+      avgLabel = ` · <span title="${window.i18n.t('table.avgPerMonthTitle', {n: catMonths, monthWord})}">${window.i18n.t('table.monthlyAverage')}: ${parts.join(' / ')}</span>`;
     }
   }
-  document.getElementById('txSummary').innerHTML = `<span class="font-semibold">${totalRows} movimentos</span> · Gastos reais: <span class="text-red-600 font-bold">${fmtEUR(saidaSum)}</span> · Entradas: <span class="text-emerald-600 font-bold">${fmtEUR(entradaSum)}</span>${transfSum?` · <span title="Movimentações internas (pockets, Flexible Cash Funds) — não contam como gasto">Transf. internas: ${fmtEUR(transfSum)}</span>`:''}${avgLabel}`;
-  document.getElementById('pageInfo').textContent = `Página ${currentPage} / ${totalPages}`;
+  document.getElementById('txSummary').innerHTML = `<span class="font-semibold">${totalRows} ${window.i18n.t('table.summary')}</span> · ${window.i18n.t('table.realExpenses')}: <span class="text-red-600 font-bold">${fmtEUR(saidaSum)}</span> · ${window.i18n.t('table.income')}: <span class="text-emerald-600 font-bold">${fmtEUR(entradaSum)}</span>${transfSum?` · <span title="${window.i18n.t('table.summaryInternalTransfersTitle')}">${window.i18n.t('table.internalTransfers')}: ${fmtEUR(transfSum)}</span>`:''}${avgLabel}`;
+  document.getElementById('pageInfo').textContent = window.i18n.t('table.pageInfo', {current: currentPage, total: totalPages});
   document.getElementById('prevPage').disabled = currentPage<=1;
   document.getElementById('nextPage').disabled = currentPage>=totalPages;
 }
@@ -381,8 +382,8 @@ function updateKPIs(){
     if(el && subEl){
       el.textContent = fmtEUR(bal.total);
       subEl.textContent = (openingBalance && openingBalance.value!=null)
-        ? `Saldo inicial ${fmtEUR(bal.base)} (${openingBalance.date.toLocaleDateString('pt-BR')}) + entradas − saídas`
-        : 'Entradas − saídas de todo o histórico · defina um saldo inicial em Configurações se faltar dado anterior';
+        ? window.i18n.t('kpis.balanceSubWithOpening', {value: fmtEUR(bal.base), date: openingBalance.date.toLocaleDateString(localeTag())})
+        : window.i18n.t('kpis.balanceSubDefault');
     }
   }
   const saidas = scoped.filter(t=>t.saida!=null && !t.internal);
@@ -392,21 +393,22 @@ function updateKPIs(){
   const saidasCount = scoped.filter(t=>t.saida && !t.internal).length;
   const entradasCount = scoped.filter(t=>t.entrada && !t.internal).length;
   const transfCount = scoped.filter(t=>t.internal).length;
-  document.getElementById('kpiCount').textContent = `${saidasCount} saídas · ${entradasCount} entradas${transfCount?` · ${transfCount} transferências internas`:''} · ${new Set(transactions.map(t=>t.source)).size} arquivos`;
+  const transfClause = transfCount ? window.i18n.t('kpis.countTransfersClause', {n: transfCount}) : '';
+  document.getElementById('kpiCount').textContent = window.i18n.t('kpis.countBreakdown', {expenses: saidasCount, income: entradasCount, transfers: transfClause, files: new Set(transactions.map(t=>t.source)).size});
   document.getElementById('kpiAvg').textContent = fmtEUR(avg);
   // top category
   const byCat={}; scoped.forEach(t=>{ if(t.saida && !t.internal) byCat[t.cat]=(byCat[t.cat]||0)+t.saida; });
   const top = Object.entries(byCat).sort((a,b)=>b[1]-a[1])[0];
   if(top){
     const c=catById(top[0]);
-    document.getElementById('kpiTopCat').innerHTML = `<span class="inline-flex w-5 h-5 rounded-full items-center justify-center text-[10px] text-white align-middle mr-1" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>${escapeHtml(c.name)}`;
-    document.getElementById('kpiTopCatVal').textContent = `${fmtEUR(top[1])} · ${Math.round(top[1]/total*100)}% do total`;
-    document.getElementById('kpiInsight').textContent = `${c.name} é seu maior gasto`;
-    document.getElementById('kpiInsightSub').textContent = `${fmtEUR(top[1])} (${Math.round(top[1]/total*100)}%) — vale revisar assinaturas e compras nessa categoria.`;
+    document.getElementById('kpiTopCat').innerHTML = `<span class="inline-flex w-5 h-5 rounded-full items-center justify-center text-[10px] text-white align-middle mr-1" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>${escapeHtml(catDisplayName(c))}`;
+    document.getElementById('kpiTopCatVal').textContent = window.i18n.t('kpis.topCategoryValueText', {value: fmtEUR(top[1]), pct: Math.round(top[1]/total*100)});
+    document.getElementById('kpiInsight').textContent = window.i18n.t('kpis.insightMainText', {cat: catDisplayName(c)});
+    document.getElementById('kpiInsightSub').textContent = window.i18n.t('kpis.insightSubText', {value: fmtEUR(top[1]), pct: Math.round(top[1]/total*100)});
   } else {
     document.getElementById('kpiTopCat').textContent='—';
     document.getElementById('kpiTopCatVal').textContent='—';
-    document.getElementById('kpiInsight').textContent='Adicione PDFs para ver insights.';
+    document.getElementById('kpiInsight').textContent=window.i18n.t('kpis.insightDefault');
     document.getElementById('kpiInsightSub').textContent='';
   }
   // taxa de poupança: (entradas - saídas reais) / entradas, sem transferências internas
@@ -418,11 +420,11 @@ function updateKPIs(){
       const rate = Math.round(saved/income*100);
       kpiSavingsEl.textContent = `${rate}%`;
       kpiSavingsEl.className = 'font-extrabold text-2xl tracking-tight mt-1 ' + (rate>=0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400');
-      kpiSavingsSubEl.textContent = rate>=0 ? `${fmtEUR(saved)} sobrando no período` : `${fmtEUR(Math.abs(saved))} além da renda`;
+      kpiSavingsSubEl.textContent = rate>=0 ? window.i18n.t('kpis.savedText', {value: fmtEUR(saved)}) : window.i18n.t('kpis.overspentText', {value: fmtEUR(Math.abs(saved))});
     } else {
       kpiSavingsEl.textContent = '—';
       kpiSavingsEl.className = 'font-extrabold text-2xl tracking-tight mt-1';
-      kpiSavingsSubEl.textContent = 'sem entradas no período';
+      kpiSavingsSubEl.textContent = window.i18n.t('kpis.noIncome');
     }
   }
 }
@@ -446,7 +448,7 @@ function ensureCharts(){
   if(trendChart) trendChart.destroy();
   trendChart = new Chart(document.getElementById('trendChart'), { type:'line', data:{labels:[],datasets:[]}, options: monthOptions() });
   if(dowChart) dowChart.destroy();
-  dowChart = new Chart(document.getElementById('dowChart'), { type:'bar', data:{labels:['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],datasets:[]}, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{callbacks:{label:(c)=>` ${fmtEUR(c.parsed.y)}`}}}, scales:{ x:{grid:{display:false}}, y:{grid:{color:'rgba(128,128,128,0.18)'}, ticks:{callback:v=>'€ '+v}} } } });
+  dowChart = new Chart(document.getElementById('dowChart'), { type:'bar', data:{labels:window.i18n.tArray('days.short'),datasets:[]}, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{callbacks:{label:(c)=>` ${fmtEUR(c.parsed.y)}`}}}, scales:{ x:{grid:{display:false}}, y:{grid:{color:'rgba(128,128,128,0.18)'}, ticks:{callback:v=>'€ '+v}} } } });
   if(compareChart) compareChart.destroy();
   compareChart = new Chart(document.getElementById('compareChart'), { type: compareMode==='lines'?'line':'bar', data:{labels:[],datasets:[]}, options:compareOptions() });
   if(cashflowChart) cashflowChart.destroy();
@@ -540,7 +542,7 @@ function merchantOptions(){
 function histOptions(){
   return {
     responsive:true, maintainAspectRatio:false,
-    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ title:(a)=>`Faixa ${a[0].label}`, label:(c)=>` ${c.parsed.y} transações` } } },
+    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ title:(a)=>window.i18n.t('charts.histogram.tooltipTitle', {range: a[0].label}), label:(c)=>window.i18n.t('charts.histogram.tooltipLabel', {n: c.parsed.y}) } } },
     scales:{
       x:{ grid:{display:false}, ticks:{ font:{size:10}, maxRotation:0 } },
       y:{ grid:{color:'rgba(128,128,128,0.18)'}, ticks:{ stepSize:1 } }
@@ -583,7 +585,7 @@ function detectAnomalies(txP){
     if(g.length>1){
       g.forEach(t=>flaggedIds.add(t.id));
       anomalies.push({ type:'duplicate', severity:'high', txs:g, date:g[0].date, aid:anomalyId('duplicate',g,g[0].date), descKey:normalizeDescKey(g[0].desc),
-        text:`${g.length}× cobrança idêntica de ${fmtEUR(g[0].saida)} em "${g[0].desc}" no mesmo dia — pode ser cobrança duplicada.` });
+        text: window.i18n.t('anomalies.messages.exactDuplicate', {n: g.length, value: fmtEUR(g[0].saida), desc: g[0].desc}) });
     }
   });
 
@@ -599,7 +601,7 @@ function detectAnomalies(txP){
       const days=(b.date-a.date)/86400000;
       if(days>0 && days<=3){
         anomalies.push({ type:'near-duplicate', severity:'medium', txs:[a,b], date:b.date, aid:anomalyId('near-duplicate',[a,b],b.date), descKey:normalizeDescKey(b.desc),
-          text:`Duas cobranças de ${fmtEUR(b.saida)} em "${b.desc}" com ${Math.round(days)} dia(s) de intervalo — confira se não é duplicada.` });
+          text: window.i18n.t('anomalies.messages.nearDuplicate', {value: fmtEUR(b.saida), desc: b.desc, days: Math.round(days)}) });
       }
     }
   });
@@ -615,7 +617,7 @@ function detectAnomalies(txP){
       const z=(t.saida-m)/sd;
       if(z>=2.5 && t.saida>m*1.5){
         anomalies.push({ type:'outlier-merchant', severity: z>=4?'high':'medium', txs:[t], date:t.date, aid:anomalyId('outlier-merchant',[t],t.date), descKey:normalizeDescKey(t.desc),
-          text:`${fmtEUR(t.saida)} em "${t.desc}" ficou bem acima do habitual (média ${fmtEUR(m)}, ${Math.round(t.saida/m*100-100)}% a mais).` });
+          text: window.i18n.t('anomalies.messages.merchantOutlier', {value: fmtEUR(t.saida), desc: t.desc, avg: fmtEUR(m), pct: Math.round(t.saida/m*100-100)}) });
       }
     });
   });
@@ -628,7 +630,7 @@ function detectAnomalies(txP){
         const z=(t.saida-m)/sd;
         if(z>=3.5 && !anomalies.some(a=>a.txs.some(x=>x.id===t.id))){
           anomalies.push({ type:'outlier-global', severity:'high', txs:[t], date:t.date, aid:anomalyId('outlier-global',[t],t.date), descKey:normalizeDescKey(t.desc),
-            text:`Gasto atípico para o período: ${fmtEUR(t.saida)} em "${t.desc}" (média geral ${fmtEUR(m)}).` });
+            text: window.i18n.t('anomalies.messages.globalOutlier', {value: fmtEUR(t.saida), desc: t.desc, avg: fmtEUR(m)}) });
         }
       });
     }
@@ -646,7 +648,7 @@ function detectAnomalies(txP){
         if(z>=3 && d.total>m*2){
           const dayTxs = spend.filter(t=>dayKey(t.date)===dayKey(d.date));
           anomalies.push({ type:'spike-day', severity:'medium', txs:dayTxs, date:d.date, aid:anomalyId('spike-day',[],d.date),
-            text:`${d.date.toLocaleDateString('pt-BR')} teve ${fmtEUR(d.total)} em ${d.count} transações — bem acima da média diária (${fmtEUR(m)}).` });
+            text: window.i18n.t('anomalies.messages.spikeDay', {date: d.date.toLocaleDateString(localeTag()), total: fmtEUR(d.total), count: d.count, avg: fmtEUR(m)}) });
         }
       });
     }
@@ -663,9 +665,9 @@ function renderAnomalies(txP){
   if(!el) return;
   const anomalies = detectAnomalies(txP).filter(a=>!dismissedAnomalyIds.has(a.aid));
   currentAnomalies = anomalies; // guarda para o botão "Resolver" reabrir pelo aid
-  if(countEl) countEl.textContent = anomalies.length ? `${anomalies.length} encontrado${anomalies.length>1?'s':''}` : 'nada fora do comum';
+  if(countEl) countEl.textContent = anomalies.length ? (anomalies.length===1 ? window.i18n.t('anomalies.messages.countFoundSingular', {n: anomalies.length}) : window.i18n.t('anomalies.messages.countFoundPlural', {n: anomalies.length})) : window.i18n.t('anomalies.messages.countNone');
   if(anomalies.length===0){
-    el.innerHTML = '<div class="p-3 rounded-xl border border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/30"><p class="text-[12px] font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5"><i class="ri-checkbox-circle-fill"></i> Nada fora do padrão</p><p class="text-[11px] text-emerald-700/80 dark:text-emerald-400/70 mt-1 leading-relaxed">Sem duplicidades, picos ou valores atípicos no período.</p></div>';
+    el.innerHTML = `<div class="p-3 rounded-xl border border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/30"><p class="text-[12px] font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5"><i class="ri-checkbox-circle-fill"></i> ${window.i18n.t('anomalies.messages.emptyTitle')}</p><p class="text-[11px] text-emerald-700/80 dark:text-emerald-400/70 mt-1 leading-relaxed">${window.i18n.t('anomalies.messages.emptyDetail')}</p></div>`;
     return;
   }
   const icons={ duplicate:'ri-file-copy-2-fill', 'near-duplicate':'ri-file-copy-2-line', 'outlier-merchant':'ri-arrow-up-circle-fill', 'outlier-global':'ri-flashlight-fill', 'spike-day':'ri-calendar-event-fill' };
@@ -674,13 +676,13 @@ function renderAnomalies(txP){
     return `<div class="p-3 rounded-xl border ${high?'border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30':'border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/30'}">
       <div class="flex items-start justify-between gap-3">
         <div class="min-w-0">
-          <p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="${icons[a.type]||'ri-error-warning-fill'}"></i> ${a.date.toLocaleDateString('pt-BR')}</p>
+          <p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="${icons[a.type]||'ri-error-warning-fill'}"></i> ${a.date.toLocaleDateString(localeTag())}</p>
           <p class="text-[11px] ${high?'text-red-700/80 dark:text-red-400/70':'text-amber-700/80 dark:text-amber-400/70'} mt-1 leading-relaxed">${escapeHtml(a.text)}</p>
         </div>
-        <button type="button" class="anomalyResolveBtn shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-bold ${high?'bg-red-600 hover:bg-red-700':'bg-amber-600 hover:bg-amber-700'} text-white whitespace-nowrap" data-aid="${escapeHtml(a.aid)}">Resolver</button>
+        <button type="button" class="anomalyResolveBtn shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-bold ${high?'bg-red-600 hover:bg-red-700':'bg-amber-600 hover:bg-amber-700'} text-white whitespace-nowrap" data-aid="${escapeHtml(a.aid)}">${window.i18n.t('anomalies.messages.resolveButton')}</button>
       </div>
     </div>`;
-  }).join('') + (anomalies.length>30 ? `<p class="text-[11px] text-zinc-500 pt-1">+ ${anomalies.length-30} outro(s) não exibido(s).</p>` : '');
+  }).join('') + (anomalies.length>30 ? `<p class="text-[11px] text-zinc-500 pt-1">${window.i18n.t('anomalies.messages.moreNotShown', {n: anomalies.length-30})}</p>` : '');
   el.querySelectorAll('.anomalyResolveBtn').forEach(b=>{
     b.addEventListener('click', e=>{ openAnomalyDialog(e.currentTarget.dataset.aid); });
   });
@@ -698,7 +700,7 @@ function openAnomalyDialog(aid){
 function renderAnomalyDialogBody(a){
   const high=a.severity==='high';
   document.getElementById('anomalyDialogSummary').innerHTML =
-    `<p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="ri-${high?'alarm-warning-fill':'error-warning-fill'}"></i> ${a.date.toLocaleDateString('pt-BR')}</p>
+    `<p class="text-[12px] font-bold ${high?'text-red-700 dark:text-red-400':'text-amber-700 dark:text-amber-400'} flex items-center gap-1.5"><i class="ri-${high?'alarm-warning-fill':'error-warning-fill'}"></i> ${a.date.toLocaleDateString(localeTag())}</p>
      <p class="text-[12px] text-zinc-600 dark:text-zinc-300 mt-1 leading-relaxed">${escapeHtml(a.text)}</p>`;
   // "Sempre aceitar" só faz sentido quando a anomalia gira em torno de UMA descrição (duplicidade, outlier de
   // estabelecimento/global) — pico de gasto num dia não tem uma descrição única pra generalizar.
@@ -710,7 +712,7 @@ function renderAnomalyDialogBody(a){
   const liveIds = new Set(a.txs.map(t=>t.id));
   const rows = transactions.filter(t=>liveIds.has(t.id)).sort((x,y)=>x.date-y.date);
   if(rows.length===0){
-    listEl.innerHTML = '<p class="text-xs text-zinc-500 py-4 text-center">Nenhuma transação envolvida ainda existe (já foi excluída).</p>';
+    listEl.innerHTML = `<p class="text-xs text-zinc-500 py-4 text-center">${window.i18n.t('anomalies.messages.noTxFound')}</p>`;
   } else {
     listEl.innerHTML = rows.map(t=>{
       const c=catById(t.cat);
@@ -718,17 +720,17 @@ function renderAnomalyDialogBody(a){
         <span class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-white" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>
         <span class="flex-1 min-w-0">
           <span class="block text-[13px] font-semibold truncate">${escapeHtml(t.desc)}</span>
-          <span class="text-[11px] text-zinc-500">${(t.realDate||t.date).toLocaleDateString('pt-BR')} · ${escapeHtml(c.name)}${t.bank?` · ${escapeHtml(bankLabel(t.bank))}`:''}${t.note?` · ${escapeHtml(t.note)}`:''}</span>
+          <span class="text-[11px] text-zinc-500">${(t.realDate||t.date).toLocaleDateString(localeTag())} · ${escapeHtml(catDisplayName(c))}${t.bank?` · ${escapeHtml(bankLabel(t.bank))}`:''}${t.note?` · ${escapeHtml(t.note)}`:''}</span>
         </span>
         <span class="font-bold font-mono text-[13px] shrink-0 text-red-600 dark:text-red-400">${fmtEUR(t.saida||t.entrada||0)}</span>
-        <button type="button" class="anomalyTxDelBtn shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30" data-id="${t.id}" title="Excluir esta transação"><i class="ri-delete-bin-line"></i></button>
+        <button type="button" class="anomalyTxDelBtn shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30" data-id="${t.id}" title="${window.i18n.t('actions.delete')}"><i class="ri-delete-bin-line"></i></button>
       </div>`;
     }).join('');
     listEl.querySelectorAll('.anomalyTxDelBtn').forEach(b=>{
       b.addEventListener('click', e=>{
         const id=e.currentTarget.dataset.id;
         const tx=transactions.find(x=>x.id===id); if(!tx) return;
-        if(!confirm(`Excluir esta transação?\n\n${tx.desc}\n${(tx.realDate||tx.date).toLocaleDateString('pt-BR')} · ${fmtEUR(tx.saida||tx.entrada||0)}`)) return;
+        if(!confirm(window.i18n.t('actions.confirmDelete', {desc: tx.desc, date: (tx.realDate||tx.date).toLocaleDateString(localeTag()), value: fmtEUR(tx.saida||tx.entrada||0)}))) return;
         transactions = transactions.filter(x=>x.id!==id);
         selectedTxIds.delete(id);
         renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
@@ -770,7 +772,7 @@ function renderCalHeatmap(txP){
     monthK = months[months.length-1];
   }
   if(!monthK){
-    el.innerHTML='<p class="text-xs text-zinc-500 py-8 text-center">Sem dados ainda.</p>';
+    el.innerHTML=`<p class="text-xs text-zinc-500 py-8 text-center">${window.i18n.t('charts.calendar.emptyState')}</p>`;
     if(labelEl) labelEl.textContent='';
     if(hlEl) hlEl.innerHTML='';
     return;
@@ -798,7 +800,7 @@ function renderCalHeatmap(txP){
   if(hlEl){
     const activeDays = Object.keys(byDay).map(Number);
     if(activeDays.length===0){
-      hlEl.innerHTML = '<p class="text-[11px] text-zinc-500 text-center">Sem gastos nesse mês.</p>';
+      hlEl.innerHTML = `<p class="text-[11px] text-zinc-500 text-center">${window.i18n.t('charts.calendar.noSpendThisMonth')}</p>`;
     } else {
       const total = activeDays.reduce((s,d)=>s+byDay[d],0);
       const biggestDay = activeDays.reduce((a,b)=> byDay[b]>byDay[a] ? b : a);
@@ -814,19 +816,20 @@ function renderCalHeatmap(txP){
       const avgWeekend = weekendCount ? weekendSum/weekendCount : 0;
 
       const boxes = [];
-      boxes.push({ icon:'ri-flashlight-fill', color:'violet', title:'Dia mais caro',
-        text:`${String(biggestDay).padStart(2,'0')}/${String(m).padStart(2,'0')} — ${fmtEUR(byDay[biggestDay])}` });
-      boxes.push({ icon:'ri-bar-chart-2-line', color:'zinc', title:'Média por dia com gasto',
-        text:`${fmtEUR(total/activeDays.length)} em ${activeDays.length} de ${daysInMonth} dias` });
+      boxes.push({ icon:'ri-flashlight-fill', color:'violet', title: window.i18n.t('charts.calendar.biggestDayTitle'),
+        text: window.i18n.t('charts.calendar.biggestDayText', {date: `${String(biggestDay).padStart(2,'0')}/${String(m).padStart(2,'0')}`, value: fmtEUR(byDay[biggestDay])}) });
+      boxes.push({ icon:'ri-bar-chart-2-line', color:'zinc', title: window.i18n.t('charts.calendar.avgPerDayTitle'),
+        text: window.i18n.t('charts.calendar.avgPerDayText', {value: fmtEUR(total/activeDays.length), n: activeDays.length, total: daysInMonth}) });
       if(weekdayCount && weekendCount && (avgWeekday>0 || avgWeekend>0)){
         const weekendHigher = avgWeekend > avgWeekday;
         const bigger = weekendHigher ? avgWeekend : avgWeekday, smaller = weekendHigher ? avgWeekday : avgWeekend;
         const pct = smaller>0 ? Math.round((bigger/smaller-1)*100) : null;
-        boxes.push({ icon:'ri-calendar-event-line', color: weekendHigher?'amber':'zinc', title: weekendHigher?'Fim de semana pesa mais':'Dias úteis pesam mais',
-          text: pct!=null ? `${fmtEUR(avgWeekday)}/dia útil vs ${fmtEUR(avgWeekend)}/dia de fim de semana — ${pct}% a mais ${weekendHigher?'no fim de semana':'em dias úteis'}.` : `Só há gasto ${weekendHigher?'no fim de semana':'em dias úteis'} até agora.` });
+        const which = weekendHigher ? window.i18n.t('charts.calendar.onWeekend') : window.i18n.t('charts.calendar.onWeekdays');
+        boxes.push({ icon:'ri-calendar-event-line', color: weekendHigher?'amber':'zinc', title: weekendHigher ? window.i18n.t('charts.calendar.weekendHigherTitle') : window.i18n.t('charts.calendar.weekdayHigherTitle'),
+          text: pct!=null ? window.i18n.t('charts.calendar.weekdayVsWeekendText', {weekday: fmtEUR(avgWeekday), weekend: fmtEUR(avgWeekend), pct, which}) : window.i18n.t('charts.calendar.weekendOnlyText', {which}) });
       }
       if(daysWithoutSpend>0){
-        boxes.push({ icon:'ri-checkbox-blank-circle-line', color:'emerald', title:'Dias sem gasto', text:`${daysWithoutSpend} de ${daysInMonth} dias sem nenhuma saída registrada.` });
+        boxes.push({ icon:'ri-checkbox-blank-circle-line', color:'emerald', title: window.i18n.t('charts.calendar.noSpendDaysTitle'), text: window.i18n.t('charts.calendar.noSpendDaysText', {n: daysWithoutSpend, total: daysInMonth}) });
       }
       const colorCls = { violet:['border-violet-200 dark:border-violet-900 bg-violet-50 dark:bg-violet-950/30','text-violet-700 dark:text-violet-400'],
         amber:['border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/30','text-amber-700 dark:text-amber-400'],
@@ -851,7 +854,7 @@ function updateCharts(){
     monthChart.data.labels=[]; monthChart.data.datasets=[]; monthChart.update();
     merchantChart.data.labels=[]; merchantChart.data.datasets=[]; merchantChart.update();
     histChart.data.labels=[]; histChart.data.datasets=[]; histChart.update();
-    document.getElementById('catLegend').innerHTML='<span class="text-xs text-zinc-500">Sem dados ainda — adicione PDFs ou use o exemplo.</span>';
+    document.getElementById('catLegend').innerHTML=`<span class="text-xs text-zinc-500">${window.i18n.t('charts.waterfall.emptyState')}</span>`;
     document.getElementById('monthRange').textContent='';
     if(cashflowChart){ cashflowChart.data.labels=[]; cashflowChart.data.datasets=[]; cashflowChart.update(); }
     const cfTipsEl=document.getElementById('cashflowTips'); if(cfTipsEl) cfTipsEl.innerHTML='';
@@ -866,7 +869,7 @@ function updateCharts(){
   const byCat={}; const byCatCount={};
   txP.forEach(t=>{ if(t.saida && !t.internal){ byCat[t.cat]=(byCat[t.cat]||0)+t.saida; byCatCount[t.cat]=(byCatCount[t.cat]||0)+1; }});
   const catEntries=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
-  const labels=catEntries.map(([id])=>catById(id).name);
+  const labels=catEntries.map(([id])=>catDisplayName(catById(id)));
   const ids=catEntries.map(([id])=>id);
   const vals=catEntries.map(([,v])=>Math.round(v*100)/100);
   const colors=catEntries.map(([id])=>catById(id).color);
@@ -877,36 +880,36 @@ function updateCharts(){
 
   const catModeHintEl = document.getElementById('catModeHint');
   if(chartMode==='waterfall'){
-    if(catModeHintEl) catModeHintEl.textContent = '· da renda até o saldo, categoria por categoria';
+    if(catModeHintEl) catModeHintEl.textContent = window.i18n.t('charts.category.hintWaterfall');
     const totalIncome = txP.filter(t=>t.entrada && !t.internal).reduce((s,t)=>s+t.entrada,0);
     const TOP_N = 6;
     const top = catEntries.slice(0, TOP_N);
     const restVal = catEntries.slice(TOP_N).reduce((s,[,v])=>s+v,0);
-    const wLabels=['Renda']; const wRanges=[[0,totalIncome]]; const wColors=['#10b981']; const wIds=[null];
+    const wLabels=[window.i18n.t('charts.waterfall.income')]; const wRanges=[[0,totalIncome]]; const wColors=['#10b981']; const wIds=[null];
     let running = totalIncome;
     top.forEach(([id,v])=>{
       const c=catById(id); const start = running-v;
-      wRanges.push([start, running]); wColors.push(c.color); wLabels.push(c.name); wIds.push(id);
+      wRanges.push([start, running]); wColors.push(c.color); wLabels.push(catDisplayName(c)); wIds.push(id);
       running = start;
     });
     if(restVal>0.005){
       const start = running-restVal;
-      wRanges.push([start, running]); wColors.push('#a1a1aa'); wLabels.push('Outras categorias'); wIds.push(null);
+      wRanges.push([start, running]); wColors.push('#a1a1aa'); wLabels.push(window.i18n.t('charts.waterfall.otherCategories')); wIds.push(null);
       running = start;
     }
-    wLabels.push('Saldo'); wRanges.push([0, running]); wColors.push(running>=0?'#10b981':'#ef4444'); wIds.push(null);
+    wLabels.push(window.i18n.t('charts.waterfall.balance')); wRanges.push([0, running]); wColors.push(running>=0?'#10b981':'#ef4444'); wIds.push(null);
 
     catChart.data.labels=wLabels; catChart.data.ids=wIds;
     catChart.data.datasets=[{ data:wRanges, backgroundColor:wColors, borderRadius:6, barThickness: wLabels.length>8?18:28 }];
     catChart.update();
     document.getElementById('catLegend').innerHTML = `<div class="text-[12px] leading-relaxed p-2.5 space-y-2">
-      <p class="text-zinc-600 dark:text-zinc-300"><span class="font-bold">Como ler:</span> começa na sua renda do período e desce categoria por categoria até o que sobrou.</p>
-      <p class="flex items-center gap-1.5 text-zinc-500"><span class="w-2 h-2 rounded-full inline-block" style="background:#10b981"></span> Renda / saldo positivo</p>
-      <p class="flex items-center gap-1.5 text-zinc-500"><span class="w-2 h-2 rounded-full inline-block" style="background:#ef4444"></span> Saldo negativo</p>
-      <p class="flex items-center gap-1.5 text-zinc-500"><span class="w-2 h-2 rounded-full inline-block" style="background:#a1a1aa"></span> Outras categorias agrupadas</p>
+      <p class="text-zinc-600 dark:text-zinc-300"><span class="font-bold">${window.i18n.t('charts.waterfall.howToRead')}</span> ${window.i18n.t('charts.waterfall.explanation')}</p>
+      <p class="flex items-center gap-1.5 text-zinc-500"><span class="w-2 h-2 rounded-full inline-block" style="background:#10b981"></span> ${window.i18n.t('charts.waterfall.legendIncomePositive')}</p>
+      <p class="flex items-center gap-1.5 text-zinc-500"><span class="w-2 h-2 rounded-full inline-block" style="background:#ef4444"></span> ${window.i18n.t('charts.waterfall.legendNegative')}</p>
+      <p class="flex items-center gap-1.5 text-zinc-500"><span class="w-2 h-2 rounded-full inline-block" style="background:#a1a1aa"></span> ${window.i18n.t('charts.waterfall.legendOtherGrouped')}</p>
     </div>`;
   } else {
-    if(catModeHintEl) catModeHintEl.textContent = '· por categoria';
+    if(catModeHintEl) catModeHintEl.textContent = window.i18n.t('charts.category.hintByCategory');
     catChart.data.labels=labels; catChart.data.ids=ids;
     if(wantType==='doughnut'){
       catChart.data.datasets=[{ data:vals, backgroundColor:colors, borderWidth:0, hoverOffset:8 }];
@@ -924,7 +927,7 @@ function updateCharts(){
         <div class="flex items-center justify-between gap-3 pl-2.5 pr-3 py-1.5 rounded-lg border transition hover:bg-zinc-50 dark:hover:bg-zinc-800/60 ${active?'shadow-sm':''}" style="${active?`background:${c.color}14;border-color:${c.color}`:'border-color:transparent'}">
           <span class="flex items-center gap-2 min-w-0">
             <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white shrink-0" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>
-            <span class="text-[13px] font-semibold truncate">${escapeHtml(c.name)}</span>
+            <span class="text-[13px] font-semibold truncate">${escapeHtml(catDisplayName(c))}</span>
             <span class="text-[10px] text-zinc-400 font-mono shrink-0">${count}</span>
           </span>
           <span class="flex items-baseline gap-1.5 shrink-0">
@@ -940,7 +943,7 @@ function updateCharts(){
   const byMonth={}; txP.forEach(t=>{ if(t.saida && !t.internal){ const k=monthKey(t.date); byMonth[k]=(byMonth[k]||0)+t.saida; }});
   const months=Object.keys(byMonth).sort();
   monthChart.data.labels=months.map(monthLabel);
-  monthChart.data.datasets=[{ label:'Gasto', data:months.map(k=>Math.round(byMonth[k]*100)/100), borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.12)', fill:true, tension:0.35 }];
+  monthChart.data.datasets=[{ label: window.i18n.t('charts.datasetLabels.expense'), data:months.map(k=>Math.round(byMonth[k]*100)/100), borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.12)', fill:true, tension:0.35 }];
   monthChart.update();
   document.getElementById('monthRange').textContent = months.length? `${monthLabel(months[0])} → ${monthLabel(months[months.length-1])}` : '';
 
@@ -974,8 +977,8 @@ function updateCharts(){
     const ma=valsM.map((_,i)=>{ const s=Math.max(0,i-2); const win=valsM.slice(s,i+1); return Math.round(win.reduce((a,b)=>a+b,0)/win.length*100)/100; });
     trendChart.data.labels=ms.map(monthLabel);
     trendChart.data.datasets=[
-      { label:'Gasto', data:valsM, borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.10)', fill:true, tension:0.35 },
-      { label:'Tendência (3m)', data:ma, borderColor:'#f59e0b', borderDash:[6,4], pointRadius:0, tension:0.35 }
+      { label: window.i18n.t('charts.datasetLabels.expense'), data:valsM, borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.10)', fill:true, tension:0.35 },
+      { label: window.i18n.t('charts.datasetLabels.trend3m'), data:ma, borderColor:'#f59e0b', borderDash:[6,4], pointRadius:0, tension:0.35 }
     ];
     trendChart.update();
     const badge=document.getElementById('trendBadge');
@@ -983,8 +986,8 @@ function updateCharts(){
       // compara último mês vs anterior
       const diff = valsM[valsM.length-1]-valsM[valsM.length-2];
       const pctPrev = valsM[valsM.length-2]>0 ? Math.round(Math.abs(diff)/valsM[valsM.length-2]*100) : 0;
-      if(diff>0){ badge.textContent=`▲ +${pctPrev}% vs mês anterior`; badge.className='text-[11px] font-bold px-2 py-1 rounded-full bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400'; }
-      else { badge.textContent=`▼ -${pctPrev}% vs mês anterior`; badge.className='text-[11px] font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400'; }
+      if(diff>0){ badge.textContent=window.i18n.t('charts.trend.upBadge', {pct: pctPrev}); badge.className='text-[11px] font-bold px-2 py-1 rounded-full bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400'; }
+      else { badge.textContent=window.i18n.t('charts.trend.downBadge', {pct: pctPrev}); badge.className='text-[11px] font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400'; }
     } else if(badge){ badge.textContent=''; }
   }
 
@@ -1049,14 +1052,14 @@ function updateCharts(){
             <div class="flex items-center justify-between gap-3 text-xs mb-1.5">
               <span class="font-semibold flex items-center gap-1.5 min-w-0">
                 <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white shrink-0" style="background:${c.color}"><i class="${catIcon(c)}"></i></span>
-                <span class="truncate">${escapeHtml(c.name)}</span>
+                <span class="truncate">${escapeHtml(catDisplayName(c))}</span>
               </span>
               <span class="font-mono shrink-0 ${over?'text-red-600 dark:text-red-400 font-bold':'text-zinc-500'}">${fmtEUR(real)} / ${fmtEUR(budgetTotal)} <span class="opacity-70">(${pctLabel}%)</span></span>
             </div>
             <div class="relative h-4 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
               <div class="absolute inset-y-0 left-0 rounded-full" style="width:${baseWidth}%; background:linear-gradient(90deg, ${c.color}, #4c0519)"></div>
               ${over ? `<div class="absolute inset-y-0" style="left:${budgetMarkerPct}%; width:${overflowWidth}%; background:repeating-linear-gradient(135deg, #4c0519, #4c0519 5px, #1a0505 5px, #1a0505 10px)"></div>` : ''}
-              ${over ? `<div class="absolute inset-y-0 w-[3px] bg-white" style="left:${budgetMarkerPct}%; box-shadow:0 0 0 1px rgba(0,0,0,0.55)" title="Aqui é onde a meta de ${fmtEUR(budgetTotal)} acabou"></div>` : ''}
+              ${over ? `<div class="absolute inset-y-0 w-[3px] bg-white" style="left:${budgetMarkerPct}%; box-shadow:0 0 0 1px rgba(0,0,0,0.55)" title="${escapeHtml(window.i18n.t('charts.compare.budgetEndTitle', {value: fmtEUR(budgetTotal)}))}"></div>` : ''}
             </div>
           </div>`;
         }).join('');
@@ -1065,8 +1068,8 @@ function updateCharts(){
         ? (scopeMonths.length ? `${monthLabel(scopeMonths[0])} – ${monthLabel(scopeMonths[scopeMonths.length-1])}` : '')
         : (cmpMonth ? monthLabel(cmpMonth) : '');
       document.getElementById('compareModeHint').textContent = budgetScope==='cumulative'
-        ? `· real sobreposto à meta acumulada dos ${scopeMonths.length} meses do período — suaviza picos isolados (férias, etc.)`
-        : '· real sobreposto à meta definida em Configurações, mês mais recente';
+        ? window.i18n.t('charts.compare.hintCumulative', {n: scopeMonths.length})
+        : window.i18n.t('charts.compare.hintThisMonth');
     } else {
       if(chartWrapEl) chartWrapEl.classList.remove('hidden');
       if(budgetListEl) budgetListEl.classList.add('hidden');
@@ -1092,12 +1095,12 @@ function updateCharts(){
         const c=catById(cid);
         const data=lastN.map(k=>{ let s=0; txP.forEach(t=>{ if(t.cat===cid&&t.saida&&!t.internal&&monthKey(t.date)===k) s+=t.saida; }); return Math.round(s*100)/100; });
         return compareMode==='lines'
-          ? { label:c.name, catId:cid, data, borderColor:c.color, backgroundColor:c.color, pointRadius:3, pointHoverRadius:5, borderWidth:2.5, tension:0.35, fill:false }
-          : { label:c.name, catId:cid, data, backgroundColor:c.color, borderRadius:6 };
+          ? { label:catDisplayName(c), catId:cid, data, borderColor:c.color, backgroundColor:c.color, pointRadius:3, pointHoverRadius:5, borderWidth:2.5, tension:0.35, fill:false }
+          : { label:catDisplayName(c), catId:cid, data, backgroundColor:c.color, borderRadius:6 };
       });
       compareChart.update();
       document.getElementById('compareRange').textContent = lastN.length? lastN.map(monthLabel).join(' · ') : '';
-      document.getElementById('compareModeHint').textContent = compareMode==='lines' ? '· tendência de cada categoria mês a mês' : '· barras lado a lado por mês';
+      document.getElementById('compareModeHint').textContent = compareMode==='lines' ? window.i18n.t('charts.compare.hintLines') : window.i18n.t('charts.compare.hintBars');
       renderCompareLegend();
     }
   }
@@ -1121,9 +1124,9 @@ function updateCharts(){
     const subEl = document.getElementById('cashflowSub');
     if(cashflowMode==='monthly'){
       cashflowChart.data.labels = monthsAll.map(monthLabel);
-      cashflowChart.data.datasets=[{ label:'Saldo do mês', data:netByMonth, backgroundColor: netByMonth.map(v=>v>=0?'#10b981':'#ef4444'), borderRadius:6 }];
-      document.getElementById('cashflowHint').textContent = '· entradas − saídas por mês';
-      if(subEl) subEl.textContent = 'Entradas − saídas reais, sem transferências internas. Verde = sobrando, vermelho = consumindo reserva.';
+      cashflowChart.data.datasets=[{ label: window.i18n.t('charts.cashflowDatasetLabels.monthly'), data:netByMonth, backgroundColor: netByMonth.map(v=>v>=0?'#10b981':'#ef4444'), borderRadius:6 }];
+      document.getElementById('cashflowHint').textContent = window.i18n.t('charts.cashflow.hintMonthly');
+      if(subEl) subEl.textContent = window.i18n.t('charts.cashflow.subtitle');
     } else {
       // Se houver um saldo inicial definido (Configurações → Saldo inicial), a curva parte dele em vez de
       // zero — soma também o net de qualquer mês entre o saldo inicial e o começo do período mostrado, pra
@@ -1154,7 +1157,7 @@ function updateCharts(){
           return keys.length ? keys.reduce((s,k)=>s+byMonth[k],0)/keys.length : 0;
         };
         const catEstimates = categories.filter(c=>c.id!=='transferencia').map(c=>({
-          name:c.name, usesBudget: c.budget>0, value: c.budget>0 ? c.budget : catMonthlyAvg(c.id)
+          name:catDisplayName(c), usesBudget: c.budget>0, value: c.budget>0 ? c.budget : catMonthlyAvg(c.id)
         })).filter(c=>c.value>0.005);
         const projectedMonthlyExpense = Math.round(catEstimates.reduce((s,c)=>s+c.value,0)*100)/100;
         const noBudgetCats = catEstimates.filter(c=>!c.usesBudget);
@@ -1175,9 +1178,9 @@ function updateCharts(){
 
         const combined = cumData.concat(forecastData);
         const splitIdx = cumData.length; // a partir daqui é projeção, não histórico real
-        cashflowChart.data.labels = monthsAll.concat(forecastKeys).map((k,i)=> i<splitIdx ? monthLabel(k) : monthLabel(k)+' (prev.)');
+        cashflowChart.data.labels = monthsAll.concat(forecastKeys).map((k,i)=> i<splitIdx ? monthLabel(k) : monthLabel(k)+window.i18n.t('charts.cashflow.forecastSuffix'));
         cashflowChart.data.datasets=[{
-          label:'Saldo (real + previsto)', data: combined, fill:true, tension:0.3,
+          label: window.i18n.t('charts.cashflowDatasetLabels.forecast'), data: combined, fill:true, tension:0.3,
           borderColor: '#8b5cf6',
           segment:{
             borderDash: ctx => ctx.p1DataIndex >= splitIdx ? [6,4] : undefined,
@@ -1188,23 +1191,25 @@ function updateCharts(){
           pointStyle: combined.map((v,i)=> i>=splitIdx ? 'rectRot' : 'circle'),
           pointRadius: combined.map((v,i)=> i>=splitIdx ? 4 : 3)
         }];
+        const projectedNetStr = (projectedNet>=0?'+':'')+fmtEUR(projectedNet);
         document.getElementById('cashflowHint').textContent =
-          `· projeção: ${fmtEUR(projectedMonthlyIncome)} renda − ${fmtEUR(projectedMonthlyExpense)} gasto = ${projectedNet>=0?'+':''}${fmtEUR(projectedNet)}/mês`;
-        if(subEl) subEl.textContent = 'Linha sólida = real. Linha tracejada (roxa) = projeção usando o orçamento definido em Configurações, com média histórica pra categorias sem meta.';
+          window.i18n.t('charts.cashflow.hintForecast', {income: fmtEUR(projectedMonthlyIncome), expense: fmtEUR(projectedMonthlyExpense), net: projectedNetStr});
+        // i18n: color name here must match the forecast line's actual borderColor (#8b5cf6 = violet/purple)
+        if(subEl) subEl.textContent = window.i18n.t('charts.cashflow.subtitleForecast');
         forecastState = { projectedMonthlyIncome, projectedMonthlyExpense, projectedNet, usesIncomeTarget, avgIncome, noBudgetCats, forecastKeys, startSaldo, finalForecast: forecastData[forecastData.length-1] };
       } else {
         cashflowChart.data.labels = monthsAll.map(monthLabel);
         cashflowChart.data.datasets=[{
-          label:'Saldo acumulado', data:cumData, fill:true, tension:0.3,
+          label: window.i18n.t('charts.cashflowDatasetLabels.cumulative'), data:cumData, fill:true, tension:0.3,
           borderColor:ctx=>{ const v=ctx.p1?.parsed?.y ?? cumData[cumData.length-1] ?? 0; return v<0?'#ef4444':'#10b981'; },
           backgroundColor: cumData[cumData.length-1]>=0 ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)',
           segment:{ borderColor: ctx => (ctx.p0.parsed.y<0 || ctx.p1.parsed.y<0) ? '#ef4444' : '#10b981' },
           pointBackgroundColor: cumData.map(v=>v>=0?'#10b981':'#ef4444')
         }];
         document.getElementById('cashflowHint').textContent = (openingBalance && openingBalance.value!=null)
-          ? `· saldo acumulado a partir de ${fmtEUR(openingBalance.value)} em ${openingBalance.date.toLocaleDateString('pt-BR')}`
-          : '· saldo acumulado ao longo do tempo';
-        if(subEl) subEl.textContent = 'Entradas − saídas reais, sem transferências internas. Verde = sobrando, vermelho = consumindo reserva.';
+          ? window.i18n.t('charts.cashflow.hintWithOpening', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString(localeTag())})
+          : window.i18n.t('charts.cashflow.hintCumulative');
+        if(subEl) subEl.textContent = window.i18n.t('charts.cashflow.subtitle');
       }
     }
     cashflowChart.update();
@@ -1215,19 +1220,20 @@ function updateCharts(){
       const f = forecastState;
       const boxes = [];
       const positive = f.projectedNet>=0;
+      const projectedNetStr = (positive?'+':'')+fmtEUR(f.projectedNet);
       boxes.push({ level: positive?'ok':'danger',
-        title: positive ? 'Sobra prevista por mês' : 'Falta prevista por mês',
-        text: `Renda ${fmtEUR(f.projectedMonthlyIncome)} − gastos ${fmtEUR(f.projectedMonthlyExpense)} = ${positive?'+':''}${fmtEUR(f.projectedNet)}/mês, no ritmo do orçamento.` });
+        title: positive ? window.i18n.t('charts.cashflow.forecastPositiveTitle') : window.i18n.t('charts.cashflow.forecastNegativeTitle'),
+        text: window.i18n.t('charts.cashflow.forecastText', {income: fmtEUR(f.projectedMonthlyIncome), expense: fmtEUR(f.projectedMonthlyExpense), net: projectedNetStr}) });
       const finalPositive = f.finalForecast>=0;
       boxes.push({ level: finalPositive?'ok':'danger',
-        title: `Saldo estimado em ${monthLabel(f.forecastKeys[f.forecastKeys.length-1])}`,
-        text: `Partindo de ${fmtEUR(f.startSaldo)} hoje, projeta-se ${fmtEUR(f.finalForecast)} em ${f.forecastKeys.length} meses.` });
+        title: window.i18n.t('charts.cashflow.estimatedBalanceTitle', {month: monthLabel(f.forecastKeys[f.forecastKeys.length-1])}),
+        text: window.i18n.t('charts.cashflow.estimatedBalanceText', {start: fmtEUR(f.startSaldo), final: fmtEUR(f.finalForecast), n: f.forecastKeys.length}) });
       if(f.projectedNet<0 && f.startSaldo>0){
         const monthsToZero = Math.ceil(f.startSaldo / -f.projectedNet);
-        if(monthsToZero<=24) boxes.push({ level:'danger', title:'Saldo pode zerar', text:`Nesse ritmo, o saldo estimado fica negativo em ~${monthsToZero} ${monthsToZero===1?'mês':'meses'}.` });
+        if(monthsToZero<=24) boxes.push({ level:'danger', title: window.i18n.t('charts.cashflow.zeroBalanceTitle'), text: monthsToZero===1 ? window.i18n.t('charts.cashflow.zeroBalanceTextSingular', {n: monthsToZero}) : window.i18n.t('charts.cashflow.zeroBalanceTextPlural', {n: monthsToZero}) });
       }
-      if(!f.usesIncomeTarget) boxes.push({ level:'warn', title:'Meta de renda não definida', text:`Usando a média das últimas entradas (${fmtEUR(f.avgIncome)}/mês) — defina uma meta em Configurações → Orçamentos mensais pra uma previsão mais intencional.` });
-      if(f.noBudgetCats.length) boxes.push({ level:'warn', title:'Categorias sem meta', text:`${f.noBudgetCats.length} categoria(s) sem orçamento usam a média histórica: ${f.noBudgetCats.map(c=>c.name).join(', ')}.` });
+      if(!f.usesIncomeTarget) boxes.push({ level:'warn', title: window.i18n.t('charts.cashflow.noIncomeTargetTitle'), text: window.i18n.t('charts.cashflow.noIncomeTargetText', {avg: fmtEUR(f.avgIncome)}) });
+      if(f.noBudgetCats.length) boxes.push({ level:'warn', title: window.i18n.t('charts.cashflow.noBudgetCatsTitle'), text: window.i18n.t('charts.cashflow.noBudgetCatsText', {n: f.noBudgetCats.length, names: f.noBudgetCats.map(c=>catDisplayName(c)).join(', ')}) });
       tipsEl.innerHTML = boxes.slice(0,4).map(b=>{
         const cls = b.level==='ok' ? 'border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/30'
           : b.level==='danger' ? 'border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30'
@@ -1247,15 +1253,15 @@ function updateCharts(){
         const inc=incByMonth[i], exp=expByMonth[i], net=netByMonth[i];
         if(inc<=0) continue; // sem entradas no mês, não dá pra avaliar margem
         const ratio=exp/inc;
-        if(net<0) tips.push({ level:'danger', month:monthsAll[i], text:`Gastou ${fmtEUR(Math.abs(net))} a mais do que ganhou nesse mês.` });
-        else if(ratio>=0.9) tips.push({ level:'warn', month:monthsAll[i], text:`Só sobrou ${Math.max(0,Math.round((1-ratio)*100))}% da renda (${fmtEUR(net)}).` });
+        if(net<0) tips.push({ level:'danger', month:monthsAll[i], text: window.i18n.t('charts.cashflow.deficitMonthText', {value: fmtEUR(Math.abs(net))}) });
+        else if(ratio>=0.9) tips.push({ level:'warn', month:monthsAll[i], text: window.i18n.t('charts.cashflow.tightMarginText', {pct: Math.max(0,Math.round((1-ratio)*100)), value: fmtEUR(net)}) });
       }
       if(tips.length===0){
         const lastIdx=incByMonth.length-1;
         const rate = (lastIdx>=0 && incByMonth[lastIdx]>0) ? Math.round(netByMonth[lastIdx]/incByMonth[lastIdx]*100) : null;
         tipsEl.innerHTML = `<div class="p-3 rounded-xl border border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/30">
-          <p class="text-[12px] font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5"><i class="ri-checkbox-circle-fill"></i> Fluxo saudável</p>
-          <p class="text-[11px] text-emerald-700/80 dark:text-emerald-400/70 mt-1 leading-relaxed">${rate!=null?`Guardando ${rate}% da renda no último mês`:'Sem entradas suficientes para avaliar ainda'} — nenhum mês estourou a renda.</p>
+          <p class="text-[12px] font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5"><i class="ri-checkbox-circle-fill"></i> ${window.i18n.t('charts.cashflow.healthyTitle')}</p>
+          <p class="text-[11px] text-emerald-700/80 dark:text-emerald-400/70 mt-1 leading-relaxed">${rate!=null ? window.i18n.t('charts.cashflow.healthySubHasIncome', {pct: rate}) : window.i18n.t('charts.cashflow.healthySubNoIncome')}</p>
         </div>`;
       } else {
         tipsEl.innerHTML = tips.map(t=>{
@@ -1278,14 +1284,14 @@ function updateCharts(){
     txP.forEach(t=>{ if(t.saida && !t.internal){ const k=normalizeDescKey(t.desc); (byKey[k]??=({months:new Set(), total:0, count:0, desc:t.desc})); byKey[k].months.add(monthKey(t.date)); byKey[k].total+=t.saida; byKey[k].count++; }});
     const rec=Object.values(byKey).filter(x=>x.months.size>=2).sort((a,b)=>b.months.size-a.months.size || b.count-a.count || b.total-a.total).slice(0,10);
     const rl=document.getElementById('recurringList');
-    if(rec.length===0){ rl.innerHTML='<span class="text-xs text-zinc-500">Nenhum padrão recorrente detectado ainda — aparece depois de 2+ meses de dados.</span>'; }
+    if(rec.length===0){ rl.innerHTML=`<span class="text-xs text-zinc-500">${window.i18n.t('charts.recurring.messages.emptyState')}</span>`; }
     else{
       rl.innerHTML=rec.map(r=>{
         const c=catById(categorize(r.desc));
         const avg=r.total/r.count;
         return `<div class="flex items-center gap-3 p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-          <span class="shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-extrabold font-mono" style="background:${c.color}1a;color:${c.color}" title="${r.months.size} meses com esse gasto">${r.months.size}×</span>
-          <span class="flex-1 min-w-0"><span class="block text-[13px] font-semibold truncate">${escapeHtml(r.desc)}</span><span class="text-[11px] text-zinc-500">${r.count}x no total · média ${fmtEUR(avg)}</span></span>
+          <span class="shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-extrabold font-mono" style="background:${c.color}1a;color:${c.color}" title="${window.i18n.t('charts.recurring.messages.monthsCountTitle', {n: r.months.size})}">${r.months.size}×</span>
+          <span class="flex-1 min-w-0"><span class="block text-[13px] font-semibold truncate">${escapeHtml(r.desc)}</span><span class="text-[11px] text-zinc-500">${window.i18n.t('charts.recurring.messages.itemSubtext', {count: r.count, avg: fmtEUR(avg)})}</span></span>
           <span class="font-bold font-mono text-[13px] shrink-0">${fmtEUR(r.total)}</span>
         </div>`;
       }).join('');

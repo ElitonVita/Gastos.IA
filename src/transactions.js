@@ -2,7 +2,7 @@ let noteTarget=null;
 function openNoteDialog(tx){
   noteTarget=tx;
   document.getElementById('noteTxDesc').textContent=tx.desc;
-  document.getElementById('noteTxMeta').textContent=`${(tx.realDate||tx.date).toLocaleDateString('pt-BR')} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}${tx.source?' · '+tx.source:''}`;
+  document.getElementById('noteTxMeta').textContent=`${(tx.realDate||tx.date).toLocaleDateString(localeTag())} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}${tx.source?' · '+tx.source:''}`;
   document.getElementById('noteText').value=tx.note||'';
   document.getElementById('btnNoteDelete').classList.toggle('hidden', !tx.note);
   noteDialog.showModal();
@@ -25,39 +25,37 @@ document.getElementById('noteForm')?.addEventListener('submit', e=>{
 // Details modal — arquivo de origem + tudo que o parser conseguiu extrair (local, hora, referências bancárias etc.)
 const detailsDialog=document.getElementById('detailsDialog');
 let detailsTarget=null;
-const META_LABELS = {
-  town:'Local', dateProcessed:'Data de processamento',
-  type:'Tipo de movimento', remittance:'Informação de remessa',
-  beneficiary:'Beneficiário', byOrderOf:'Por ordem de',
-  beneficiaryAccount:'Conta do beneficiário', atBank:'Banco do beneficiário',
-  mandateRef:'Referência do mandato', endToEnd:'ID ponta a ponta', ourRef:'Nossa referência',
-  to:'Destino', card:'Cartão', fxRate:'Taxa de câmbio', originalAmount:'Valor na moeda original',
-  paymentDate:'Data de pagamento da fatura', cardNumber:'Número do cartão', cardStatementDate:'Fatura referente a'
-};
+function getMetaLabels(){
+  // Function (not a static object) so it re-reads the current language every
+  // time it's called — a plain object built once at load time would freeze
+  // in whatever language was active on page load.
+  return window.i18n.tObject('modals.details.metaLabels');
+}
 function openDetailsDialog(tx){
   detailsTarget=tx;
   document.getElementById('detailsTxDesc').textContent=tx.desc;
   const displayDate = tx.realDate||tx.date;
-  document.getElementById('detailsTxMeta').textContent=`${displayDate.toLocaleDateString('pt-BR')} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}`;
+  document.getElementById('detailsTxMeta').textContent=`${displayDate.toLocaleDateString(localeTag())} · ${tx.saida?fmtEUR(tx.saida):fmtEUR(tx.entrada||0)}`;
   const bSel=document.getElementById('detailsBankSelect');
-  bSel.innerHTML = '<option value="">Não identificado</option>' + bankTypes.map(b=>`<option value="${b.id}" ${b.id===tx.bank?'selected':''}>${escapeHtml(b.name)}</option>`).join('');
+  bSel.innerHTML = `<option value="">${window.i18n.t('modals.details.notIdentified')}</option>` + bankTypes.map(b=>`<option value="${b.id}" ${b.id===tx.bank?'selected':''}>${escapeHtml(bankDisplayName(b))}</option>`).join('');
   const transferBox=document.getElementById('detailsTransferBox');
   const pair = tx.transferGroupId ? transactions.find(t=>t.transferGroupId===tx.transferGroupId && t!==tx) : null;
   transferBox.classList.toggle('hidden', !pair);
   if(pair){
-    document.getElementById('detailsTransferPair').textContent = `Vinculada a: ${pair.desc} · ${(pair.realDate||pair.date).toLocaleDateString('pt-BR')} · ${fmtEUR(pair.saida||pair.entrada||0)}${pair.bank?' · '+bankLabel(pair.bank):''}`;
+    document.getElementById('detailsTransferPair').textContent = window.i18n.t('modals.details.transferPair', {desc: pair.desc, date: (pair.realDate||pair.date).toLocaleDateString(localeTag()), value: fmtEUR(pair.saida||pair.entrada||0), bank: pair.bank?' · '+bankLabel(pair.bank):''});
   }
   const autoBox=document.getElementById('detailsAutoTransferBox');
   const showAuto = !!tx.autoTransfer && !pair;
   autoBox.classList.toggle('hidden', !showAuto);
   if(showAuto){
     const toBank = tx.meta && tx.meta.transferToBank ? bankLabel(tx.meta.transferToBank) : '';
-    document.getElementById('detailsAutoTransferInfo').textContent = toBank ? `Provável destino: ${toBank}` : '';
+    document.getElementById('detailsAutoTransferInfo').textContent = toBank ? window.i18n.t('modals.details.autoTransferInfo', {bank: toBank}) : '';
   }
-  const rows=[['Arquivo de origem', tx.source||'—']];
-  if(tx.realDate && +tx.realDate!==+tx.date) rows.push(['Data considerada no mês/orçamento', tx.date.toLocaleDateString('pt-BR')]);
+  const rows=[[window.i18n.t('modals.details.sourceFile'), tx.source||'—']];
+  if(tx.realDate && +tx.realDate!==+tx.date) rows.push([window.i18n.t('modals.details.consideredDateLabel'), tx.date.toLocaleDateString(localeTag())]);
   const meta=tx.meta||{};
-  for(const k of Object.keys(META_LABELS)){ if(meta[k]) rows.push([META_LABELS[k], meta[k]]); }
+  const labels = getMetaLabels();
+  for(const k of Object.keys(labels)){ if(meta[k]) rows.push([labels[k], meta[k]]); }
   document.getElementById('detailsExtra').innerHTML = rows.map(([label,val])=>`
     <div class="flex items-start justify-between gap-3 py-1.5 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
       <span class="text-zinc-500 shrink-0">${escapeHtml(label)}</span>
@@ -99,7 +97,7 @@ document.getElementById('bulkClearBtn')?.addEventListener('click', ()=>{
 });
 document.getElementById('bulkDeleteBtn')?.addEventListener('click', ()=>{
   const n=selectedTxIds.size; if(n===0) return;
-  if(!confirm(`Excluir ${n} transação(ões) selecionada(s)? Essa ação não pode ser desfeita.`)) return;
+  if(!confirm(window.i18n.t('actions.bulkDeleteConfirm', {n}))) return;
   transactions = transactions.filter(t=>!selectedTxIds.has(t.id));
   selectedTxIds.clear();
   renderTable(); renderCategoryChips(); updateCharts(); updateKPIs(); persistState();
@@ -150,14 +148,14 @@ function undoAutoTransfer(tx){
 }
 document.getElementById('bulkLinkTransferBtn')?.addEventListener('click', ()=>{
   const targets = transactions.filter(t=>selectedTxIds.has(t.id));
-  if(targets.length!==2){ alert('Selecione exatamente 2 transações: a saída (ex: na conta BIL) e a entrada correspondente (ex: na conta Revolut).'); return; }
+  if(targets.length!==2){ alert(window.i18n.t('actions.selectTwoTransfers')); return; }
   const saidaTx = targets.find(t=>t.saida!=null && t.entrada==null);
   const entradaTx = targets.find(t=>t.entrada!=null && t.saida==null);
-  if(!saidaTx || !entradaTx){ alert('Selecione uma transação de Saída e uma de Entrada — são os dois lados da mesma transferência.'); return; }
-  if(saidaTx.transferLinked || entradaTx.transferLinked){ alert('Uma das transações selecionadas já está vinculada a outra transferência. Desvincule antes (em Detalhes) se quiser refazer.'); return; }
+  if(!saidaTx || !entradaTx){ alert(window.i18n.t('actions.selectOneExpenseOneIncome')); return; }
+  if(saidaTx.transferLinked || entradaTx.transferLinked){ alert(window.i18n.t('actions.alreadyLinked')); return; }
   const diffPct = Math.abs(saidaTx.saida - entradaTx.entrada) / Math.max(saidaTx.saida, entradaTx.entrada);
   if(diffPct > 0.02){
-    if(!confirm(`Os valores são diferentes (${fmtEUR(saidaTx.saida)} saindo vs ${fmtEUR(entradaTx.entrada)} entrando) — normal se houve conversão de moeda ou taxa. Vincular mesmo assim?`)) return;
+    if(!confirm(window.i18n.t('actions.differentValues', {expense: fmtEUR(saidaTx.saida), income: fmtEUR(entradaTx.entrada)}))) return;
   }
   linkTransfer(saidaTx, entradaTx);
   selectedTxIds.clear();
@@ -180,7 +178,7 @@ document.getElementById('bulkBankSelect')?.addEventListener('change', e=>{
 document.getElementById('bulkNoteBtn')?.addEventListener('click', ()=>{
   if(selectedTxIds.size===0) return;
   bulkNoteTarget = Array.from(selectedTxIds);
-  document.getElementById('bulkNoteCount').textContent = bulkNoteTarget.length;
+  document.getElementById('bulkNoteDesc').innerHTML = window.i18n.t('modals.bulkNote.description', {count: bulkNoteTarget.length});
   document.getElementById('bulkNoteText').value='';
   document.getElementById('bulkNoteDialog').showModal();
 });
@@ -201,8 +199,8 @@ document.getElementById('bulkNoteForm')?.addEventListener('submit', e=>{
 const catDialog=document.getElementById('catDialog');
 function openCategoryDialog(editId){
   const c = editId ? catById(editId) : null;
-  document.getElementById('catDialogTitle').textContent = c ? 'Editar categoria' : 'Nova categoria';
-  document.getElementById('catSubmitBtn').textContent = c ? 'Salvar alterações' : 'Criar categoria';
+  document.getElementById('catDialogTitle').textContent = c ? window.i18n.t('modals.category.titleEdit') : window.i18n.t('modals.category.titleNew');
+  document.getElementById('catSubmitBtn').textContent = c ? window.i18n.t('modals.category.submitEdit') : window.i18n.t('modals.category.submitNew');
   document.getElementById('cEditId').value = c ? c.id : '';
   document.getElementById('cName').value = c ? c.name : '';
   document.getElementById('cColor').value = c ? c.color : '#6366f1';

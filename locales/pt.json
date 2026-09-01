@@ -1,0 +1,717 @@
+{
+  "app": {
+    "title": "Gastos<span style=\"color:#7c3aed;\">.AI</span>",
+    "subtitle": "Dashboard de despesas 100% local e privado",
+    "pageTitle": "Gastos.AI — Dashboard de Despesas em PDF"
+  },
+  "header": {
+    "language": "Idioma",
+    "theme": "Tema",
+    "print": "Imprimir relatório"
+  },
+  "dropZone": {
+    "title": "Arraste PDFs aqui ou clique para selecionar",
+    "subtitle": "Extratos bancários (Revolut, BIL, etc.) — PDFs de texto, não imagens",
+    "btnPickFiles": "Escolher arquivos",
+    "btnPickFolder": "Escolher pasta"
+  },
+  "fileList": {
+    "title": "Arquivos importados",
+    "reading": "Lendo...",
+    "error": "Erro ao ler",
+    "noPdfs": "Nenhum PDF encontrado. Selecione arquivos .pdf",
+    "noValuesFound": "Não encontrei valores no formato esperado (ex: 12,34 € , € 1.234,56 ou 1 234,56 €). Abra o PDF e tente selecionar o valor com o mouse — se não conseguir selecionar, é PDF escaneado (imagem) e precisa de OCR. Use \"Adicionar transação manual\" como alternativa.",
+    "extractedText": "Texto extraído (primeiros 1200 chars) — copie e me envie se o erro persistir:",
+    "duplicatesSkipped": "duplicadas ignoradas (data+descrição+valor idênticos)",
+    "enriched": "completadas com novos detalhes",
+    "nothingNew": "Nada novo",
+    "inheritedCategories": "herdados de categorias já salvas",
+    "readingStatus": "lendo...",
+    "readingProgress": "Lendo {name} ({current}/{total})",
+    "parsedCounts": "{expenses} saídas · {income} entradas",
+    "parsedNone": "nenhum valor encontrado",
+    "bilCardTitle": "Fatura de cartão BIL",
+    "bilAccountTitle": "Extrato de conta BIL",
+    "bilBadge": "BIL",
+    "revolutTitle": "Extrato Revolut",
+    "revolutBadge": "Revolut",
+    "readError": "erro ao ler",
+    "completed": "Concluído",
+    "debugEmptyText": "(vazio — PDF sem texto selecionável)",
+    "duplicatesBanner": "⏭️ {n} duplicadas ignoradas (data+descrição+valor idênticos){extra}",
+    "enrichedClause": " · {n} completadas com novos detalhes",
+    "nothingNewProgress": "Nada novo",
+    "nothingNewLog": "{n} movimentos duplicados{enrichedClause} — nada novo importado.",
+    "enrichedLogClause": " ({n} completados com novos detalhes)",
+    "inheritedBanner": "✨ {n} herdados de categorias já salvas",
+    "demoLoaded": "Dados de exemplo carregados — {n} despesas"
+  },
+  "kpis": {
+    "balance": "Saldo atual",
+    "totalExpenses": "Total gasto",
+    "count": "Movimentos",
+    "average": "Média por gasto",
+    "topCategory": "Maior categoria",
+    "topCategoryValue": "Valor e % do total",
+    "insight": "Insight",
+    "insightDetail": "Detalhe do insight",
+    "savingsRate": "Taxa de poupança",
+    "saved": "sobrando no período",
+    "overspent": "além da renda",
+    "noIncome": "sem entradas no período",
+    "balanceSubDefault": "Entradas − saídas de todo o histórico · defina um saldo inicial em Configurações se faltar dado anterior",
+    "transactionsLabel": "{count} transações",
+    "avgTicket": "Ticket médio",
+    "perTransaction": "por transação",
+    "insightTitle": "O que mais pesa?",
+    "insightDefault": "Adicione PDFs para ver insights.",
+    "balanceSubWithOpening": "Saldo inicial {value} ({date}) + entradas − saídas",
+    "countBreakdown": "{expenses} saídas · {income} entradas{transfers} · {files} arquivos",
+    "countTransfersClause": " · {n} transferências internas",
+    "topCategoryValueText": "{value} · {pct}% do total",
+    "insightMainText": "{cat} é seu maior gasto",
+    "insightSubText": "{value} ({pct}%) — vale revisar assinaturas e compras nessa categoria.",
+    "savedText": "{value} sobrando no período",
+    "overspentText": "{value} além da renda"
+  },
+  "filters": {
+    "searchPlaceholder": "Buscar descrição, categoria, arquivo...",
+    "allCategories": "Todas categorias",
+    "allPeriods": "Todo o período",
+    "typeAll": "Todos",
+    "typeExpense": "Só saídas",
+    "typeIncome": "Só entradas",
+    "bankAll": "Todos os tipos",
+    "bankNone": "Sem tipo identificado",
+    "periodChips": {
+      "all": "Tudo"
+    },
+    "yearOf": "Ano de {year}"
+  },
+  "table": {
+    "columns": {
+      "select": "Selecionar",
+      "date": "Data",
+      "description": "Descrição",
+      "expense": "Saída",
+      "income": "Entrada",
+      "category": "Categoria",
+      "actions": "Ações"
+    },
+    "howItWorks": "<span class=\"font-bold\">Como funciona:</span> Importe extratos em <b>Configurações → Importar PDFs</b> → os gráficos usam só <b>Saídas</b> → corrija categorias na tabela. Tudo salvo automaticamente.",
+    "title": "Transações",
+    "subtitle": "· extrato completo",
+    "selectAllTitle": "Selecionar tudo nesta página",
+    "sort": {
+      "date": "Ordenar por data",
+      "description": "Ordenar por descrição",
+      "expense": "Ordenar por valor de saída",
+      "income": "Ordenar por valor de entrada",
+      "category": "Ordenar por categoria"
+    },
+    "emptyTitle": "Nenhuma despesa ainda",
+    "emptyDetail": "Adicione PDFs de extrato bancário (com colunas Data, Descrição, Saída, Entrada, Saldo) em <b>Configurações</b>, ou use dados de exemplo para explorar.",
+    "goToSettings": "Ir para Configurações",
+    "empty": "Nenhuma transação nesse filtro.",
+    "noValue": "—",
+    "cardSettlement": "Fatura do cartão",
+    "cardSettlementTitle": "Débito único da fatura do cartão — não contabilizado (as compras já foram contadas individualmente)",
+    "transferBetweenAccounts": "entre contas",
+    "transferBetweenAccountsTitle": "Transferência entre suas contas — não contabilizada em Gastos/Entradas. Veja o par em Detalhes.",
+    "possibleTransfer": "possível transferência",
+    "internalTransfer": "interna",
+    "internalTransferTitle": "Movimentação interna — não contabilizada",
+    "summary": "movimentos",
+    "realExpenses": "Gastos reais",
+    "income": "Entradas",
+    "internalTransfers": "Transf. internas",
+    "monthlyAverage": "Média mensal",
+    "pageInfo": "Página {current} / {total}",
+    "prevPage": "Anterior",
+    "nextPage": "Próxima",
+    "possibleTransferTitleText": "Detectado automaticamente pelo banco do beneficiário — provável transferência para {bank}. Confira em Detalhes.",
+    "avgPerMonthTitle": "Total dividido pelos {n} {monthWord} com movimento nessa categoria",
+    "monthWordSingular": "mês",
+    "monthWordPlural": "meses",
+    "summaryInternalTransfersTitle": "Movimentações internas (pockets, Flexible Cash Funds) — não contam como gasto",
+    "csvHeaders": ["data","descricao","saida","entrada","saldo","categoria","arquivo"]
+  },
+  "actions": {
+    "swap": "Trocar Saída ↔ Entrada",
+    "note": "Nota",
+    "details": "Detalhes",
+    "delete": "Excluir transação",
+    "confirmDelete": "Excluir esta transação?\n\n{desc}\n{date} · {value}",
+    "bulkActions": "Ações em massa",
+    "bulkCount": "{count} selecionadas",
+    "bulkClear": "Limpar seleção",
+    "bulkDelete": "Excluir selecionadas",
+    "bulkDeleteConfirm": "Excluir {n} transação(ões) selecionada(s)? Essa ação não pode ser desfeita.",
+    "bulkSwap": "Inverter Saída/Entrada",
+    "bulkCategory": "Categoria...",
+    "bulkBank": "Tipo de conta...",
+    "bulkNote": "Adicionar nota",
+    "bulkLinkTransfer": "Vincular transferência",
+    "selectTwoTransfers": "Selecione exatamente 2 transações: a saída (ex: na conta BIL) e a entrada correspondente (ex: na conta Revolut).",
+    "selectOneExpenseOneIncome": "Selecione uma transação de Saída e uma de Entrada — são os dois lados da mesma transferência.",
+    "alreadyLinked": "Uma das transações selecionadas já está vinculada a outra transferência. Desvincule antes (em Detalhes) se quiser refazer.",
+    "differentValues": "Os valores são diferentes ({expense} saindo vs {income} entrando) — normal se houve conversão de moeda ou taxa. Vincular mesmo assim?",
+    "linkTransferSuccess": "Transferência vinculada com sucesso",
+    "unlinkTransfer": "Desvincular transferência",
+    "rejectAutoTransfer": "Rejeitar detecção automática",
+    "selectInOut": "Selecione uma transação de Saída e uma de Entrada — são os dois lados da mesma transferência.",
+    "linkTransferHint": "Selecione a saída (ex: BIL) e a entrada (ex: Revolut) da mesma transferência",
+    "linkTransferBetweenAccounts": "Transferência entre contas",
+    "bulkCountSuffix": "selecionada(s)",
+    "nothingToExport": "Nada para exportar ainda."
+  },
+  "transactions": {
+    "defaultDescription": "Movimento"
+  },
+  "modals": {
+    "manualEntry": {
+      "title": "Adicionar transação manual",
+      "date": "Data",
+      "value": "Valor",
+      "description": "Descrição",
+      "type": "Tipo",
+      "typeExpense": "Saída (gasto)",
+      "typeIncome": "Entrada (receita)",
+      "category": "Categoria",
+      "cancel": "Cancelar",
+      "submit": "Adicionar",
+      "invalidValue": "Informe um valor válido",
+      "valuePlaceholder": "123,45",
+      "descriptionPlaceholder": "Ex: Supermercado Pão de Açúcar"
+    },
+    "note": {
+      "title": "Nota para \"{desc}\"",
+      "meta": "{date} · {value}{source}",
+      "placeholder": "Escreva uma nota...",
+      "cancel": "Cancelar",
+      "delete": "Apagar nota",
+      "save": "Salvar",
+      "dialogTitle": "Nota da transação",
+      "label": "Nota",
+      "deleteShort": "Remover"
+    },
+    "details": {
+      "title": "Detalhes da transação",
+      "meta": "{date} · {value}",
+      "sourceFile": "Arquivo de origem",
+      "bankType": "Tipo de conta",
+      "notIdentified": "Não identificado",
+      "transferPair": "Vinculada a: {desc} · {date} · {value}{bank}",
+      "autoTransferInfo": "Provável destino: {bank}",
+      "close": "Fechar",
+      "unlinkTransfer": "Desvincular transferência",
+      "rejectAutoTransfer": "Rejeitar detecção automática",
+      "transferBetweenAccounts": "Transferência entre contas",
+      "possibleTransfer": "Possível transferência entre contas",
+      "autoTransferHint": "Detectado pelo banco do beneficiário no extrato — não está contando como Gasto. Se estiver certo, não precisa fazer nada; se for um gasto de verdade, desfaça abaixo.",
+      "extractedData": "Dados extraídos do extrato",
+      "unlinkShort": "Desvincular",
+      "rejectShort": "Não é transferência — restaurar categoria",
+      "consideredDateLabel": "Data considerada no mês/orçamento",
+      "metaLabels": {
+        "town": "Local",
+        "dateProcessed": "Data de processamento",
+        "type": "Tipo de movimento",
+        "remittance": "Informação de remessa",
+        "beneficiary": "Beneficiário",
+        "byOrderOf": "Por ordem de",
+        "beneficiaryAccount": "Conta do beneficiário",
+        "atBank": "Banco do beneficiário",
+        "mandateRef": "Referência do mandato",
+        "endToEnd": "ID ponta a ponta",
+        "ourRef": "Nossa referência",
+        "to": "Destino",
+        "card": "Cartão",
+        "fxRate": "Taxa de câmbio",
+        "originalAmount": "Valor na moeda original",
+        "paymentDate": "Data de pagamento da fatura",
+        "cardNumber": "Número do cartão",
+        "cardStatementDate": "Fatura referente a"
+      }
+    },
+    "anomaly": {
+      "title": "Resolver gasto estranho",
+      "txListLabel": "Transações envolvidas",
+      "hint": "Excluir remove a transação de vez do extrato. Aceitar marca só esse alerta como revisado.",
+      "alwaysAcceptHint": "\"Sempre aceitar\" ignora essa descrição pra sempre — não vira mais gasto estranho, nem em meses futuros.",
+      "alwaysAcceptTitle": "Nunca mais avisar sobre essa descrição"
+    },
+    "category": {
+      "titleNew": "Nova categoria",
+      "titleEdit": "Editar categoria",
+      "name": "Nome",
+      "color": "Cor",
+      "icon": "Ícone",
+      "keywords": "Palavras-chave (separadas por vírgula)",
+      "cancel": "Cancelar",
+      "submitNew": "Criar categoria",
+      "submitEdit": "Salvar alterações",
+      "namePlaceholder": "Ex: Pets, Assinaturas",
+      "keywordsPlaceholder": "ex: petshop, cobasi, veterinário",
+      "keywordsHelp": "Usadas para classificar automaticamente. Só valem para categorização futura — não recategoriza o que já existe."
+    },
+    "bulkNote": {
+      "title": "Adicionar nota a {count} transações",
+      "count": "{count} transações",
+      "placeholder": "Nota para todas as selecionadas...",
+      "cancel": "Cancelar",
+      "save": "Salvar nota",
+      "dialogTitle": "Nota em massa",
+      "description": "Aplica a mesma nota em <span class=\"font-bold\">{count}</span> transações selecionadas, substituindo a nota atual de cada uma.",
+      "saveShort": "Aplicar a todas"
+    },
+    "bankType": {
+      "titleNew": "Novo tipo de conta",
+      "titleEdit": "Editar tipo de conta",
+      "namePlaceholder": "Ex: N26, Banco do Brasil",
+      "submitNew": "Criar tipo de conta"
+    }
+  },
+  "charts": {
+    "mode": {
+      "donut": "Rosca",
+      "bar": "Barras",
+      "waterfall": "Cascata"
+    },
+    "compareMode": {
+      "bars": "Barras agrupadas",
+      "lines": "Linhas sobrepostas"
+    },
+    "budgetScope": {
+      "month": "Mês atual",
+      "quarter": "Trimestre",
+      "year": "Ano",
+      "cumulative": "Acumulado"
+    },
+    "cashflowMode": {
+      "monthly": "Mensal",
+      "cumulative": "Acumulado",
+      "forecast": "Previsão"
+    },
+    "cashflow": {
+      "title": "Fluxo de caixa",
+      "hintCumulative": "· saldo acumulado ao longo do tempo",
+      "subtitle": "Entradas − saídas reais, sem transferências internas. Verde = sobrando, vermelho = consumindo reserva.",
+      "hintMonthly": "· entradas − saídas por mês",
+      "hintForecast": "· projeção: {income} renda − {expense} gasto = {net}/mês",
+      "hintWithOpening": "· saldo acumulado a partir de {value} em {date}",
+      "subtitleForecast": "Linha sólida = real. Linha tracejada (roxa) = projeção usando o orçamento definido em Configurações, com média histórica pra categorias sem meta.",
+      "healthyTitle": "Fluxo saudável",
+      "healthySubHasIncome": "Guardando {pct}% da renda no último mês — nenhum mês estourou a renda.",
+      "healthySubNoIncome": "Sem entradas suficientes para avaliar ainda — nenhum mês estourou a renda.",
+      "deficitMonthText": "Gastou {value} a mais do que ganhou nesse mês.",
+      "tightMarginText": "Só sobrou {pct}% da renda ({value}).",
+      "forecastPositiveTitle": "Sobra prevista por mês",
+      "forecastNegativeTitle": "Falta prevista por mês",
+      "forecastText": "Renda {income} − gastos {expense} = {net}/mês, no ritmo do orçamento.",
+      "estimatedBalanceTitle": "Saldo estimado em {month}",
+      "estimatedBalanceText": "Partindo de {start} hoje, projeta-se {final} em {n} meses.",
+      "zeroBalanceTitle": "Saldo pode zerar",
+      "zeroBalanceTextSingular": "Nesse ritmo, o saldo estimado fica negativo em ~{n} mês.",
+      "zeroBalanceTextPlural": "Nesse ritmo, o saldo estimado fica negativo em ~{n} meses.",
+      "noIncomeTargetTitle": "Meta de renda não definida",
+      "noIncomeTargetText": "Usando a média das últimas entradas ({avg}/mês) — defina uma meta em Configurações → Orçamentos mensais pra uma previsão mais intencional.",
+      "noBudgetCatsTitle": "Categorias sem meta",
+      "noBudgetCatsText": "{n} categoria(s) sem orçamento usam a média histórica: {names}.",
+      "forecastSuffix": " (prev.)"
+    },
+    "cashflowDatasetLabels": {
+      "monthly": "Saldo do mês",
+      "forecast": "Saldo (real + previsto)",
+      "cumulative": "Saldo acumulado"
+    },
+    "category": {
+      "title": "Onde seu dinheiro vai",
+      "hintByCategory": "· por categoria",
+      "hintWaterfall": "· da renda até o saldo, categoria por categoria"
+    },
+    "datasetLabels": {
+      "expense": "Gasto",
+      "trend3m": "Tendência (3m)"
+    },
+    "monthChart": {
+      "title": "Evolução mensal",
+      "legendLabel": "Total mensal ·"
+    },
+    "merchantChart": {
+      "title": "Top estabelecimentos / descrições",
+      "subtitle": "Quem mais levou seu dinheiro no período"
+    },
+    "histogram": {
+      "title": "Distribuição de valores",
+      "badge": "Histograma",
+      "hint": "Picos indicam faixa de gasto mais comum. Use para identificar micro-gastos recorrentes.",
+      "tooltipTitle": "Faixa {range}",
+      "tooltipLabel": "{n} transações"
+    },
+    "trend": {
+      "title": "Tendência de gastos",
+      "subtitle": "Média móvel (3 meses) vs gasto mensal",
+      "upBadge": "▲ +{pct}% vs mês anterior",
+      "downBadge": "▼ -{pct}% vs mês anterior"
+    },
+    "recurring": {
+      "title": "Gastos recorrentes detectados",
+      "subtitle": "Mesma descrição em vários meses — assinaturas e fixos",
+      "messages": {
+        "emptyState": "Nenhum padrão recorrente detectado ainda — aparece depois de 2+ meses de dados.",
+        "monthsCountTitle": "{n} meses com esse gasto",
+        "itemSubtext": "{count}x no total · média {avg}"
+      }
+    },
+    "dow": {
+      "subtitle": "Onde seus gastos se concentram"
+    },
+    "calendar": {
+      "title": "Calendário de gastos",
+      "subtitle": "Cor mais forte = dia com mais gasto — pico de salário, fim de semana, etc.",
+      "emptyState": "Sem dados ainda.",
+      "noSpendThisMonth": "Sem gastos nesse mês.",
+      "biggestDayTitle": "Dia mais caro",
+      "biggestDayText": "{date} — {value}",
+      "avgPerDayTitle": "Média por dia com gasto",
+      "avgPerDayText": "{value} em {n} de {total} dias",
+      "weekendHigherTitle": "Fim de semana pesa mais",
+      "weekdayHigherTitle": "Dias úteis pesam mais",
+      "weekdayVsWeekendText": "{weekday}/dia útil vs {weekend}/dia de fim de semana — {pct}% a mais {which}.",
+      "weekendOnlyText": "Só há gasto {which} até agora.",
+      "onWeekend": "no fim de semana",
+      "onWeekdays": "em dias úteis",
+      "noSpendDaysTitle": "Dias sem gasto",
+      "noSpendDaysText": "{n} de {total} dias sem nenhuma saída registrada."
+    },
+    "compare": {
+      "title": "Comparativo por categoria",
+      "hintBars": "· barras lado a lado por mês",
+      "hintLines": "· tendência de cada categoria mês a mês",
+      "hintCumulative": "· real sobreposto à meta acumulada dos {n} meses do período — suaviza picos isolados (férias, etc.)",
+      "hintThisMonth": "· real sobreposto à meta definida em Configurações, mês mais recente",
+      "tabBars": "Barras",
+      "tabLines": "Linhas",
+      "tabBudget": "Orçamento",
+      "cumulativeTitle": "Soma o orçamento e o gasto real de todos os meses do período — evita que um mês fora da curva (férias, etc.) pareça um estouro isolado",
+      "noBudgetDefined": "Nenhuma categoria tem orçamento definido ainda. Defina metas em <b>Configurações → Orçamentos mensais</b>.",
+      "budgetEndTitle": "Aqui é onde a meta de {value} acabou"
+    },
+    "waterfall": {
+      "income": "Renda",
+      "otherCategories": "Outras categorias",
+      "balance": "Saldo",
+      "howToRead": "Como ler:",
+      "explanation": "começa na sua renda do período e desce categoria por categoria até o que sobrou.",
+      "legendIncomePositive": "Renda / saldo positivo",
+      "legendNegative": "Saldo negativo",
+      "legendOtherGrouped": "Outras categorias agrupadas",
+      "emptyState": "Sem dados ainda — adicione PDFs ou use o exemplo."
+    },
+    "legends": {
+      "compare": "Legenda (clique para isolar categoria)",
+      "monthlyExpenses": "Gastos mensais",
+      "byCategory": "Por categoria",
+      "byMerchant": "Top estabelecimentos",
+      "distribution": "Distribuição",
+      "dayOfWeek": "Por dia da semana",
+      "compareCategoryMonth": "Categoria × Mês",
+      "trend": "Tendência",
+      "cashflow": "Fluxo de caixa"
+    }
+  },
+  "dashboard": {
+    "periodLabel": "Período",
+    "periodExpenses": "Gastos no período:",
+    "periodIncome": "Entradas:",
+    "sectionOverview": "01 · Visão geral",
+    "sectionWhereItGoes": "02 · Para onde vai",
+    "sectionPatterns": "03 · Padrões no tempo"
+  },
+  "budget": {
+    "title": "Orçamento por categoria",
+    "incomeTarget": "Meta de renda mensal (€)",
+    "placeholder": "Sem meta",
+    "summary": {
+      "totalBudgeted": "Total orçado",
+      "incomeTarget": "Meta de renda",
+      "ofIncome": "% da renda",
+      "remaining": "Sobra",
+      "shortfall": "Falta",
+      "beyondIncome": "além da renda",
+      "free": "livre",
+      "noIncomeTarget": "Defina a meta de renda mensal acima pra ver quanto sobra e a porcentagem comprometida.",
+      "pctOfIncomeText": "{pct}% da renda",
+      "pctFreeOrOverText": "{pct}% {label}"
+    }
+  },
+  "settings": {
+    "title": "Configurações",
+    "backToDashboard": "← Voltar ao dashboard",
+    "tabs": {
+      "general": "Geral",
+      "data": "Dados",
+      "ai": "IA Local (Ollama)",
+      "categories": "Categorias",
+      "banks": "Tipos de conta"
+    },
+    "general": {
+      "demoData": "Ver com dados de exemplo",
+      "exportCsv": "Exportar CSV",
+      "clearAll": "Limpar tudo",
+      "clearConfirm": "Limpar {count} transações?"
+    },
+    "data": {
+      "title": "Persistência de dados",
+      "localStorage": "Salvando no navegador (localStorage)",
+      "folder": "Salvando na pasta \"{name}\"",
+      "folderSub": "gastos-data.json é gravado direto no seu computador a cada mudança.",
+      "localStorageSub": "Escolha uma pasta para gravar gastos-data.json direto no seu computador.",
+      "localStorageSubHtml": "Escolha uma pasta para gravar <code>gastos-data.json</code> direto no seu computador.",
+      "compatNote": "Funciona no Chrome e Edge. Sem pasta escolhida, tudo continua salvo automaticamente no navegador.",
+      "quotaBannerHtml": "<span class=\"font-bold\">Armazenamento do navegador cheio.</span> Escolha uma pasta acima ou <button id=\"quotaDlBtn\" class=\"underline font-bold\">baixe backup JSON</button> e limpe dados antigos em <span class=\"font-mono\">localStorage</span>.",
+      "chooseFolder": "Escolher pasta",
+      "changeFolder": "Trocar pasta",
+      "saveNow": "Salvar agora",
+      "saveNowSuccess": "gastos-data.json salvo na pasta \"{name}\"",
+      "saveNowSuccessLocal": "Salvo no navegador (localStorage). Clique em \"Escolher pasta\" para gravar direto no computador.",
+      "exportJson": "Baixar backup JSON",
+      "importJson": "Restaurar backup JSON",
+      "importSuccess": "Backup restaurado: {count} transações",
+      "importError": "Arquivo inválido: {error}",
+      "storageFull": "Armazenamento do navegador cheio — escolha uma pasta ou baixe backup",
+      "folderApiUnsupported": "Escolher pasta funciona no Chrome e Edge. Nesse navegador, os dados continuam salvos automaticamente aqui mesmo (localStorage).",
+      "quotaFull": "⚠️ Armazenamento do navegador cheio — escolha uma pasta em Configurações → Dados ou baixe backup JSON.",
+      "restoredFromFolder": "Restaurado de gastos-data.json ({count} transações, {date})",
+      "savedToFolderLog": "💾 gastos-data.json salvo na pasta \"{name}\"",
+      "savedToLocalLog": "💾 salvo no navegador (localStorage) — use \"Escolher pasta\" em Configurações → Dados para gravar no computador",
+      "savedToFolderAlert": "✅ gastos-data.json salvo na pasta \"{name}\"",
+      "savedToLocalAlert": "✅ Salvo no navegador (localStorage). Clique em \"Escolher pasta\" para gravar direto no computador.",
+      "fixedBilCardMigration": "🔧 {n} compra(s) do cartão BIL, importadas antes da correção, foram recategorizadas e voltaram a contar como Gasto.",
+      "fixedTransfersMigration": "🔧 {n} transação(ões) identificadas como transferência entre suas contas (pelo banco do beneficiário) — não contam mais como Gasto/Entrada."
+    },
+    "ai": {
+      "title": "Categorização automática com IA local",
+      "url": "URL do Ollama",
+      "model": "Modelo",
+      "testConnection": "Testar conexão",
+      "statusChecking": "a verificar...",
+      "testButton": "Testar",
+      "saveJsonNowTitle": "Salvar gastos-data.json agora",
+      "footerNote": "100% offline · <span class=\"text-zinc-400\">gemma4:latest</span> já detectado (9.6 GB) · Nada sai da sua rede.",
+      "autoCategorize": "Categorizar automaticamente ao importar",
+      "categorizeNow": "Categorizar com IA local",
+      "categorizing": "Categorizando...",
+      "status": {
+        "online": "online",
+        "offline": "offline",
+        "busy": "a categorizar...",
+        "hasModel": "online · {model}",
+        "none": "(nenhum)"
+      },
+      "log": {
+        "nothingToCategorize": "Nada para categorizar (sem Saídas).",
+        "allCategorized": "Todas as {count} saídas já estão categorizadas — nada a fazer. ✅",
+        "starting": "Iniciando: {count} descrições → {model} @ {url}",
+        "batchProgress": "Lote {current}/{total}: {applied} categorizadas",
+        "batchError": "Erro no lote {batch}: {error}",
+        "corsError": "Erro de CORS — rode: OLLAMA_ORIGINS=\"*\" ollama serve",
+        "completed": "Concluído: {done} transações re-categorizadas com {model}.",
+        "healthCheckOk": "Ollama online. Modelos: {models}",
+        "healthCheckFail": "Ollama offline: {error} — verifique: OLLAMA_ORIGINS=\"*\" ollama serve",
+        "healthCheckHint": "Dica: brew services stop ollama && OLLAMA_ORIGINS=\"*\" ollama serve",
+        "batchSummary": "{n} sem categoria serão enviadas à IA · {already} já categorizadas foram ignoradas",
+        "batchUnparsable": "Lote {batch}: resposta sem JSON — \"{preview}\""
+      }
+    },
+    "categories": {
+      "add": "Adicionar categoria",
+      "addShort": "+ Nova",
+      "hint": "Clique numa fatia do gráfico ou no chip para filtrar a tabela lá embaixo.",
+      "edit": "Editar",
+      "keywordsHelp": "Palavras que fazem a categoria ser sugerida automaticamente"
+    },
+    "banks": {
+      "title": "Tipos de conta / banco",
+      "add": "Adicionar tipo",
+      "addShort": "+ Novo",
+      "hint": "Detectado automaticamente ao importar PDFs (BIL, Cartão BIL, Revolut). Crie outros tipos se usar mais contas — aparece discretamente abaixo da descrição na tabela de transações, e pode ser ajustado por transação ou em massa.",
+      "name": "Nome",
+      "icon": "Ícone",
+      "keywords": "Palavras-chave para detecção automática"
+    },
+    "importPdfs": {
+      "title": "Importar PDFs",
+      "badge": "Arraste ou selecione",
+      "localNote": "100% local — nada sai do seu PC · € (1.234,56 €)",
+      "readingProgress": "Lendo PDFs...",
+      "formatHint": "<span class=\"font-bold\">Formato:</span> Data, Descrição, <b class=\"text-red-600\">Saída</b>, <b class=\"text-emerald-600\">Entrada</b>, Saldo. Só <b>Saídas</b> entram nos gráficos. Duplicatas são ignoradas automaticamente.",
+      "formatHintExtra": "Testado com extratos <b>Revolut</b>. Datas numéricas (dd.mm.aaaa, comuns em bancos europeus como <b>BIL Luxembourg</b>) também são reconhecidas — se o seu extrato não importar corretamente, veja como reportar em <b>Configurações → Dados</b> ou ajuste manualmente na tabela.",
+      "dragAnywhereHint": "Você também pode arrastar PDFs em qualquer lugar da página do dashboard."
+    },
+    "budget": {
+      "cardTitle": "Orçamentos mensais",
+      "hint": "Defina uma meta de gasto por categoria — habilita o modo \"Orçamento\" no comparativo do dashboard e alimenta a aba <b>Previsão</b> do Fluxo de caixa.",
+      "incomeTargetLabel": "Meta de renda mensal",
+      "incomeTargetPlaceholder": "Ex: 3000",
+      "footerHint": "Categorias sem meta usam a média dos últimos meses na Previsão — não precisa preencher tudo."
+    }
+  },
+  "openingBalance": {
+    "title": "Saldo inicial",
+    "date": "Data",
+    "value": "Valor (€)",
+    "save": "Salvar saldo inicial",
+    "clear": "Limpar saldo inicial",
+    "statusSet": "Definido: {value} em {date}",
+    "statusNone": "Nenhum saldo inicial definido — o Fluxo de caixa acumulado começa do zero.",
+    "invalidInput": "Informe uma data e um valor válidos.",
+    "explanation": "Se o extrato começa no meio do caminho (ex: janeiro/2026) e falta uma entrada anterior a ele (ex: o salário de dezembro que pagou o começo de janeiro), informe aqui o saldo que você tinha um dia antes do primeiro extrato importado. Esse valor entra tanto no <b>Saldo atual</b> (topo do painel) quanto no início do gráfico de <b>Fluxo de caixa acumulado</b>. Alternativa: em vez de preencher aqui, lance uma <b>transação manual do tipo Entrada</b> em dezembro com o total que você tinha — dá no mesmo, mas não use os dois ao mesmo tempo pra não contar em dobro.",
+    "dateLabel": "Saldo em",
+    "valuePlaceholder": "Ex: 3200.00",
+    "saveShort": "Salvar",
+    "removeShort": "Remover"
+  },
+  "anomalies": {
+    "title": "Gastos estranhos detectados",
+    "subtitle": "Cobranças repetidas, valores fora do padrão e picos de gasto — vale conferir",
+    "description": "Estas transações têm valores muito acima do padrão da categoria. Revise cada uma:",
+    "accept": "Aceitar (é gasto real)",
+    "alwaysAccept": "Sempre aceitar esta descrição",
+    "reject": "Ignorar (não é gasto)",
+    "close": "Fechar",
+    "messages": {
+      "exactDuplicate": "{n}× cobrança idêntica de {value} em \"{desc}\" no mesmo dia — pode ser cobrança duplicada.",
+      "nearDuplicate": "Duas cobranças de {value} em \"{desc}\" com {days} dia(s) de intervalo — confira se não é duplicada.",
+      "merchantOutlier": "{value} em \"{desc}\" ficou bem acima do habitual (média {avg}, {pct}% a mais).",
+      "globalOutlier": "Gasto atípico para o período: {value} em \"{desc}\" (média geral {avg}).",
+      "spikeDay": "{date} teve {total} em {count} transações — bem acima da média diária ({avg}).",
+      "countFoundSingular": "{n} encontrado",
+      "countFoundPlural": "{n} encontrados",
+      "countNone": "nada fora do comum",
+      "emptyTitle": "Nada fora do padrão",
+      "emptyDetail": "Sem duplicidades, picos ou valores atípicos no período.",
+      "resolveButton": "Resolver",
+      "moreNotShown": "+ {n} outro(s) não exibido(s).",
+      "noTxFound": "Nenhuma transação envolvida ainda existe (já foi excluída)."
+    }
+  },
+  "printReport": {
+    "title": "Gastos.AI — Relatório de Despesas",
+    "subtitle": "Relatório de Despesas",
+    "generated": "gerado em {date}",
+    "categoryClause": " · categoria: {name}",
+    "noExpensesInPeriod": "Sem saídas no período.",
+    "noData": "Sem dados.",
+    "printWithoutDataAlert": "Adicione dados antes de imprimir — importe PDFs ou use \"Ver com dados de exemplo\" em Configurações.",
+    "kpis": {
+      "totalExpenses": "TOTAL GASTO",
+      "income": "ENTRADAS",
+      "balance": "SALDO DO PERÍODO",
+      "savingsRate": "TAXA DE POUPANÇA"
+    },
+    "sections": {
+      "byCategory": "Gasto por categoria",
+      "monthlyEvolution": "Evolução mensal",
+      "topMerchants": "Top estabelecimentos",
+      "statement": "Extrato — {count} transações{category}"
+    },
+    "tableHeaders": {
+      "date": "Data",
+      "description": "Descrição",
+      "category": "Categoria",
+      "expense": "Saída",
+      "income": "Entrada"
+    },
+    "footer": "Gerado por Gastos.AI — 100% local e privado · {date}"
+  },
+  "categories": {
+    "alimentacao": "Alimentação",
+    "transporte": "Transporte",
+    "moradia": "Moradia",
+    "contas": "Contas & Serviços",
+    "saude": "Saúde",
+    "lazer": "Lazer",
+    "compras": "Compras",
+    "educacao": "Educação",
+    "outros": "Outros",
+    "transferencia": "Transferência interna",
+    "cartao": "Pagamento de Cartão",
+    "propagatedLog": "Propagado: {n} transações com descrição \"{desc}\" → {category}"
+  },
+  "bankTypes": {
+    "REVOLUT": "Revolut",
+    "BIL": "BIL",
+    "BIL_CARD": "BIL Cartão",
+    "OTHER": "Outro"
+  },
+  "months": {
+    "short": [
+      "Jan",
+      "Fev",
+      "Mar",
+      "Abr",
+      "Mai",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Set",
+      "Out",
+      "Nov",
+      "Dez"
+    ],
+    "long": [
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro"
+    ]
+  },
+  "days": {
+    "short": [
+      "Dom",
+      "Seg",
+      "Ter",
+      "Qua",
+      "Qui",
+      "Sex",
+      "Sáb"
+    ],
+    "long": [
+      "Domingo",
+      "Segunda",
+      "Terça",
+      "Quarta",
+      "Quinta",
+      "Sexta",
+      "Sábado"
+    ]
+  },
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "close": "Fechar",
+    "yes": "Sim",
+    "no": "Não",
+    "ok": "OK",
+    "apply": "Aplicar",
+    "reset": "Redefinir",
+    "export": "Exportar CSV",
+    "editItemTitle": "Editar {name}"
+  }
+}

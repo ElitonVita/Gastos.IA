@@ -36,7 +36,7 @@ async function initFsDir(){
 }
 async function chooseFolder(){
   if(!('showDirectoryPicker' in window)){
-    alert('Escolher pasta funciona no Chrome e Edge. Nesse navegador, os dados continuam salvos automaticamente aqui mesmo (localStorage).');
+    alert(t('settings.data.folderApiUnsupported'));
     return;
   }
   try{
@@ -55,14 +55,14 @@ function updateFsStatus(){
   if(!text) return;
   if(fsDirHandle){
     dot.className='w-2 h-2 rounded-full shrink-0 bg-emerald-500';
-    text.textContent=`Salvando na pasta "${fsDirHandle.name}"`;
-    sub.textContent='gastos-data.json é gravado direto no seu computador a cada mudança.';
-    if(btn) btn.innerHTML='<i class="ri-folder-open-line"></i> Trocar pasta';
+    text.textContent=t('settings.data.folder', {name: fsDirHandle.name});
+    sub.textContent=t('settings.data.folderSub');
+    if(btn) btn.innerHTML='<i class="ri-folder-open-line"></i> '+t('settings.data.changeFolder');
   } else {
     dot.className='w-2 h-2 rounded-full shrink-0 bg-zinc-400';
-    text.textContent='Salvando no navegador (localStorage)';
-    sub.textContent='Escolha uma pasta para gravar gastos-data.json direto no seu computador.';
-    if(btn) btn.innerHTML='<i class="ri-folder-open-line"></i> Escolher pasta';
+    text.textContent=t('settings.data.localStorage');
+    sub.textContent=t('settings.data.localStorageSub');
+    if(btn) btn.innerHTML='<i class="ri-folder-open-line"></i> '+t('settings.data.chooseFolder');
   }
 }
 
@@ -70,17 +70,17 @@ function updateOpeningBalanceStatus(){
   const statusEl=document.getElementById('obStatus'), dateEl=document.getElementById('obDate'), valEl=document.getElementById('obValue');
   if(!statusEl) return;
   if(openingBalance && openingBalance.value!=null){
-    statusEl.textContent = `Definido: ${fmtEUR(openingBalance.value)} em ${openingBalance.date.toLocaleDateString('pt-BR')}`;
+    statusEl.textContent = t('openingBalance.statusSet', {value: fmtEUR(openingBalance.value), date: openingBalance.date.toLocaleDateString(localeTag())});
     if(dateEl) dateEl.value = dayKey(openingBalance.date);
     if(valEl) valEl.value = openingBalance.value;
   } else {
-    statusEl.textContent = 'Nenhum saldo inicial definido — o Fluxo de caixa acumulado começa do zero.';
+    statusEl.textContent = t('openingBalance.statusNone');
   }
 }
 document.getElementById('btnSaveOpeningBalance')?.addEventListener('click', ()=>{
   const dStr = document.getElementById('obDate').value;
   const v = parseFloat(document.getElementById('obValue').value);
-  if(!dStr || isNaN(v)){ alert('Informe uma data e um valor válidos.'); return; }
+  if(!dStr || isNaN(v)){ alert(t('openingBalance.invalidInput')); return; }
   openingBalance = { date: new Date(dStr+'T12:00:00'), value: v };
   updateOpeningBalanceStatus();
   updateCharts(); persistState();
@@ -129,9 +129,10 @@ function _writeLocalStorage(state){
     const isQuota = e && (e.name==='QuotaExceededError' || e.code===22 || /quota/i.test(e.message||''));
     if(isQuota){
       const banner = document.getElementById('quotaBanner');
+      // i18n: intentionally not translated — developer-facing console diagnostics, never rendered in the UI.
       if(banner) banner.classList.remove('hidden');
       else console.warn('localStorage cheio — escolha uma pasta ou baixe backup');
-      ollamaLog('⚠️ Armazenamento do navegador cheio — escolha uma pasta em Configurações → Dados ou baixe backup JSON.', true);
+      ollamaLog(t('settings.data.quotaFull'), true);
     }
     return false;
   }
@@ -143,8 +144,12 @@ async function _writeFsDir(state){
     const w = await fh.createWritable();
     await w.write(JSON.stringify(state,null,2));
     await w.close();
+    // i18n: intentionally not translated — developer-facing console diagnostics, never rendered in the UI.
     console.log('gastos-data.json salvo na pasta');
-  }catch(e){ console.warn('falhou salvar json na pasta',e); }
+  }catch(e){
+    // i18n: intentionally not translated — developer-facing console diagnostics, never rendered in the UI.
+    console.warn('falhou salvar json na pasta',e);
+  }
 }
 async function persistState(){
   clearTimeout(saveTimer);
@@ -170,7 +175,7 @@ async function loadPersisted(){
       const f=await fh.getFile();
       const j=JSON.parse(await f.text());
       applyState(j);
-      ollamaLog(`Restaurado de gastos-data.json (${j.transactions?.length||0} transações, ${new Date(j.savedAt).toLocaleString()})`);
+      ollamaLog(t('settings.data.restoredFromFolder', {count: j.transactions?.length||0, date: new Date(j.savedAt).toLocaleString()}));
       return true;
     }catch{ /* arquivo ainda não existe */ }
   }
@@ -180,7 +185,8 @@ async function loadPersisted(){
     if(raw){
       const j=JSON.parse(raw);
       applyState(j);
-      if(typeof ollamaLog==='function') {} 
+      if(typeof ollamaLog==='function') {}
+      // i18n: intentionally not translated — developer-facing console diagnostics, never rendered in the UI.
       console.log('restaurado do localStorage');
       return true;
     }
@@ -222,8 +228,8 @@ function applyState(j){
   const fixedLegacy = repairLegacyCardTransactions();
   const fixedTransfers = repairCrossAccountTransfers();
   const msgs = [];
-  if(fixedLegacy>0) msgs.push(`🔧 ${fixedLegacy} compra(s) do cartão BIL, importadas antes da correção, foram recategorizadas e voltaram a contar como Gasto.`);
-  if(fixedTransfers>0) msgs.push(`🔧 ${fixedTransfers} transação(ões) identificadas como transferência entre suas contas (pelo banco do beneficiário) — não contam mais como Gasto/Entrada.`);
+  if(fixedLegacy>0) msgs.push(t('settings.data.fixedBilCardMigration', {n: fixedLegacy}));
+  if(fixedTransfers>0) msgs.push(t('settings.data.fixedTransfersMigration', {n: fixedTransfers}));
   if(msgs.length){ msgs.forEach(m=>ollamaLog(m)); persistState(); }
 }
 // Correção retroativa: importações de "Card statement" feitas antes desta versão marcavam TODA compra do cartão
@@ -277,8 +283,8 @@ setTimeout(()=>checkOllama(true), 600);
   if(restored){ renderCategoryChips(); renderBankTypeChips(); renderTable(); updateCharts(); updateKPIs(); updateOpeningBalanceStatus(); }
 })();
 document.getElementById('btnOllamaTest')?.addEventListener('click', ()=>checkOllama(false));
-document.getElementById('btnSaveJson')?.addEventListener('click', async ()=>{ await persistStateImmediate(); ollamaLog(fsDirHandle? `💾 gastos-data.json salvo na pasta "${fsDirHandle.name}"`:'💾 salvo no navegador (localStorage) — use "Escolher pasta" em Configurações → Dados para gravar no computador'); });
-document.getElementById('btnSaveJsonNow')?.addEventListener('click', async ()=>{ await persistStateImmediate(); alert(fsDirHandle? `✅ gastos-data.json salvo na pasta "${fsDirHandle.name}"`:'✅ Salvo no navegador (localStorage). Clique em "Escolher pasta" para gravar direto no computador.'); });
+document.getElementById('btnSaveJson')?.addEventListener('click', async ()=>{ await persistStateImmediate(); ollamaLog(fsDirHandle? t('settings.data.savedToFolderLog', {name: fsDirHandle.name}):t('settings.data.savedToLocalLog')); });
+document.getElementById('btnSaveJsonNow')?.addEventListener('click', async ()=>{ await persistStateImmediate(); alert(fsDirHandle? t('settings.data.savedToFolderAlert', {name: fsDirHandle.name}):t('settings.data.savedToLocalAlert')); });
 document.getElementById('btnChooseFolder')?.addEventListener('click', chooseFolder);
 document.getElementById('quotaDlBtn')?.addEventListener('click', ()=> document.getElementById('btnExportJson')?.click());
 document.getElementById('btnExportJson')?.addEventListener('click', ()=>{
@@ -292,8 +298,8 @@ document.getElementById('fileImportJson')?.addEventListener('change', async e=>{
     const j=JSON.parse(await f.text());
     applyState(j);
     renderCategoryChips(); renderBankTypeChips(); renderTable(); updateCharts(); updateKPIs(); updateOpeningBalanceStatus(); persistState();
-    alert(`✅ Backup restaurado: ${j.transactions?.length||0} transações`);
-  }catch(err){ alert('Arquivo inválido: '+err.message); }
+    alert('✅ '+t('settings.data.importSuccess', {count: j.transactions?.length||0}));
+  }catch(err){ alert(t('settings.data.importError', {error: err.message})); }
   e.target.value='';
 });
 document.getElementById('btnOllamaCategorize')?.addEventListener('click', categorizeWithOllama);

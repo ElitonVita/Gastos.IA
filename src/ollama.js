@@ -31,13 +31,13 @@ async function checkOllama(silent=false){
     const j=await r.json();
     const models=(j.models||[]).map(m=>m.name);
     const hasGemma = models.some(m=>m.includes('gemma'));
-    setOllamaStatus('ok', hasGemma ? 'online · '+models.find(m=>m.includes('gemma')) : 'online');
-    if(!silent) ollamaLog('Ollama online. Modelos: ' + (models.join(', ')||'(nenhum)'));
+    setOllamaStatus('ok', hasGemma ? t('settings.ai.status.hasModel', {model: models.find(m=>m.includes('gemma'))}) : t('settings.ai.status.online'));
+    if(!silent) ollamaLog(t('settings.ai.log.healthCheckOk', {models: models.join(', ')||t('settings.ai.status.none')}));
     return true;
   }catch(e){
-    setOllamaStatus('error', 'offline');
-    if(!silent) ollamaLog('Ollama offline: ' + e.message + ' — verifique: OLLAMA_ORIGINS="*" ollama serve', true);
-    if(!silent) ollamaLog('Dica: brew services stop ollama && OLLAMA_ORIGINS="*" ollama serve', true);
+    setOllamaStatus('error', t('settings.ai.status.offline'));
+    if(!silent) ollamaLog(t('settings.ai.log.healthCheckFail', {error: e.message}), true);
+    if(!silent) ollamaLog(t('settings.ai.log.healthCheckHint'), true);
     return false;
   }
 }
@@ -47,25 +47,31 @@ async function categorizeWithOllama(){
   const url=(document.getElementById('ollamaUrl')?.value||'http://localhost:11434').replace(/\/$/,'');
   const model=document.getElementById('ollamaModel')?.value||OLLAMA_DEFAULT_MODEL;
   const saidaTxs = transactions.filter(t=> t.saida!=null && t.saida>0 && !t.internal);
-  if(saidaTxs.length===0){ ollamaLog('Nada para categorizar (sem Saídas).', true); return; }
+  if(saidaTxs.length===0){ ollamaLog(t('settings.ai.log.nothingToCategorize'), true); return; }
   // IA só toca no que ainda NÃO tem categoria (outros). Já categorizadas ficam intocadas.
   let targets = saidaTxs.filter(t=> t.cat==='outros');
   const already = saidaTxs.length - targets.length;
   if(targets.length===0){
-    ollamaLog(`Todas as ${saidaTxs.length} saídas já estão categorizadas — nada a fazer. ✅`);
+    ollamaLog(t('settings.ai.log.allCategorized', {count: saidaTxs.length}));
     return;
   }
-  ollamaLog(`${targets.length} sem categoria serão enviadas à IA · ${already} já categorizadas foram ignoradas`);
+  ollamaLog(t('settings.ai.log.batchSummary', {n: targets.length, already}));
   ollamaBusy=true;
   const btn=document.getElementById('btnOllamaCategorize');
-  if(btn){ btn.disabled=true; btn.innerHTML='<i class="ri-loader-4-line animate-spin"></i> Categorizando...'; }
-  setOllamaStatus('busy','a categorizar...');
-  ollamaLog(`Iniciando: ${targets.length} descrições → ${model} @ ${url}`);
+  if(btn){ btn.disabled=true; btn.innerHTML='<i class="ri-loader-4-line animate-spin"></i> '+t('settings.ai.categorizing'); }
+  setOllamaStatus('busy', t('settings.ai.status.busy'));
+  ollamaLog(t('settings.ai.log.starting', {count: targets.length, model, url}));
 
   const ok = await checkOllama(true);
-  if(!ok){ ollamaBusy=false; if(btn){ btn.disabled=false; btn.innerHTML='<i class="ri-magic-line"></i> Categorizar com IA local'; } setOllamaStatus('error','offline'); return; }
+  if(!ok){ ollamaBusy=false; if(btn){ btn.disabled=false; btn.innerHTML='<i class="ri-magic-line"></i> '+t('settings.ai.categorizeNow'); } setOllamaStatus('error',t('settings.ai.status.offline')); return; }
 
   const catList = categories.map(c=> `- ${c.id}: ${c.name}`).join('\n');
+  // i18n: intentionally not translated — this is the instruction text sent to the
+  // local LLM (Ollama), never rendered in the UI. Keeping it in Portuguese matches
+  // the transaction descriptions being classified (mostly Portuguese/European bank
+  // statement text), which likely improves classification accuracy; translating
+  // only the prompt wrapper while leaving user data in Portuguese would be
+  // inconsistent anyway.
   const systemPrompt = `Você é um classificador de extratos bancários portugueses.\nCategorias disponíveis (use exatamente um destes ids):\n${catList}\n\nRegras:\n- Responda APENAS JSON válido, sem texto extra.\n- Formato: {"resultados":[{"idx":0,"categoria":"alimentacao"}, ...]}\n- idx é o índice da lista enviada.\n- Seja conservador: só use "outros" se realmente não encaixar.\n- Descrições em PT-PT: Continente/Pingo Doce=alimentacao, Galp/Repsol=transporte, EDP/NOS/Águas=contas, Renda/Condomínio=moradia, Farmácia/Hospital=saude, Netflix/Spotify=lazer, Amazon/Shein=compras, Escola/Curso=educacao.`;
 
   const BATCH=18;
@@ -109,7 +115,7 @@ async function categorizeWithOllama(){
         if(keys.every(k=>!isNaN(k))) resultados = keys.map(k=>({idx: parseInt(k), categoria: parsed[k]}));
       }
       if(resultados.length===0){
-        ollamaLog(`Lote ${i/BATCH+1}: resposta sem JSON — "${content.slice(0,120)}"`, true);
+        ollamaLog(t('settings.ai.log.batchUnparsable', {batch: i/BATCH+1, preview: content.slice(0,120)}), true);
         continue;
       }
       let applied=0;
@@ -122,12 +128,12 @@ async function categorizeWithOllama(){
         if(tx.cat !== catId){ tx.cat = catId; applied++; }
       }
       done+=applied;
-      ollamaLog(`Lote ${i/BATCH+1}/${Math.ceil(targets.length/BATCH)}: ${applied} categorizadas`);
+      ollamaLog(t('settings.ai.log.batchProgress', {current: i/BATCH+1, total: Math.ceil(targets.length/BATCH), applied}));
       renderCategoryChips(); updateCharts(); renderTable(); updateKPIs();
     }catch(e){
-      ollamaLog('Erro no lote '+(i/BATCH+1)+': '+e.message, true);
+      ollamaLog(t('settings.ai.log.batchError', {batch: i/BATCH+1, error: e.message}), true);
       if(e.message.includes('CORS') || e.message.includes('Failed to fetch')){
-        ollamaLog('Erro de CORS — rode: OLLAMA_ORIGINS="*" ollama serve', true);
+        ollamaLog(t('settings.ai.log.corsError'), true);
         break;
       }
     }
@@ -135,9 +141,9 @@ async function categorizeWithOllama(){
     await new Promise(r=>setTimeout(r, 120));
   }
   ollamaBusy=false;
-  if(btn){ btn.disabled=false; btn.innerHTML='<i class="ri-magic-line"></i> Categorizar com IA local'; }
-  setOllamaStatus('ok','online');
-  ollamaLog(`Concluído: ${done} transações re-categorizadas com ${model}.`);
+  if(btn){ btn.disabled=false; btn.innerHTML='<i class="ri-magic-line"></i> '+t('settings.ai.categorizeNow'); }
+  setOllamaStatus('ok', t('settings.ai.status.online'));
+  ollamaLog(t('settings.ai.log.completed', {done, model}));
   if(done>0){ renderCategoryChips(); updateCharts(); renderTable(); persistState(); }
 }
 
