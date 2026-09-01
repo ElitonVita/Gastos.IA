@@ -523,13 +523,13 @@ function showView(v){
 <!-- Manual entry modal -->
 <dialog id="manualDialog" class="backdrop:bg-black/40 bg-white dark:bg-zinc-900 rounded-2xl p-0 shadow-2xl w-[min(480px,92vw)] border border-zinc-200 dark:border-zinc-800">
   <form method="dialog" class="p-6 space-y-4" id="manualForm">
-    <h3 class="font-extrabold text-lg" data-i18n="modals.manualEntry.title">Adicionar transação manual</h3>
+    <h3 class="font-extrabold text-lg text-zinc-900 dark:text-zinc-100" data-i18n="modals.manualEntry.title">Adicionar transação manual</h3>
     <div class="grid grid-cols-2 gap-3">
-      <label class="text-sm font-semibold"><span data-i18n="modals.manualEntry.date">Data</span> <input type="date" id="mDate" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
-      <label class="text-sm font-semibold"><span data-i18n="modals.manualEntry.value">Valor (€)</span> <input type="number" step="0.01" id="mVal" placeholder="123,45" data-i18n-placeholder="modals.manualEntry.valuePlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
+      <label class="text-sm font-semibold text-zinc-900 dark:text-zinc-100"><span data-i18n="modals.manualEntry.date">Data</span> <input type="date" id="mDate" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
+      <label class="text-sm font-semibold text-zinc-900 dark:text-zinc-100"><span data-i18n="modals.manualEntry.value">Valor (€)</span> <input type="number" step="0.01" id="mVal" placeholder="123,45" data-i18n-placeholder="modals.manualEntry.valuePlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
     </div>
-    <label class="text-sm font-semibold block"><span data-i18n="modals.manualEntry.description">Descrição</span> <input id="mDesc" placeholder="Ex: Supermercado Pão de Açúcar" data-i18n-placeholder="modals.manualEntry.descriptionPlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
-    <div class="grid grid-cols-2 gap-3"><label class="text-sm font-semibold block"><span data-i18n="modals.manualEntry.type">Tipo</span> <select id="mType" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"><option value="saida" data-i18n-option="modals.manualEntry.typeExpense">Saída (despesa)</option><option value="entrada" data-i18n-option="modals.manualEntry.typeIncome">Entrada (receita)</option></select></label><label class="text-sm font-semibold block"><span data-i18n="modals.manualEntry.category">Categoria</span> <select id="mCat" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></select></label></div>
+    <label class="text-sm font-semibold block text-zinc-900 dark:text-zinc-100"><span data-i18n="modals.manualEntry.description">Descrição</span> <input id="mDesc" placeholder="Ex: Supermercado Pão de Açúcar" data-i18n-placeholder="modals.manualEntry.descriptionPlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
+    <div class="grid grid-cols-2 gap-3"><label class="text-sm font-semibold block text-zinc-900 dark:text-zinc-100"><span data-i18n="modals.manualEntry.type">Tipo</span> <select id="mType" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"><option value="saida" data-i18n-option="modals.manualEntry.typeExpense">Saída (despesa)</option><option value="entrada" data-i18n-option="modals.manualEntry.typeIncome">Entrada (receita)</option></select></label><label class="text-sm font-semibold block text-zinc-900 dark:text-zinc-100"><span data-i18n="modals.manualEntry.category">Categoria</span> <select id="mCat" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></select></label></div>
     <div class="flex justify-end gap-2 pt-2">
       <button type="button" id="btnCancelManual" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
       <button type="submit" data-i18n="modals.manualEntry.submit" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm hover:bg-violet-700">Adicionar</button>
@@ -541,13 +541,13 @@ function showView(v){
 <!-- Note modal -->
 <dialog id="noteDialog" class="backdrop:bg-black/40 bg-white dark:bg-zinc-900 rounded-2xl p-0 shadow-2xl w-[min(480px,92vw)] border border-zinc-200 dark:border-zinc-800">
   <form method="dialog" class="p-6 space-y-4" id="noteForm">
-    <h3 class="font-extrabold text-lg" data-i18n="modals.note.dialogTitle">Nota da transação</h3>
+    <h3 class="font-extrabold text-lg text-zinc-900 dark:text-zinc-100" data-i18n="modals.note.dialogTitle">Nota da transação</h3>
     <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 text-sm">
-      <span id="noteTxDesc" class="font-semibold block"></span>
+      <span id="noteTxDesc" class="font-semibold block text-zinc-900 dark:text-zinc-100"></span>
       <span id="noteTxMeta" class="text-xs text-zinc-500 font-mono"></span>
     </div>
-    <label class="text-sm font-semibold block"><span data-i18n="modals.note.label">Nota</span>
-      <textarea id="noteText" rows="3" placeholder="Ex: presente para a Sofia, reembolsável pela empresa..." class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 resize-y"></textarea>
+    <label class="text-sm font-semibold block text-zinc-900 dark:text-zinc-100"><span data-i18n="modals.note.label">Nota</span>
+      <textarea id="noteText" rows="3" placeholder="Ex: presente para a Sofia, reembolsável pela empresa..." class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 resize-y"></textarea>
     </label>
     <div class="flex justify-end gap-2 pt-2">
       <button type="button" id="btnNoteDelete" class="px-4 py-2 rounded-xl border border-red-200 dark:border-red-900 text-red-600 dark:text-red-400 font-semibold text-sm hidden"><i class="ri-delete-bin-line"></i> <span data-i18n="modals.note.deleteShort">Remover</span></button>
@@ -593,12 +593,12 @@ function showView(v){
 <dialog id="anomalyDialog" class="backdrop:bg-black/40 bg-white dark:bg-zinc-900 rounded-2xl p-0 shadow-2xl w-[min(560px,92vw)] border border-zinc-200 dark:border-zinc-800">
   <div class="p-6 space-y-4">
     <div class="flex items-center justify-between">
-      <h3 class="font-extrabold text-lg flex items-center gap-2"><i class="ri-alarm-warning-line text-amber-500"></i> <span data-i18n="modals.anomaly.title">Resolver gasto estranho</span></h3>
+      <h3 class="font-extrabold text-lg flex items-center gap-2 text-zinc-900 dark:text-zinc-100"><i class="ri-alarm-warning-line text-amber-500"></i> <span data-i18n="modals.anomaly.title">Resolver gasto estranho</span></h3>
       <button type="button" id="btnAnomalyDialogClose" class="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"><i class="ri-close-line text-xl"></i></button>
     </div>
-    <div id="anomalyDialogSummary" class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60"></div>
+    <div id="anomalyDialogSummary" class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100"></div>
     <div>
-      <span class="text-sm font-semibold block mb-1.5" data-i18n="modals.anomaly.txListLabel">Transações envolvidas</span>
+      <span class="text-sm font-semibold block mb-1.5 text-zinc-900 dark:text-zinc-100" data-i18n="modals.anomaly.txListLabel">Transações envolvidas</span>
       <div id="anomalyDialogTxList" class="space-y-2 max-h-[320px] overflow-auto pr-1"></div>
     </div>
     <p class="text-[11px] text-zinc-500"><span data-i18n="modals.anomaly.hint">Excluir remove a transação de vez do extrato. Aceitar marca só esse alerta como revisado.</span> <span id="anomalyAlwaysHint" class="hidden" data-i18n="modals.anomaly.alwaysAcceptHint">"Sempre aceitar" ignora essa descrição pra sempre — não vira mais gasto estranho, nem em meses futuros.</span></p>
@@ -613,10 +613,10 @@ function showView(v){
 <!-- Bulk note modal -->
 <dialog id="bulkNoteDialog" class="backdrop:bg-black/40 bg-white dark:bg-zinc-900 rounded-2xl p-0 shadow-2xl w-[min(480px,92vw)] border border-zinc-200 dark:border-zinc-800">
   <form method="dialog" class="p-6 space-y-4" id="bulkNoteForm">
-    <h3 class="font-extrabold text-lg" data-i18n="modals.bulkNote.dialogTitle">Nota em massa</h3>
+    <h3 class="font-extrabold text-lg text-zinc-900 dark:text-zinc-100" data-i18n="modals.bulkNote.dialogTitle">Nota em massa</h3>
     <p id="bulkNoteDesc" class="text-sm text-zinc-500" data-i18n="modals.bulkNote.description" data-i18n-html="true">Aplica a mesma nota em <span class="font-bold text-zinc-800 dark:text-zinc-200">0</span> transações selecionadas, substituindo a nota atual de cada uma.</p>
-    <label class="text-sm font-semibold block"><span data-i18n="modals.note.label">Nota</span>
-      <textarea id="bulkNoteText" rows="3" placeholder="Ex: revisão de assinatura, reembolsável..." data-i18n-placeholder="modals.bulkNote.placeholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 resize-y"></textarea>
+    <label class="text-sm font-semibold block text-zinc-900 dark:text-zinc-100"><span data-i18n="modals.note.label">Nota</span>
+      <textarea id="bulkNoteText" rows="3" placeholder="Ex: revisão de assinatura, reembolsável..." data-i18n-placeholder="modals.bulkNote.placeholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 resize-y"></textarea>
     </label>
     <div class="flex justify-end gap-2 pt-2">
       <button type="button" id="btnBulkNoteCancel" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
@@ -628,18 +628,18 @@ function showView(v){
 <!-- Category modal -->
 <dialog id="catDialog" class="backdrop:bg-black/40 bg-white dark:bg-zinc-900 rounded-2xl p-0 shadow-2xl w-[min(520px,92vw)] border border-zinc-200 dark:border-zinc-800">
   <form method="dialog" class="p-6 space-y-4" id="catForm">
-    <h3 class="font-extrabold text-lg" id="catDialogTitle" data-i18n="modals.category.titleNew">Nova categoria</h3>
+    <h3 class="font-extrabold text-lg text-zinc-900 dark:text-zinc-100" id="catDialogTitle" data-i18n="modals.category.titleNew">Nova categoria</h3>
     <input type="hidden" id="cEditId" value="">
     <div class="grid grid-cols-3 gap-3">
-      <label class="col-span-2 text-sm font-semibold"><span data-i18n="modals.category.name">Nome</span> <input id="cName" placeholder="Ex: Pets, Assinaturas" data-i18n-placeholder="modals.category.namePlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
-      <label class="text-sm font-semibold"><span data-i18n="modals.category.color">Cor</span> <input id="cColor" type="color" value="#6366f1" class="mt-1 w-full h-[42px] p-1 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"></label>
+      <label class="col-span-2 text-sm font-semibold text-zinc-900 dark:text-zinc-100"><span data-i18n="modals.category.name">Nome</span> <input id="cName" placeholder="Ex: Pets, Assinaturas" data-i18n-placeholder="modals.category.namePlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
+      <label class="text-sm font-semibold text-zinc-900 dark:text-zinc-100"><span data-i18n="modals.category.color">Cor</span> <input id="cColor" type="color" value="#6366f1" class="mt-1 w-full h-[42px] p-1 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"></label>
     </div>
     <div>
-      <span class="text-sm font-semibold block mb-1.5" data-i18n="modals.category.icon">Ícone</span>
+      <span class="text-sm font-semibold block mb-1.5 text-zinc-900 dark:text-zinc-100" data-i18n="modals.category.icon">Ícone</span>
       <div id="iconPicker" class="grid grid-cols-8 gap-1.5"></div>
       <input type="hidden" id="cIcon" value="ri-price-tag-3-fill">
     </div>
-    <label class="text-sm font-semibold block"><span data-i18n="modals.category.keywords">Palavras-chave (separa por vírgula)</span> <input id="cKeys" placeholder="ex: petshop, cobasi, veterinário" data-i18n-placeholder="modals.category.keywordsPlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"><span class="text-[11px] font-normal text-zinc-500" data-i18n="modals.category.keywordsHelp">Usadas para classificar automaticamente. Só valem para categorização futura — não recategoriza o que já existe.</span></label>
+    <label class="text-sm font-semibold block text-zinc-900 dark:text-zinc-100"><span data-i18n="modals.category.keywords">Palavras-chave (separa por vírgula)</span> <input id="cKeys" placeholder="ex: petshop, cobasi, veterinário" data-i18n-placeholder="modals.category.keywordsPlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"><span class="text-[11px] font-normal text-zinc-500" data-i18n="modals.category.keywordsHelp">Usadas para classificar automaticamente. Só valem para categorização futura — não recategoriza o que já existe.</span></label>
     <div class="flex justify-end gap-2 pt-2">
       <button type="button" id="btnCancelCat" data-i18n="common.cancel" class="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-semibold text-sm">Cancelar</button>
       <button type="submit" id="catSubmitBtn" data-i18n="modals.category.submitNew" class="px-5 py-2 rounded-xl bg-violet-600 text-white font-bold text-sm">Criar categoria</button>
@@ -650,11 +650,11 @@ function showView(v){
 <!-- Bank type modal -->
 <dialog id="bankTypeDialog" class="backdrop:bg-black/40 bg-white dark:bg-zinc-900 rounded-2xl p-0 shadow-2xl w-[min(480px,92vw)] border border-zinc-200 dark:border-zinc-800">
   <form method="dialog" class="p-6 space-y-4" id="bankTypeForm">
-    <h3 class="font-extrabold text-lg" id="bankDialogTitle" data-i18n="modals.bankType.titleNew">Novo tipo de conta</h3>
+    <h3 class="font-extrabold text-lg text-zinc-900 dark:text-zinc-100" id="bankDialogTitle" data-i18n="modals.bankType.titleNew">Novo tipo de conta</h3>
     <input type="hidden" id="bEditId" value="">
-    <label class="text-sm font-semibold block"><span data-i18n="settings.banks.name">Nome</span> <input id="bName" placeholder="Ex: N26, Banco do Brasil" data-i18n-placeholder="modals.bankType.namePlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
+    <label class="text-sm font-semibold block text-zinc-900 dark:text-zinc-100"><span data-i18n="settings.banks.name">Nome</span> <input id="bName" placeholder="Ex: N26, Banco do Brasil" data-i18n-placeholder="modals.bankType.namePlaceholder" class="mt-1 w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"></label>
     <div>
-      <span class="text-sm font-semibold block mb-1.5" data-i18n="settings.banks.icon">Ícone</span>
+      <span class="text-sm font-semibold block mb-1.5 text-zinc-900 dark:text-zinc-100" data-i18n="settings.banks.icon">Ícone</span>
       <div id="bankIconPicker" class="grid grid-cols-8 gap-1.5"></div>
       <input type="hidden" id="bIcon" value="ri-bank-line">
     </div>
