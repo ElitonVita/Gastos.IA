@@ -1,0 +1,15 @@
+services:
+  gastos-ia:
+    build: .
+    container_name: gastos-ia
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      # A mesma pasta onde o index.html standalone é servido — o container
+      # regenera dist/index.html aqui a cada start (sempre com a versão mais
+      # recente de src/), e grava gastos-data.json ao lado dele. Com isso o
+      # ./dist deste projeto, no host, é literalmente "a pasta onde o index
+      # está": abra ./dist/gastos-data.json pra ver/editar/fazer backup direto,
+      # sem precisar entrar no container.
+      - ./dist:/app/dist

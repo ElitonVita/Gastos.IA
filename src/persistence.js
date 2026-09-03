@@ -2,6 +2,15 @@
 const STORAGE_KEY='gastos-ai-state-v1';
 let fsDirHandle=null; // File System Access API (quando disponível)
 let saveTimer=null;
+// Servidor (server.js, rodando via `node server.js`/Docker): quando existe, GET/PUT
+// /api/data lê e grava gastos-data.json na pasta do servidor — o mesmo arquivo, pro
+// computador e pro celular (via Tailscale/LAN), sem escolher pasta em cada aparelho
+// (File System Access API só existe no Chrome/Edge desktop). Detectado uma vez no
+// carregamento da página; abrir o app como arquivo local (file://) ou numa hospedagem
+// estática sem essa rota (GitHub Pages etc.) simplesmente não acha o servidor e o app
+// segue funcionando como sempre (pasta local / localStorage).
+let serverStorageAvailable=false;
+let lastServerSavedAt=null;
 
 async function idbOpen(){
   return new Promise((res)=>{
@@ -10,6 +19,38 @@ async function idbOpen(){
     req.onsuccess=()=>res(req.result);
     req.onerror=()=>res(null);
   });
+}
+// Único GET em /api/data no carregamento da página: define serverStorageAvailable e,
+// se já existir um gastos-data.json salvo lá, devolve ele já parseado (pra não precisar
+// de uma segunda ida à rede em loadPersisted/no fluxo de inicialização). Timeout curto
+// pra não deixar o carregamento da página travado esperando uma rede que não tem servidor.
+async function probeServer(){
+  try{
+    const ctrl = new AbortController();
+    const timer = setTimeout(()=>ctrl.abort(), 3000);
+    const res = await fetch('/api/data', { cache:'no-store', signal: ctrl.signal });
+    clearTimeout(timer);
+    if(res.status===200){ serverStorageAvailable=true; return { status:200, json: await res.json() }; }
+    if(res.status===404){ serverStorageAvailable=true; return { status:404, json:null }; } // servidor ligado, ainda sem dado
+  }catch(e){ /* sem servidor — file:// ou hospedagem estática sem essa rota */ }
+  serverStorageAvailable=false;
+  return { status:0, json:null };
+}
+async function _writeServer(state){
+  if(!serverStorageAvailable) return;
+  try{
+    const res = await fetch('/api/data', {
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(state),
+    });
+    if(res.ok) lastServerSavedAt = state.savedAt;
+    // i18n: intentionally not translated — developer-facing console diagnostics, never rendered in the UI.
+    else console.warn('falhou salvar no servidor', res.status);
+  }catch(e){
+    // i18n: intentionally not translated — developer-facing console diagnostics, never rendered in the UI.
+    console.warn('falhou salvar no servidor', e);
+  }
 }
 async function initFsDir(){
   // Restauração SILENCIOSA de uma pasta escolhida em sessão anterior — nunca abre o
@@ -53,16 +94,23 @@ async function chooseFolder(){
 function updateFsStatus(){
   const dot=document.getElementById('fsStatusDot'), text=document.getElementById('fsStatusText'), sub=document.getElementById('fsStatusSub'), btn=document.getElementById('btnChooseFolder');
   if(!text) return;
-  if(fsDirHandle){
+  if(serverStorageAvailable){
+    // Com servidor, "Escolher pasta" (local a este navegador) só geraria uma segunda
+    // fonte de dados fora de sincronia com o que o celular vê — some daqui.
+    dot.className='w-2 h-2 rounded-full shrink-0 bg-emerald-500';
+    text.textContent=t('settings.data.server');
+    sub.textContent=t('settings.data.serverSub');
+    if(btn) btn.classList.add('hidden');
+  } else if(fsDirHandle){
     dot.className='w-2 h-2 rounded-full shrink-0 bg-emerald-500';
     text.textContent=t('settings.data.folder', {name: fsDirHandle.name});
     sub.textContent=t('settings.data.folderSub');
-    if(btn) btn.innerHTML='<i class="ri-folder-open-line"></i> '+t('settings.data.changeFolder');
+    if(btn){ btn.classList.remove('hidden'); btn.innerHTML='<i class="ri-folder-open-line"></i> '+t('settings.data.changeFolder'); }
   } else {
     dot.className='w-2 h-2 rounded-full shrink-0 bg-zinc-400';
     text.textContent=t('settings.data.localStorage');
     sub.textContent=t('settings.data.localStorageSub');
-    if(btn) btn.innerHTML='<i class="ri-folder-open-line"></i> '+t('settings.data.chooseFolder');
+    if(btn){ btn.classList.remove('hidden'); btn.innerHTML='<i class="ri-folder-open-line"></i> '+t('settings.data.chooseFolder'); }
   }
 }
 
@@ -157,6 +205,7 @@ async function persistState(){
     const state=buildState();
     _writeLocalStorage(state);
     await _writeFsDir(state);
+    await _writeServer(state);
   }, 400);
 }
 // grava NA HORA — usado pelos botões "Salvar agora" (sem debounce, sem race)
@@ -165,6 +214,7 @@ async function persistStateImmediate(){
   const state=buildState();
   _writeLocalStorage(state);
   await _writeFsDir(state);
+  await _writeServer(state);
 }
 
 async function loadPersisted(){
@@ -280,13 +330,52 @@ const _origPush = transactions.push.bind(transactions);
 renderCategoryChips(); renderBankTypeChips(); ensureCharts(); updateCharts(); updateKPIs(); renderTable(); updateOpeningBalanceStatus();
 setTimeout(()=>checkOllama(true), 600);
 (async()=>{
+  // probeServer() primeiro: initFsDir()/loadPersisted() e updateFsStatus() (chamado no
+  // fim de initFsDir) precisam já saber se tem servidor pra decidir a fonte da verdade
+  // e o que mostrar no card de Dados.
+  const probe = await probeServer();
   await initFsDir();
-  const restored = await loadPersisted();
+  let restored=false;
+  if(probe.status===200 && probe.json){
+    applyState(probe.json);
+    lastServerSavedAt = probe.json.savedAt || null;
+    ollamaLog(t('settings.data.restoredFromServer', {count: probe.json.transactions?.length||0, date: new Date(probe.json.savedAt).toLocaleString()}));
+    restored=true;
+  } else {
+    // sem servidor, ou servidor ligado mas ainda sem gastos-data.json (primeira vez
+    // rodando atrás dele) — cai no fluxo de sempre (pasta local → localStorage). Se
+    // era o segundo caso, o próximo persistState() já grava esse resultado também no
+    // servidor, migrando os dados existentes pra lá automaticamente.
+    restored = await loadPersisted();
+  }
   if(restored){ renderCategoryChips(); renderBankTypeChips(); renderTable(); updateCharts(); updateKPIs(); updateOpeningBalanceStatus(); }
 })();
+// Outra aba ou outro aparelho (celular + computador, o cenário que o modo servidor existe
+// pra atender) pode ter salvo algo novo enquanto esta aba estava em segundo plano — ao
+// voltar a ficar visível, busca de novo e recarrega só se realmente mudou.
+document.addEventListener('visibilitychange', async ()=>{
+  if(document.visibilityState!=='visible' || !serverStorageAvailable) return;
+  try{
+    const res = await fetch('/api/data', {cache:'no-store'});
+    if(res.status!==200) return;
+    const j = await res.json();
+    if(j.savedAt && j.savedAt!==lastServerSavedAt){
+      applyState(j);
+      lastServerSavedAt = j.savedAt;
+      renderCategoryChips(); renderBankTypeChips(); renderTable(); updateCharts(); updateKPIs(); updateOpeningBalanceStatus();
+      ollamaLog(t('settings.data.syncedFromServer', {date: new Date(j.savedAt).toLocaleString()}));
+    }
+  }catch(e){ /* rede instável — mantém o que já está na tela */ }
+});
 document.getElementById('btnOllamaTest')?.addEventListener('click', ()=>checkOllama(false));
-document.getElementById('btnSaveJson')?.addEventListener('click', async ()=>{ await persistStateImmediate(); ollamaLog(fsDirHandle? t('settings.data.savedToFolderLog', {name: fsDirHandle.name}):t('settings.data.savedToLocalLog')); });
-document.getElementById('btnSaveJsonNow')?.addEventListener('click', async ()=>{ await persistStateImmediate(); alert(fsDirHandle? t('settings.data.savedToFolderAlert', {name: fsDirHandle.name}):t('settings.data.savedToLocalAlert')); });
+document.getElementById('btnSaveJson')?.addEventListener('click', async ()=>{
+  await persistStateImmediate();
+  ollamaLog(serverStorageAvailable ? t('settings.data.server') : (fsDirHandle? t('settings.data.savedToFolderLog', {name: fsDirHandle.name}):t('settings.data.savedToLocalLog')));
+});
+document.getElementById('btnSaveJsonNow')?.addEventListener('click', async ()=>{
+  await persistStateImmediate();
+  alert(serverStorageAvailable ? '✅ '+t('settings.data.server') : (fsDirHandle? t('settings.data.savedToFolderAlert', {name: fsDirHandle.name}):t('settings.data.savedToLocalAlert')));
+});
 document.getElementById('btnChooseFolder')?.addEventListener('click', chooseFolder);
 document.getElementById('quotaDlBtn')?.addEventListener('click', ()=> document.getElementById('btnExportJson')?.click());
 document.getElementById('btnExportJson')?.addEventListener('click', ()=>{

@@ -22,6 +22,7 @@ Veja [`PROJECT.md`](PROJECT.md) para a descrição completa do projeto — o que
 - `dist/index.html` — **versão standalone**, tudo injetado inline num único arquivo — é essa que você baixa/abre se só quer usar o app
 - `src/` — o código-fonte separado por responsabilidade (parsers, renderização, persistência etc. — veja abaixo)
 - `build.js` — script Node sem dependências que monta `dist/index.html` a partir de `index.html` + `src/`
+- `server.js` — servidor HTTP mínimo (sem dependências) opcional, pra persistência compartilhada entre aparelhos — veja [Rodando via Docker](#rodando-via-docker-acesso-do-celular)
 - `PROJECT.md` — descrição completa do projeto, escopo e limitações
 - `IDEA.md` — a ideia original que deu origem ao projeto
 - `README.md` — este arquivo
@@ -31,6 +32,35 @@ Veja [`PROJECT.md`](PROJECT.md) para a descrição completa do projeto — o que
 2. Arraste PDFs de extrato bancário (colunas: Data · Descrição · Saída · Entrada · Saldo)
 3. Veja gráficos, filtre por categoria, troque Saída↔Entrada com o botão ⇆ na tabela
 4. Exporte CSV se precisar
+
+Nesse modo (arquivo aberto direto, sem servidor) os dados ficam salvos no `localStorage` do navegador, ou numa pasta do seu computador se você clicar em **Escolher pasta** (Chrome/Edge) — cada aparelho tem os seus próprios dados. Se você quer abrir o **mesmo** painel, com os **mesmos** dados, tanto no computador quanto no celular, veja a seção abaixo.
+
+## Rodando via Docker (acesso do celular)
+
+Por padrão o app não tem backend — mas rodando `server.js` (via Docker ou `node server.js` direto), ele passa a servir o `dist/index.html` **e** gravar/ler o `gastos-data.json` no próprio servidor, na mesma pasta do `index.html`. Assim, computador e celular acessando o mesmo endereço (por exemplo, via [Tailscale](https://tailscale.com/)) veem e editam **os mesmos dados**, sem precisar escolher pasta em cada aparelho — a File System Access API (o botão "Escolher pasta") nem existe em navegador de celular.
+
+```bash
+docker compose up -d --build
+```
+
+Isso sobe o painel em `http://localhost:8080` (ajuste a porta em `docker-compose.yml` se quiser) e cria uma pasta `./dist` aqui do lado — é literalmente "a pasta onde o `index.html` está": nela fica o `index.html` gerado (sempre atualizado a cada `docker compose up`, a partir de `src/`) e, assim que você salvar algo no app, o `gastos-data.json` ao lado dele. Dá pra abrir esse `.json` direto, copiar, versionar num backup, etc.
+
+Pra acessar do celular, instale o [Tailscale](https://tailscale.com/) no servidor (ou máquina/NAS) e no celular, entre na mesma tailnet, e acesse `http://<nome-ou-ip-tailscale-do-servidor>:8080` pelo navegador do celular — sem abrir porta nenhuma pra internet pública.
+
+Sem Docker, dá pra rodar direto (só precisa de Node):
+```bash
+node build.js && node server.js
+```
+
+Variáveis de ambiente, todas opcionais:
+| Variável | Padrão | O que faz |
+|---|---|---|
+| `PORT` | `8080` | Porta HTTP |
+| `HOST` | `0.0.0.0` | Endereço pra escutar |
+| `STATIC_DIR` | `./dist` | Pasta servida como o site |
+| `DATA_FILE` | `<STATIC_DIR>/gastos-data.json` | Onde ler/gravar os dados |
+
+**Sem autenticação** — pensado pra rodar atrás de uma rede que já é privada (Tailscale, LAN de casa), não pra expor na internet pública. Se você já tinha dados salvos só no `localStorage` do navegador quando ligar o modo servidor pela primeira vez, o app detecta o servidor vazio, carrega o que já existia localmente e sobe pro servidor na primeira gravação — nada se perde na troca.
 
 ## Estrutura do código
 
@@ -44,7 +74,7 @@ O app é JS puro, sem framework e sem build obrigatório — `src/*.js` são scr
 | `src/file-handling.js` | drag-and-drop de PDF, barra de progresso, dados de exemplo, exportação CSV |
 | `src/transactions.js` | notas, detalhes de transação, ações em massa, transferências entre contas |
 | `src/ollama.js` | categorização assistida por IA local (Ollama) |
-| `src/persistence.js` | salvar/carregar estado (`localStorage` e `gastos-data.json` via File System Access API) |
+| `src/persistence.js` | salvar/carregar estado (`localStorage`, `gastos-data.json` via File System Access API, e via `/api/data` quando rodando atrás de `server.js`) |
 | `src/print-report.js` | relatório para impressão |
 | `src/styles.css` | CSS customizado |
 
@@ -76,6 +106,9 @@ launchctl setenv OLLAMA_ORIGINS "*" && brew services restart ollama
 Teste: `curl http://localhost:11434/api/tags` deve listar `gemma4:latest`.
 
 ## Changelog
+
+### Sprint 3 (2026-09-03)
+- **Persistência compartilhada:** `server.js` (sem dependências) + `Dockerfile`/`docker-compose.yml` — rodando atrás de um servidor, `gastos-data.json` fica na pasta do próprio servidor e é lido/gravado via `/api/data`, permitindo acesso com os mesmos dados do computador e do celular (ex.: via Tailscale). Sem servidor, o app continua funcionando exatamente como antes (pasta local / `localStorage`).
 
 ### Sprint 1 (2026-08-23)
 - **Segurança:** escape de `c.name` em chips/legendas (XSS), SRI+crossorigin nos 4 CDNs

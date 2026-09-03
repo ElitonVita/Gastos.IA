@@ -6,7 +6,7 @@ Feito para resolver um problema pessoal: entender para onde vai o dinheiro entre
 
 ## O que ele faz
 
-- **Roda 100% no navegador, offline.** Sem backend, sem servidor. `dist/index.html` é um único arquivo standalone — abre com duplo clique. Para desenvolvimento, o código-fonte fica separado em `src/` (veja o [README](README.md)), sem exigir nenhum passo de build para usar.
+- **Roda 100% no navegador, offline, por padrão.** Sem backend, sem servidor. `dist/index.html` é um único arquivo standalone — abre com duplo clique. Para desenvolvimento, o código-fonte fica separado em `src/` (veja o [README](README.md)), sem exigir nenhum passo de build para usar. Opcionalmente, dá pra rodar atrás de um servidor local (`server.js`, via Docker) só pra compartilhar os mesmos dados entre computador e celular na sua própria rede (Tailscale, LAN) — veja [Rodando via Docker](README.md#rodando-via-docker-acesso-do-celular) no README.
 - **Importa extratos em PDF** por drag-and-drop e extrai as transações (data, descrição, valor, saldo) usando `pdf.js` no próprio navegador.
 - **Detecta automaticamente o banco/tipo de conta** pelo texto do PDF (conta corrente BIL, fatura de cartão BIL, conta Revolut) e ajusta o parser para o layout de cada um.
 - **Categoriza transações**, manualmente ou com ajuda de um modelo de IA rodando localmente via **Ollama** (100% offline, nenhuma transação sai da máquina).
@@ -18,7 +18,7 @@ Feito para resolver um problema pessoal: entender para onde vai o dinheiro entre
 
 - **Não é um produto genérico "conecte seu banco e pronto".** Os parsers de PDF foram construídos e testados **apenas com os extratos da Revolut e da BIL** que eu mesmo uso. Cada banco tem seu próprio layout de PDF (colunas, formato de data, cabeçalhos, texto de identificação), então o parser é, na prática, específico para esses dois formatos.
 - **Não tem integração bancária (Open Banking, APIs, etc.).** Tudo é baseado em ler o PDF do extrato que você mesmo baixa do seu banco e arrasta para o navegador.
-- **Não envia dados para nenhum servidor.** Não há telemetria, não há conta de usuário, não há sincronização em nuvem. A categorização por IA, quando usada, roda em um modelo local via Ollama — nada é enviado para APIs externas.
+- **Não envia dados para nenhum servidor de terceiros.** Não há telemetria, não há conta de usuário, não há sincronização em nuvem. A categorização por IA, quando usada, roda em um modelo local via Ollama — nada é enviado para APIs externas. O único "servidor" que existe é opcional e seu (`server.js`, rodando na sua própria máquina/rede) — serve pra ler o mesmo `gastos-data.json` de mais de um aparelho, não pra mandar dados pra fora.
 - **Não garante suporte a outros bancos.** Se você usar um extrato de um banco diferente, é bem provável que o parser não reconheça o formato corretamente (datas, colunas ou cabeçalhos diferentes) — vai exigir adaptação de código.
 
 ## Usando com o seu banco
@@ -35,7 +35,7 @@ Se você tiver **modelos anonimizados** de extratos de outros bancos (PDF com os
 - `pdf.js` para extração de texto de PDF no navegador
 - Chart.js (ou equivalente) para os gráficos
 - Ollama (opcional) para categorização assistida por IA local
-- `localStorage` para persistência dos dados no navegador
+- `localStorage` para persistência dos dados no navegador (padrão), com `gastos-data.json` numa pasta local (File System Access API) ou num servidor próprio (`server.js`, opcional, sem dependências) como alternativas
 
 ## Aviso
 

@@ -1,0 +1,7 @@
+.git
+.gitignore
+docs
+dist
+node_modules
+*.md
+gastos-data*.json
