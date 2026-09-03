@@ -3,6 +3,44 @@
 .card{backdrop-filter: blur(12px)}
 .drop-active{border-color:#6366f1 !important;background:rgba(99,102,241,0.08) !important}
 #printReport{display:none}
+
+/* ---------- Tabela de transações → cards no mobile ----------
+   Abaixo do breakpoint md do Tailwind (768px) a tabela de transações vira uma
+   lista de cards via CSS Grid, sem duplicar a lógica de renderização em JS:
+   cada <td> (sempre na mesma ordem — checkbox, data, descrição, saída,
+   entrada, categoria, ações) é só realocado por nth-child numa grid-area.
+   Acima de 768px nada disso se aplica; a tabela continua igual a sempre foi. */
+@media (max-width: 767.98px){
+  #txTable thead{ display:none; }
+  #txTable{ display:block; width:100%; }
+  #txBody{ display:block; }
+  #txBody > tr{
+    display:grid;
+    grid-template-columns: 22px 1fr 1fr;
+    grid-template-areas:
+      "check date actions"
+      "check desc desc"
+      "check saida entrada"
+      "check cat cat";
+    column-gap:.65rem;
+    row-gap:.3rem;
+    padding:.85rem .9rem;
+  }
+  #txBody > tr > td{ padding:0 !important; }
+  #txBody > tr > td:nth-child(1){ grid-area:check; align-self:start; padding-top:.1rem !important; }
+  #txBody > tr > td:nth-child(2){ grid-area:date; align-self:center; color:#71717a; }
+  #txBody > tr > td:nth-child(3){ grid-area:desc; }
+  #txBody > tr > td:nth-child(4){ grid-area:saida; text-align:left !important; }
+  #txBody > tr > td:nth-child(5){ grid-area:entrada; text-align:right !important; }
+  #txBody > tr > td:nth-child(6){ grid-area:cat; align-self:start; }
+  #txBody > tr > td:nth-child(7){ grid-area:actions; justify-self:end; align-self:start; }
+  #txBody > tr > td:nth-child(4)::before,
+  #txBody > tr > td:nth-child(5)::before{
+    content:attr(data-label); display:block; font-family:Inter,sans-serif;
+    font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+    opacity:.55;
+  }
+}
 @media print{
   @page{ size:A4; margin:14mm 12mm; }
   html,body{ background:#fff !important; }

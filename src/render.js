@@ -131,7 +131,7 @@ function refreshPeriodOptions(){
     chipWrap.innerHTML='';
     const mk=(label,val,title)=>{
       const b=document.createElement('button');
-      b.className='periodChip px-3 py-1.5 rounded-lg text-xs font-bold transition '+(periodFilter===val?'bg-white dark:bg-zinc-700 shadow-sm text-violet-600 dark:text-violet-300':'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200');
+      b.className='periodChip px-3 py-1.5 rounded-lg text-xs font-bold transition shrink-0 whitespace-nowrap '+(periodFilter===val?'bg-white dark:bg-zinc-700 shadow-sm text-violet-600 dark:text-violet-300':'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200');
       b.dataset.period=val; b.textContent=label; if(title) b.title=title;
       b.onclick=()=>setPeriod(val);
       chipWrap.appendChild(b);
@@ -161,11 +161,20 @@ function inPeriod(t){
 }
 function updateSelectAllState(pageIds){
   const cb = document.getElementById('selectAllTx');
+  const cbMobile = document.getElementById('selectAllTxMobile');
   if(!cb) return;
-  if(pageIds.length===0){ cb.checked=false; cb.indeterminate=false; return; }
+  if(pageIds.length===0){
+    cb.checked=false; cb.indeterminate=false;
+    if(cbMobile){ cbMobile.checked=false; cbMobile.indeterminate=false; }
+    return;
+  }
   const selectedCount = pageIds.filter(id=>selectedTxIds.has(id)).length;
   cb.checked = selectedCount===pageIds.length;
   cb.indeterminate = selectedCount>0 && selectedCount<pageIds.length;
+  if(cbMobile){
+    cbMobile.checked = cb.checked;
+    cbMobile.indeterminate = cb.indeterminate;
+  }
 }
 function renderBulkBar(){
   const bar=document.getElementById('bulkBar');
@@ -367,8 +376,8 @@ function renderTable(){
       <td class="px-3 py-2.5 text-center"><input type="checkbox" class="rowSelect rounded border-zinc-300 dark:border-zinc-600 text-violet-600 focus:ring-violet-500/40" data-select="${t.id}" ${selectedTxIds.has(t.id)?'checked':''}></td>
       <td class="px-4 py-2.5 font-mono text-xs whitespace-nowrap">${d}</td>
       <td class="px-3 py-2.5"><div class="font-medium text-[13px] leading-tight line-clamp-2" title="${escapeHtml(t.desc)}">${manualMark}${escapeHtml(t.desc)}${intBadge}</div>${t.note?`<div class="text-[11px] text-amber-600 dark:text-amber-400 italic mt-0.5 flex items-center gap-1"><i class="ri-sticky-note-line"></i>${escapeHtml(t.note)}</div>`:''}${bankBadge}</td>
-      <td class="px-3 py-2.5 text-right font-bold font-mono text-[13px] whitespace-nowrap ${t.saida?'text-red-600 dark:text-red-400':''}">${saidaStr}</td>
-      <td class="px-3 py-2.5 text-right font-bold font-mono text-[13px] whitespace-nowrap ${t.entrada?'text-emerald-600 dark:text-emerald-400':''}">${entradaStr}</td>
+      <td class="px-3 py-2.5 text-right font-bold font-mono text-[13px] whitespace-nowrap ${t.saida?'text-red-600 dark:text-red-400':''}" data-label="${escapeHtml(window.i18n.t('table.columns.expense'))}">${saidaStr}</td>
+      <td class="px-3 py-2.5 text-right font-bold font-mono text-[13px] whitespace-nowrap ${t.entrada?'text-emerald-600 dark:text-emerald-400':''}" data-label="${escapeHtml(window.i18n.t('table.columns.income'))}">${entradaStr}</td>
       <td class="px-3 py-2.5">
         ${needCat ? `<select data-id="${t.id}" class="catSelect w-full text-[11px] font-bold px-2 py-1 rounded-full border text-white shadow-sm" style="background:${c.color};border-color:${c.color}">
           ${categories.map(cc=>`<option value="${cc.id}" ${cc.id===t.cat?'selected':''} style="color:#111">${escapeHtml(catDisplayName(cc))}</option>`).join('')}

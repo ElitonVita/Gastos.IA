@@ -92,6 +92,12 @@ document.getElementById('selectAllTx')?.addEventListener('change', e=>{
   else ids.forEach(id=>selectedTxIds.delete(id));
   renderTable();
 });
+// Mesma ação do checkbox "selecionar tudo" do cabeçalho da tabela (thead fica oculto no
+// layout em cards do mobile), só que exposto na barra de filtros para telas pequenas.
+document.getElementById('selectAllTxMobile')?.addEventListener('change', e=>{
+  document.getElementById('selectAllTx').checked = e.target.checked;
+  document.getElementById('selectAllTx').dispatchEvent(new Event('change'));
+});
 document.getElementById('bulkClearBtn')?.addEventListener('click', ()=>{
   selectedTxIds.clear();
   renderTable();
