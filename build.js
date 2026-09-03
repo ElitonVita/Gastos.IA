@@ -9,7 +9,10 @@ const path = require('path');
 
 const ROOT = __dirname;
 const SRC_HTML = path.join(ROOT, 'index.html');
-const OUT_DIR = path.join(ROOT, 'dist');
+// dist/ por padrão (uso normal: `node build.js`) — mas configurável via env var pra
+// quem gera o standalone direto numa pasta própria (ex.: server.js/Docker apontando
+// pra qualquer pasta onde o index.html deva morar, não só "dist").
+const OUT_DIR = path.resolve(process.env.BUILD_OUT_DIR || path.join(ROOT, 'dist'));
 const OUT_HTML = path.join(OUT_DIR, 'index.html');
 
 function readLocal(relSrc) {
@@ -36,7 +39,7 @@ function build() {
 
   fs.mkdirSync(OUT_DIR, { recursive: true });
   fs.writeFileSync(OUT_HTML, html);
-  console.log(`dist/index.html gerado (${(html.length / 1024).toFixed(0)} KB)`);
+  console.log(`${path.relative(ROOT, OUT_HTML) || OUT_HTML} gerado (${(html.length / 1024).toFixed(0)} KB)`);
 }
 
 build();

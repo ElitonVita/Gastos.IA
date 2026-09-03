@@ -6,10 +6,14 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      # A mesma pasta onde o index.html standalone é servido — o container
-      # regenera dist/index.html aqui a cada start (sempre com a versão mais
-      # recente de src/), e grava gastos-data.json ao lado dele. Com isso o
-      # ./dist deste projeto, no host, é literalmente "a pasta onde o index
-      # está": abra ./dist/gastos-data.json pra ver/editar/fazer backup direto,
-      # sem precisar entrar no container.
-      - ./dist:/app/dist
+      # Troque o lado esquerdo (antes do ":") pela pasta que VOCÊ já usa —
+      # onde já costuma deixar/copiar o index.html. Não precisa ser "./dist",
+      # não precisa ficar dentro deste repo: pode ser qualquer caminho no seu
+      # servidor/NAS, ex. "/mnt/user/appdata/gastos-ia". Essa pasta vira o
+      # site inteiro (index.html) e é onde o gastos-data.json passa a viver.
+      #
+      # Se já existir um index.html nela (o que você mesmo copiou pra lá),
+      # ele é respeitado — o container não sobrescreve. Se estiver vazia, o
+      # container gera um index.html a partir do código deste repo na
+      # primeira vez que sobe.
+      - ./dist:/app/site

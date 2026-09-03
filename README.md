@@ -37,19 +37,27 @@ Nesse modo (arquivo aberto direto, sem servidor) os dados ficam salvos no `local
 
 ## Rodando via Docker (acesso do celular)
 
-Por padrão o app não tem backend — mas rodando `server.js` (via Docker ou `node server.js` direto), ele passa a servir o `dist/index.html` **e** gravar/ler o `gastos-data.json` no próprio servidor, na mesma pasta do `index.html`. Assim, computador e celular acessando o mesmo endereço (por exemplo, via [Tailscale](https://tailscale.com/)) veem e editam **os mesmos dados**, sem precisar escolher pasta em cada aparelho — a File System Access API (o botão "Escolher pasta") nem existe em navegador de celular.
+Por padrão o app não tem backend — mas rodando `server.js` (via Docker ou `node server.js` direto), ele passa a servir um `index.html` **e** gravar/ler o `gastos-data.json` no próprio servidor, na mesma pasta do `index.html`. Assim, computador e celular acessando o mesmo endereço (por exemplo, via [Tailscale](https://tailscale.com/)) veem e editam **os mesmos dados**, sem precisar escolher pasta em cada aparelho — a File System Access API (o botão "Escolher pasta") nem existe em navegador de celular.
 
+Não existe uma pasta fixa "certa" — é **qualquer pasta que você já usa** pra manter esse `index.html` (uma pasta no seu servidor/NAS, onde você já costuma copiar o arquivo depois de gerar o build, o que for). Aponte o volume do Docker pra ela. Edite o `docker-compose.yml` deste repo: troque `./dist` (o padrão, só um exemplo) pelo caminho real da sua pasta:
+
+```yaml
+volumes:
+  - /caminho/para/sua/pasta:/app/site   # <- essa é a única linha que normalmente muda
+```
+
+Depois:
 ```bash
 docker compose up -d --build
 ```
 
-Isso sobe o painel em `http://localhost:8080` (ajuste a porta em `docker-compose.yml` se quiser) e cria uma pasta `./dist` aqui do lado — é literalmente "a pasta onde o `index.html` está": nela fica o `index.html` gerado (sempre atualizado a cada `docker compose up`, a partir de `src/`) e, assim que você salvar algo no app, o `gastos-data.json` ao lado dele. Dá pra abrir esse `.json` direto, copiar, versionar num backup, etc.
+Se a pasta que você apontou **já tiver** um `index.html` (o seu, copiado do jeito que você já fazia), ele não é sobrescrito — o container só entra servindo e grava o `gastos-data.json` ao lado. Se a pasta estiver **vazia**, o container gera um `index.html` a partir do `src/` deste repo na primeira vez que sobe, pra já funcionar sem passo manual nenhum. Nos dois casos, o painel sobe em `http://localhost:8080` (ajuste a porta em `docker-compose.yml` se quiser).
 
 Pra acessar do celular, instale o [Tailscale](https://tailscale.com/) no servidor (ou máquina/NAS) e no celular, entre na mesma tailnet, e acesse `http://<nome-ou-ip-tailscale-do-servidor>:8080` pelo navegador do celular — sem abrir porta nenhuma pra internet pública.
 
-Sem Docker, dá pra rodar direto (só precisa de Node):
+Sem Docker, dá pra rodar direto (só precisa de Node) — aponte `STATIC_DIR` pra sua pasta:
 ```bash
-node build.js && node server.js
+STATIC_DIR=/caminho/para/sua/pasta node server.js
 ```
 
 Variáveis de ambiente, todas opcionais:
@@ -57,8 +65,9 @@ Variáveis de ambiente, todas opcionais:
 |---|---|---|
 | `PORT` | `8080` | Porta HTTP |
 | `HOST` | `0.0.0.0` | Endereço pra escutar |
-| `STATIC_DIR` | `./dist` | Pasta servida como o site |
+| `STATIC_DIR` | `./dist` (fora do Docker) / `/app/site` (na imagem) | Pasta servida como o site — a "pasta onde o index está" |
 | `DATA_FILE` | `<STATIC_DIR>/gastos-data.json` | Onde ler/gravar os dados |
+| `BUILD_OUT_DIR` | `./dist` | Só pro `build.js`: pasta de saída do `index.html` gerado (o `Dockerfile` usa isso internamente pra gerar direto dentro de `STATIC_DIR`) |
 
 **Sem autenticação** — pensado pra rodar atrás de uma rede que já é privada (Tailscale, LAN de casa), não pra expor na internet pública. Se você já tinha dados salvos só no `localStorage` do navegador quando ligar o modo servidor pela primeira vez, o app detecta o servidor vazio, carrega o que já existia localmente e sobe pro servidor na primeira gravação — nada se perde na troca.
 
